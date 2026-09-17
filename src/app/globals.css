@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #0b1020;
+  --color-surface-2: #121a33;
+  --color-surface-3: #1b2547;
+  --color-line: #2a3566;
+  --color-ink: #eef2ff;
+  --color-ink-muted: #a5b0d6;
+  --color-accent: #7c5cff;
+  --color-accent-soft: #a68bff;
+  --color-xp: #ffc857;
+  --color-success: #35d39a;
+  --color-danger: #ff6b81;
+  --color-info: #4cc9f0;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background:
+    radial-gradient(1100px 600px at 12% -10%, rgba(124, 92, 255, 0.22), transparent 60%),
+    radial-gradient(900px 500px at 92% 0%, rgba(76, 201, 240, 0.14), transparent 55%),
+    var(--color-surface);
+  color: var(--color-ink);
+}
+
+body {
+  min-height: 100dvh;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent-soft);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.cm-editor {
+  background: transparent !important;
+  font-size: 13px;
+}
+
+.cm-editor .cm-gutters {
+  background: transparent !important;
+  border-right: 1px solid var(--color-line) !important;
+}
+
+.cm-editor.cm-focused {
+  outline: none !important;
+}
+
+@keyframes xp-pop {
+  0% { transform: translateY(6px) scale(0.9); opacity: 0; }
+  40% { transform: translateY(-4px) scale(1.05); opacity: 1; }
+  100% { transform: translateY(-16px) scale(1); opacity: 0; }
+}
+
+.animate-xp-pop {
+  animation: xp-pop 1.4s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-xp-pop {
+    animation: none;
+    opacity: 1;
+  }
+}
