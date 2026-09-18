@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Game Mode 🎮</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+<header>
+  <div>
+    <h1>English Game Mode 🎮</h1>
+    <p class="sub">Speak • Listen • Read • Write • Level Up</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b id="level">1</b><small>LEVEL</small></div>
+    <div class="stat"><b id="xp">0</b><small>XP</small></div>
+    <div class="stat"><b id="streak">0</b><small>STREAK</small></div>
+  </div>
+</header>
+
+<div class="layout">
+<main class="card">
+  <h2>Choose your training</h2>
+  <div class="modes" id="modes"></div>
+
+  <section class="challenge">
+    <div class="challenge-top">
+      <span class="badge" id="badge">🗣️ SPEAKING</span>
+      <span class="count" id="count">1 / 1</span>
+    </div>
+    <div class="question" id="question">Loading…</div>
+    <p class="hint" id="hint"></p>
+    <textarea id="answer" placeholder="Type your answer..."></textarea>
+    <div class="actions">
+      <button class="btn primary" id="submit">Submit + XP</button>
+      <button class="btn green" id="hear">🔊 Hear</button>
+      <button class="btn ghost" id="voice">🎙️ Voice</button>
+      <button class="btn ghost" id="next">Next →</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+  </section>
+</main>
+
+<aside class="card">
+  <h2>Progress</h2>
+  <div class="bigxp"><span id="xp2">0</span> XP</div>
+  <div class="row"><span id="levelText">Level 1</span><span id="goal">0 / 101</span></div>
+  <div class="bar"><div id="fill"></div></div>
+
+  <div class="list">
+    <div class="item"><b>🎯 Main weakness</b><span id="weakness">Not enough data yet.</span></div>
+    <div class="item"><b>✅ Main improvement</b><span id="improvement">Keep practicing!</span></div>
+    <div class="item"><b>🔥 Next focus</b><span id="focus">Try all six modes today.</span></div>
+  </div>
+
+  <div class="list">
+    <div class="item">
+      <b>⏱️ Daily 25-minute training</b>
+      <div class="timer" id="timer">25:00</div>
+      <div class="bar"><div id="timeFill" class="green"></div></div>
+      <div class="actions">
+        <button class="btn primary" id="start">Start</button>
+        <button class="btn ghost" id="reset">Reset</button>
+      </div>
+    </div>
+    <div class="item">
+      <b id="connLabel">🔌 Connection</b><span id="conn">Checking…</span>
+      <div class="actions"><button class="btn ghost small" id="resetAll">Reset all progress</button></div>
+    </div>
+  </div>
+</aside>
+</div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

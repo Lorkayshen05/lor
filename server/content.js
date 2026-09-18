@@ -1,4 +1,5 @@
 /* Content for all six modes. Easy items first, harder items later. */
+
 const DATA = {
   speaking: [
     { prompt: "Tell me about your university. What do you study?", hint: "Speak or write 2-3 sentences.", keywords: ["study","university","class","major","course"] },
@@ -8,7 +9,9 @@ const DATA = {
     { prompt: "You want an internship. Tell the manager why they should choose you.", hint: "Use: I am good at / I can / I learn fast.", keywords: ["internship","learn","work","skill","team","good at"] },
     { prompt: "Tell me about a trip you want to take. Where and why?", hint: "Use: I would like to / because.", keywords: ["travel","go","country","because","visit","trip"] },
     { prompt: "Do you use AI tools? How do they help you study or work?", hint: "Use: I use it to / it helps me.", keywords: ["ai","help","use","study","tool","work"] },
-    { prompt: "Your friend is sad about an exam. What do you say to help them?", hint: "Be kind. Use: don't worry / next time / you can.", keywords: ["worry","next time","can","try","help","ok"] }
+    { prompt: "Your friend is sad about an exam. What do you say to help them?", hint: "Be kind. Use: don't worry / next time / you can.", keywords: ["worry","next time","can","try","help","ok"] },
+    { prompt: "Nice to meet you. Tell me about yourself and what you do in your free time.", hint: "3-5 sentences.", keywords: ["my name","i am","free time","like","study"] },
+    { prompt: "Tell me about your last gym workout. What did you train and how did you feel?", hint: "Use past simple: I trained / I felt.", keywords: ["train","gym","felt","tired","legs","strong"] }
   ],
   listening: [
     { audio: "I go to university by bus every morning.", question: "Type what you heard.", answer: "i go to university by bus every morning" },
@@ -33,7 +36,9 @@ const DATA = {
     { prompt: "Write a short email to your professor to ask for one more day for your homework.", hint: "Use: Dear Professor / Could I / Thank you.", keywords: ["dear","professor","could","thank","homework","day"] },
     { prompt: "Write 3 sentences about your day today.", hint: "Use past simple: I woke up / I went / I studied.", keywords: ["i","today","went","did","studied"] },
     { prompt: "Write a short message to a company to ask if they have an internship for students.", hint: "Use: Hello / I am a student / I am interested in.", keywords: ["hello","student","internship","interested","thank"] },
-    { prompt: "Write a message inviting your friend to the gym tomorrow at 6 p.m.", hint: "Use: Do you want to / Are you free.", keywords: ["gym","tomorrow","want","free","come"] }
+    { prompt: "Write a message inviting your friend to the gym tomorrow at 6 p.m.", hint: "Use: Do you want to / Are you free.", keywords: ["gym","tomorrow","want","free","come"] },
+    { prompt: "Write a short paragraph about one skill you want to improve at university.", hint: "Use: I want to improve / because.", keywords: ["improve","skill","because","want","better"] },
+    { prompt: "Write a professional message to your internship supervisor about what you finished today.", hint: "Use: Hello / Today I finished / Please let me know.", keywords: ["hello","today","finished","report","please","thank"] }
   ],
   vocabulary: [
     { word: "look forward to", meaning: "to feel happy about something in the future", example: "I look forward to my internship next month.", task: "Write your own sentence with: look forward to" },
@@ -63,3 +68,6 @@ const MODES = [
   { id: "vocabulary", name: "Vocabulary", emoji: "💡", tag: "New words" },
   { id: "speed",      name: "Speed",      emoji: "⚡", tag: "Think fast" }
 ];
+
+/* Export for the Node backend; in the browser these stay as globals. */
+if (typeof module !== "undefined" && module.exports) module.exports = { DATA, MODES };

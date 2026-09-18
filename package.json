@@ -1,0 +1,8 @@
+{
+  "name": "english-game-mode",
+  "version": "1.0.0",
+  "description": "Beginner-friendly English practice app: six modes, XP, levels, daily timer.",
+  "main": "server/index.js",
+  "scripts": { "start": "node server/index.js" },
+  "license": "MIT"
+}
