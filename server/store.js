@@ -69,12 +69,19 @@ function coaching(s) {
   };
   if (played.length) {
     const w = worst(played), b = played.reduce((x, y) => (x.rate >= y.rate ? x : y));
-    out.weakness = `${w.name} — ${Math.round(w.rate * 100)}% correct. Practice it a little more.`;
     out.improvement = `${b.name} — ${Math.round(b.rate * 100)}% correct. Well done!`;
+    // Only call something a weakness if it really is one.
+    out.weakness = w.rate >= 0.8
+      ? "Nothing weak so far — try a harder mode to find your limit."
+      : `${w.name} — ${Math.round(w.rate * 100)}% correct. Practice it a little more.`;
   }
   const pool = played.length ? played : tried;
   if (unplayed.length) out.focus = `Try ${unplayed[0].name} next.`;
-  else if (pool.length) out.focus = `Do 3 more ${worst(pool).name} questions.`;
+  else if (pool.length) {
+    const w = worst(pool);
+    out.focus = w.rate >= 0.8 ? `You are strong everywhere — keep the streak going.`
+                              : `Do 3 more ${w.name} questions.`;
+  }
   return out;
 }
 

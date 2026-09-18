@@ -2,77 +2,92 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English Game Mode 🎮</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>English Game Mode</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-<header>
-  <div>
-    <h1>English Game Mode 🎮</h1>
-    <p class="sub">Speak • Listen • Read • Write • Level Up</p>
-  </div>
-  <div class="stats">
-    <div class="stat"><b id="level">1</b><small>LEVEL</small></div>
-    <div class="stat"><b id="xp">0</b><small>XP</small></div>
-    <div class="stat"><b id="streak">0</b><small>STREAK</small></div>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header class="bar">
+  <a class="brand" href="#"><span class="glyph">EG</span><span class="brand-text">English Game <em>Mode</em></span></a>
+  <div class="chips">
+    <div class="chip"><span class="chip-k">Level</span><span class="chip-v" id="level">1</span></div>
+    <div class="chip"><span class="chip-k">XP</span><span class="chip-v" id="xp">0</span></div>
+    <div class="chip"><span class="chip-k">Streak</span><span class="chip-v" id="streak">0</span><span class="flame">🔥</span></div>
+    <div class="chip clock"><span class="chip-k">Session</span><span class="chip-v" id="miniTimer">25:00</span></div>
   </div>
 </header>
 
-<div class="layout">
-<main class="card">
-  <h2>Choose your training</h2>
-  <div class="modes" id="modes"></div>
+<main class="shell">
+  <section class="stage">
+    <nav class="rail" id="modes" aria-label="Practice modes"></nav>
 
-  <section class="challenge">
-    <div class="challenge-top">
-      <span class="badge" id="badge">🗣️ SPEAKING</span>
-      <span class="count" id="count">1 / 1</span>
-    </div>
-    <div class="question" id="question">Loading…</div>
-    <p class="hint" id="hint"></p>
-    <textarea id="answer" placeholder="Type your answer..."></textarea>
-    <div class="actions">
-      <button class="btn primary" id="submit">Submit + XP</button>
-      <button class="btn green" id="hear">🔊 Hear</button>
-      <button class="btn ghost" id="voice">🎙️ Voice</button>
-      <button class="btn ghost" id="next">Next →</button>
-    </div>
-    <div class="feedback" id="feedback"></div>
-  </section>
-</main>
+    <article class="stagecard" id="stagecard">
+      <div class="stagecard-head">
+        <span class="pill" id="badge">Speaking</span>
+        <span class="steps" id="count">1 / 1</span>
+      </div>
 
-<aside class="card">
-  <h2>Progress</h2>
-  <div class="bigxp"><span id="xp2">0</span> XP</div>
-  <div class="row"><span id="levelText">Level 1</span><span id="goal">0 / 101</span></div>
-  <div class="bar"><div id="fill"></div></div>
+      <p class="question" id="question">Loading…</p>
+      <p class="hint" id="hint"></p>
 
-  <div class="list">
-    <div class="item"><b>🎯 Main weakness</b><span id="weakness">Not enough data yet.</span></div>
-    <div class="item"><b>✅ Main improvement</b><span id="improvement">Keep practicing!</span></div>
-    <div class="item"><b>🔥 Next focus</b><span id="focus">Try all six modes today.</span></div>
-  </div>
+      <div class="field">
+        <textarea id="answer" placeholder="Write your answer in English…" spellcheck="true"></textarea>
+        <div class="field-foot">
+          <span id="wordcount">0 words</span>
+          <span class="kbd">Ctrl + Enter to submit</span>
+        </div>
+      </div>
 
-  <div class="list">
-    <div class="item">
-      <b>⏱️ Daily 25-minute training</b>
-      <div class="timer" id="timer">25:00</div>
-      <div class="bar"><div id="timeFill" class="green"></div></div>
       <div class="actions">
-        <button class="btn primary" id="start">Start</button>
-        <button class="btn ghost" id="reset">Reset</button>
+        <button class="btn solid" id="submit"><span>Submit</span><em id="xpHint">+XP</em></button>
+        <button class="btn soft" id="hear">🔊<span>Hear</span></button>
+        <button class="btn soft" id="voice">🎙️<span>Voice</span></button>
+        <button class="btn line" id="next"><span>Next</span>→</button>
+      </div>
+
+      <div class="feedback" id="feedback"></div>
+    </article>
+  </section>
+
+  <aside class="panel">
+    <div class="ringcard">
+      <div class="ringwrap">
+        <svg class="ring" viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-fg" cx="60" cy="60" r="52" id="ringFg"></circle>
+        </svg>
+        <div class="ring-mid"><b id="xp2">0</b><small>XP</small></div>
+      </div>
+      <div class="ringcard-foot">
+        <span id="levelText">Level 1</span>
+        <span id="goal">0 / 100</span>
       </div>
     </div>
-    <div class="item">
-      <b id="connLabel">🔌 Connection</b><span id="conn">Checking…</span>
-      <div class="actions"><button class="btn ghost small" id="resetAll">Reset all progress</button></div>
+
+    <div class="tiles">
+      <div class="tile weak"><span class="tile-k">Weakness</span><p id="weakness">Not enough data yet.</p></div>
+      <div class="tile good"><span class="tile-k">Improvement</span><p id="improvement">Keep practicing!</p></div>
+      <div class="tile focus"><span class="tile-k">Next focus</span><p id="focus">Try all six modes today.</p></div>
     </div>
-  </div>
-</aside>
-</div>
-</div>
+
+    <div class="timercard">
+      <div class="timer-head"><span class="tile-k">Daily training</span><b class="timer" id="timer">25:00</b></div>
+      <div class="track"><i id="timeFill"></i></div>
+      <div class="timer-actions">
+        <button class="btn solid sm" id="start">Start</button>
+        <button class="btn line sm" id="reset">Reset</button>
+      </div>
+    </div>
+
+    <div class="statusline">
+      <span class="dot" id="dot"></span><span id="conn">Checking…</span>
+      <button class="linkbtn" id="resetAll">Reset all</button>
+    </div>
+  </aside>
+</main>
+
 <script src="app.js"></script>
 </body>
 </html>
