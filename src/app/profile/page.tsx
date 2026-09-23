@@ -39,10 +39,13 @@ export default async function ProfilePage() {
         <StatTile icon={<Icon name="star" className="h-4 w-4" />} label="Achievements" value={`${unlockedCount}/${achievements.length}`} accent="text-xp" />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid items-start gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader title={`Level ${user.level}`} subtitle="Experience Points" />
           <ProgressBar value={user.xp} max={xpToNextLevel(user.level)} color="xp" label="XP" />
+          <p className="mt-3 text-xs text-muted">
+            {xpToNextLevel(user.level) - user.xp} XP to Level {user.level + 1}.
+          </p>
         </Card>
 
         <Card>

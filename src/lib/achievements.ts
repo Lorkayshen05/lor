@@ -30,8 +30,15 @@ const CHECKS: Record<string, (userId: string) => Promise<boolean>> = {
   },
 };
 
-export async function checkAndUnlockAchievements(userId: string) {
-  const unlocked: string[] = [];
+export interface UnlockedAchievement {
+  key: string;
+  title: string;
+  description: string;
+  icon: string;
+}
+
+export async function checkAndUnlockAchievements(userId: string): Promise<UnlockedAchievement[]> {
+  const unlocked: UnlockedAchievement[] = [];
   const achievements = await prisma.achievement.findMany();
   const existing = await prisma.userAchievement.findMany({ where: { userId } });
   const existingIds = new Set(existing.map((e) => e.achievementId));
@@ -44,7 +51,12 @@ export async function checkAndUnlockAchievements(userId: string) {
       await prisma.userAchievement.create({
         data: { userId, achievementId: achievement.id },
       });
-      unlocked.push(achievement.key);
+      unlocked.push({
+        key: achievement.key,
+        title: achievement.title,
+        description: achievement.description,
+        icon: achievement.icon,
+      });
     }
   }
   return unlocked;

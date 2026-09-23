@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Play, Send, Lightbulb, ArrowRight, Eye, CheckCircle2, XCircle } from "lucide-react";
+import { Play, Send, Lightbulb, ArrowRight, Eye, CheckCircle2, XCircle, Swords } from "lucide-react";
 import { DifficultyTag } from "@/components/DifficultyTag";
+import { Icon } from "@/components/Icon";
 import { ProgressBar } from "@/components/ProgressBar";
 import type { QuestQuestionView, SubmitResponse, RunResponse } from "@/lib/types";
 
@@ -113,8 +114,8 @@ export function QuestWorkspace({
     <div className="mx-auto max-w-6xl px-4 py-8">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
         <div>
-          <div className="mb-1 flex items-center gap-2 text-sm text-muted">
-            <span>⚔ Quest</span>
+          <div className="mb-1 flex items-center gap-1.5 text-sm text-muted">
+            <Swords className="h-4 w-4" /> <span>Quest</span>
           </div>
           <h1 className="text-2xl font-bold text-foreground">{title}</h1>
         </div>
@@ -236,6 +237,19 @@ export function QuestWorkspace({
               <p className="mb-2 text-sm text-foreground">{submitResult.tutorMessage}</p>
               {submitResult.passed && submitResult.xpAwarded > 0 && (
                 <div className="mb-2 text-lg font-bold text-xp">+{submitResult.xpAwarded} XP</div>
+              )}
+              {submitResult.unlockedAchievements.length > 0 && (
+                <div className="mb-3 space-y-1.5">
+                  {submitResult.unlockedAchievements.map((a) => (
+                    <div key={a.key} className="pop-in flex items-center gap-2 rounded-lg border border-xp/40 bg-xp/10 px-3 py-2">
+                      <Icon name={a.icon} className="h-4 w-4 text-xp" />
+                      <div>
+                        <div className="text-xs font-semibold text-xp">Achievement Unlocked: {a.title}</div>
+                        <div className="text-xs text-muted">{a.description}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               )}
               {submitResult.passed && (
                 <div className="mb-3">
