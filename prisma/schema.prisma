@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  name          String
+  level         Int          @default(1)
+  xp            Int          @default(0)
+  xpToNext      Int          @default(100)
+  streak        Int          @default(0)
+  lastActiveAt  DateTime     @default(now())
+  createdAt     DateTime     @default(now())
+  submissions   Submission[]
+  progress      Progress[]
+  achievements  UserAchievement[]
+  mistakes      Mistake[]
+  studyTasks    StudyTask[]
+  projects      Project[]
+  subjects      Subject[]
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  icon        String   @default("book")
+  order       Int      @default(0)
+  modules     Module[]
+}
+
+model Module {
+  id       String   @id @default(cuid())
+  courseId String
+  course   Course   @relation(fields: [courseId], references: [id])
+  title    String
+  order    Int      @default(0)
+  lessons  Lesson[]
+}
+
+model Lesson {
+  id       String  @id @default(cuid())
+  moduleId String
+  module   Module  @relation(fields: [moduleId], references: [id])
+  title    String
+  content  String
+  order    Int     @default(0)
+  quests   Quest[]
+}
+
+model Quest {
+  id           String     @id @default(cuid())
+  lessonId     String
+  lesson       Lesson     @relation(fields: [lessonId], references: [id])
+  title        String
+  description  String
+  difficulty   String     @default("easy") // easy | medium | hard | boss
+  starterCode  String     @default("")
+  solutionCode String     @default("")
+  xpReward     Int        @default(10)
+  order        Int        @default(0)
+  questions    Question[]
+  submissions  Submission[]
+  progress     Progress[]
+}
+
+model Question {
+  id       String @id @default(cuid())
+  questId  String
+  quest    Quest  @relation(fields: [questId], references: [id])
+  prompt   String
+  testCode String @default("")
+  hint     String @default("")
+}
+
+model Submission {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  questId   String
+  quest     Quest    @relation(fields: [questId], references: [id])
+  code      String
+  passed    Boolean  @default(false)
+  output    String   @default("")
+  createdAt DateTime @default(now())
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  questId   String
+  quest     Quest    @relation(fields: [questId], references: [id])
+  mastery   Int      @default(0) // 0-100
+  completed Boolean  @default(false)
+  attempts  Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, questId])
+}
+
+model Achievement {
+  id          String @id @default(cuid())
+  key         String @unique
+  title       String
+  description String
+  icon        String @default("trophy")
+  users       UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  unlockedAt    DateTime    @default(now())
+
+  @@unique([userId, achievementId])
+}
+
+model Mistake {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  topic     String
+  detail    String
+  count     Int      @default(1)
+  createdAt DateTime @default(now())
+}
+
+model Streak {
+  id        String   @id @default(cuid())
+  date      DateTime
+  userId    String
+}
+
+model Subject {
+  id         String      @id @default(cuid())
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  name       String
+  targetCgpa Float       @default(4.0)
+  progress   Int         @default(0) // 0-100
+  studyTasks StudyTask[]
+}
+
+model StudyTask {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id])
+  title     String
+  type      String   @default("assignment") // assignment | exam | reading
+  dueDate   DateTime?
+  done      Boolean  @default(false)
+}
+
+model Project {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  title      String
+  description String
+  status     String   @default("planning") // planning | in_progress | done
+  githubUrl  String?
+  demoUrl    String?
+  createdAt  DateTime @default(now())
+}
