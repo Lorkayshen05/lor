@@ -23,6 +23,19 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Verifying changes
+
+```bash
+npm run lint       # eslint
+npm run typecheck  # tsc --noEmit
+npm run build      # next build (also type-checks)
+npm test           # node's built-in test runner via tsx, tests/**/*.test.ts
+```
+
+The test suite covers sandboxed grading (pass/fail/timeout), XP/level/streak
+math, achievement unlocking, English-answer checking, and the CGPA practice-
+question extractor — no test framework dependency needed.
+
 ## Project Structure
 
 - `prisma/schema.prisma` — data models (User, Course, Module, Lesson, Quest,

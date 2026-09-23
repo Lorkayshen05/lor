@@ -43,7 +43,10 @@ export async function awardXp(user: User, amount: number) {
 
   const now = new Date();
   let streak = user.streak;
-  if (isSameDay(user.lastActiveAt, now)) {
+  if (streak === 0) {
+    // first XP-earning action ever (account creation itself doesn't count as a day of activity)
+    streak = 1;
+  } else if (isSameDay(user.lastActiveAt, now)) {
     // already counted today
   } else if (isYesterday(user.lastActiveAt, now)) {
     streak += 1;
