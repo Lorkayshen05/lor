@@ -11,13 +11,6 @@ export interface TestOutcomeView {
   message: string;
 }
 
-export interface UnlockedAchievementView {
-  key: string;
-  title: string;
-  description: string;
-  icon: string;
-}
-
 export interface SubmitResponse {
   outcomes: TestOutcomeView[];
   passed: boolean;
@@ -25,7 +18,7 @@ export interface SubmitResponse {
   attempts: number;
   mastery: number;
   user: { level: number; xp: number; xpToNext: number; streak: number };
-  unlockedAchievements: UnlockedAchievementView[];
+  unlockedAchievements: string[];
   nextQuestId: string | null;
   tutorMessage: string;
   error?: string;

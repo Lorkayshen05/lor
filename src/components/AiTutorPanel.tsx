@@ -20,19 +20,6 @@ interface ChatEntry {
   text: string;
 }
 
-/** Renders the tutor's minimal `**bold**` markdown without a full parser dependency. */
-function renderFormatted(text: string) {
-  return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
-    part.startsWith("**") && part.endsWith("**") ? (
-      <strong key={i} className="font-semibold">
-        {part.slice(2, -2)}
-      </strong>
-    ) : (
-      <span key={i}>{part}</span>
-    )
-  );
-}
-
 export function AiTutorPanel({
   topic,
   hint,
@@ -103,11 +90,11 @@ export function AiTutorPanel({
         {entries.map((entry, i) => (
           <div
             key={i}
-            className={`pop-in max-w-[90%] whitespace-pre-wrap rounded-xl px-3 py-2 ${
+            className={`pop-in max-w-[90%] rounded-xl px-3 py-2 ${
               entry.from === "tutor" ? "bg-surface-2 text-foreground" : "ml-auto bg-primary/20 text-foreground"
             }`}
           >
-            {renderFormatted(entry.text)}
+            {entry.text}
           </div>
         ))}
         {loading && <div className="text-xs text-muted">AI Tutor is thinking…</div>}

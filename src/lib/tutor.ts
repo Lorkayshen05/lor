@@ -83,7 +83,7 @@ export function getRuleBasedTutorReply(ctx: TutorContext): TutorReply {
 
     case "boss":
       return {
-        message: `Boss challenge on ${ctx.topic}. This combines everything from this module — take your time and test your logic before submitting.`,
+        message: `⚔ Boss challenge on ${ctx.topic}. This combines everything from this module — take your time and test your logic before submitting.`,
       };
 
     default:
