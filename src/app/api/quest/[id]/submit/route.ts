@@ -1,132 +1,102 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { getOrCreateDemoUser } from "@/lib/user";
-import { gradeQuest } from "@/lib/sandbox";
-import { awardXp } from "@/lib/xp";
-import { checkAndUnlockAchievements } from "@/lib/achievements";
-import { getRuleBasedTutorReply } from "@/lib/tutor";
+import { z } from "zod";
+import { eq, and } from "drizzle-orm";
+import { db } from "@/db";
+import { quests, progress, submissions } from "@/db/schema";
+import { getSessionUser } from "@/lib/auth/session";
+import { pyRunResultSchema } from "@/lib/pyRunner/types";
+import { runOnPiston } from "@/lib/pyRunner/piston";
+import { logMistake } from "@/lib/game/weakTopics";
+import { awardCompletion } from "@/lib/game/awardCompletion";
+import { pickNextQuest } from "@/lib/game/nextQuest";
 
-const MAX_CODE_LENGTH = 20_000;
+const bodySchema = z.object({
+  code: z.string().min(1).max(20_000),
+  clientResult: pyRunResultSchema,
+});
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const user = await getSessionUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const { id: questId } = await params;
+  const parsedBody = bodySchema.safeParse(await req.json().catch(() => null));
+  if (!parsedBody.success) {
+    return NextResponse.json({ error: parsedBody.error.issues[0]?.message ?? "Invalid request body" }, { status: 400 });
+  }
+  const { code, clientResult } = parsedBody.data;
 
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
-  if (typeof body !== "object" || body === null || !("code" in body)) {
-    return NextResponse.json({ error: "Missing 'code' field." }, { status: 400 });
-  }
-  const { code } = body as { code: unknown };
-  if (typeof code !== "string" || code.trim().length === 0) {
-    return NextResponse.json({ error: "'code' must be a non-empty string." }, { status: 400 });
-  }
-  if (code.length > MAX_CODE_LENGTH) {
-    return NextResponse.json({ error: "Code is too long." }, { status: 400 });
-  }
-
-  const quest = await prisma.quest.findUnique({
-    where: { id: questId },
-    include: { questions: true, lesson: { include: { module: { include: { course: true } } } } },
+  const quest = await db.query.quests.findFirst({
+    where: eq(quests.id, questId),
+    with: { lesson: { with: { module: { with: { course: true } } } } },
   });
-  if (!quest) {
-    return NextResponse.json({ error: "Quest not found." }, { status: 404 });
+  if (!quest || quest.type !== "code") {
+    return NextResponse.json({ error: "Code quest not found." }, { status: 404 });
   }
 
-  const user = await getOrCreateDemoUser();
+  const questTests = quest.tests ?? [];
+  // Never trust a client-fabricated result blindly: the reported test set must match the quest's real tests.
+  const testCountMatches = clientResult.tests.length === questTests.length;
+  const testNamesMatch = testCountMatches && clientResult.tests.every((t, i) => t.name === questTests[i].name);
+  if (!testNamesMatch) {
+    return NextResponse.json({ error: "Submitted result does not match this quest's tests." }, { status: 400 });
+  }
 
-  const outcomes = await gradeQuest(
-    code,
-    quest.questions.map((q) => ({ id: q.id, prompt: q.prompt, testCode: q.testCode, hint: q.hint }))
-  );
-  const passed = outcomes.length > 0 && outcomes.every((o) => o.passed);
+  let result = clientResult;
+  let verified: "client" | "server" = "client";
+  const serverResult = await runOnPiston(code, questTests, quest.expectedStdout ?? undefined);
+  if (serverResult) {
+    result = serverResult;
+    verified = "server";
+  }
 
-  await prisma.submission.create({
-    data: {
-      userId: user.id,
-      questId: quest.id,
-      code,
-      passed,
-      output: JSON.stringify(outcomes),
-    },
-  });
+  const passed = !result.timedOut && result.error === null && result.expectedOk && result.tests.every((t) => t.passed);
 
-  const existingProgress = await prisma.progress.findUnique({
-    where: { userId_questId: { userId: user.id, questId: quest.id } },
-  });
-  const wasAlreadyCompleted = existingProgress?.completed ?? false;
-
+  const existingProgress = await db.query.progress.findFirst({ where: and(eq(progress.userId, user.id), eq(progress.questId, questId)) });
   const attempts = (existingProgress?.attempts ?? 0) + 1;
-  const mastery = passed ? 100 : Math.max(0, (existingProgress?.mastery ?? 0) - 5);
+  const hintsUsed = existingProgress?.hintsUsed ?? 0;
 
-  await prisma.progress.upsert({
-    where: { userId_questId: { userId: user.id, questId: quest.id } },
-    update: { attempts, mastery, completed: passed || wasAlreadyCompleted },
-    create: { userId: user.id, questId: quest.id, attempts, mastery, completed: passed },
+  await db.insert(submissions).values({
+    userId: user.id,
+    questId,
+    kind: "code",
+    passed,
+    verified,
+    stdout: result.stdout,
+    errorType: result.error?.type,
+    errorMessage: result.error?.message,
+    errorLine: result.error?.line ?? undefined,
+    hintsUsed,
   });
 
-  let updatedUser = user;
-  let xpAwarded = 0;
-  if (passed && !wasAlreadyCompleted) {
-    xpAwarded = quest.xpReward;
-    updatedUser = await awardXp(user, xpAwarded);
-  }
-
-  const firstFail = outcomes.find((o) => !o.passed);
-  if (!passed && firstFail) {
-    const topic = quest.title;
-    const existingMistake = await prisma.mistake.findFirst({ where: { userId: user.id, topic } });
-    if (existingMistake) {
-      await prisma.mistake.update({
-        where: { id: existingMistake.id },
-        data: { count: existingMistake.count + 1, detail: firstFail.message },
-      });
-    } else {
-      await prisma.mistake.create({
-        data: { userId: user.id, topic, detail: firstFail.message },
-      });
-    }
-  }
-
-  const unlockedAchievements = passed ? await checkAndUnlockAchievements(user.id) : [];
-
+  let completion = null;
   let nextQuestId: string | null = null;
-  if (passed) {
-    const allQuests = await prisma.quest.findMany({
-      orderBy: [
-        { lesson: { module: { course: { order: "asc" } } } },
-        { lesson: { module: { order: "asc" } } },
-        { lesson: { order: "asc" } },
-        { order: "asc" },
-      ],
-      select: { id: true },
-    });
-    const idx = allQuests.findIndex((q) => q.id === quest.id);
-    nextQuestId = idx >= 0 && idx < allQuests.length - 1 ? allQuests[idx + 1].id : null;
-  }
 
-  const tutor = passed
-    ? getRuleBasedTutorReply({ mode: "review", topic: quest.title })
-    : getRuleBasedTutorReply({
-        mode: "debug",
-        topic: quest.title,
-        errorOutput: firstFail?.message,
-        hint: quest.questions.find((q) => q.id === firstFail?.id)?.hint,
-        attempts,
-      });
+  if (passed) {
+    completion = await awardCompletion({ userId: user.id, questId, xpReward: quest.xp, attempts, hintsUsed });
+    nextQuestId = await pickNextQuest(user.id, questId, completion.mastery);
+  } else {
+    if (existingProgress) {
+      await db.update(progress).set({ attempts }).where(eq(progress.id, existingProgress.id));
+    } else {
+      await db.insert(progress).values({ userId: user.id, questId, attempts });
+    }
+
+    const kind = result.timedOut ? "infinite-loop" : result.error ? result.error.type : "wrong-output";
+    const topic = quest.lesson.module.course.title;
+    await logMistake(user.id, topic, kind, result.error?.message ?? "Output did not match the expected tests.");
+  }
 
   return NextResponse.json({
-    outcomes,
     passed,
-    xpAwarded,
+    result,
+    verified,
     attempts,
-    mastery,
-    user: { level: updatedUser.level, xp: updatedUser.xp, xpToNext: updatedUser.xpToNext, streak: updatedUser.streak },
-    unlockedAchievements,
+    xpAwarded: completion?.xpAwarded ?? 0,
+    mastery: completion?.mastery ?? null,
+    level: completion?.level ?? null,
+    streak: completion?.streak ?? null,
+    unlockedAchievements: completion?.unlockedAchievements ?? [],
     nextQuestId,
-    tutorMessage: tutor.message,
   });
 }

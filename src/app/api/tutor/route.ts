@@ -1,36 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRuleBasedTutorReply, TutorMode } from "@/lib/tutor";
+import { z } from "zod";
+import { getSessionUser } from "@/lib/auth/session";
+import { getRuleBasedReply, type TutorMode } from "@/lib/tutor/ruleBasedTutor";
+import { getLiveTutorReply } from "@/lib/tutor/anthropic";
+import { getWeakTopics } from "@/lib/game/weakTopics";
 
-const VALID_MODES: TutorMode[] = ["teach", "quiz", "practice", "hint", "debug", "review", "exam", "boss"];
+const MODES: TutorMode[] = ["teach", "quiz", "practice", "hint", "debug", "review", "exam", "boss", "chat"];
+
+const bodySchema = z.object({
+  mode: z.enum(MODES as [TutorMode, ...TutorMode[]]),
+  topic: z.string().max(200).optional(),
+  questTitle: z.string().max(200).optional(),
+  hint: z.string().max(500).optional(),
+  errorType: z.string().max(100).optional(),
+  errorMessage: z.string().max(500).optional(),
+  message: z.string().max(1000).optional(),
+});
 
 export async function POST(req: NextRequest) {
-  let body: unknown;
-  try {
-    body = await req.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
-  if (typeof body !== "object" || body === null) {
-    return NextResponse.json({ error: "Invalid body." }, { status: 400 });
-  }
-  const { mode, topic, question, studentAnswer, hint, errorOutput, attempts } = body as Record<string, unknown>;
+  const user = await getSessionUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  if (typeof mode !== "string" || !VALID_MODES.includes(mode as TutorMode)) {
-    return NextResponse.json({ error: `'mode' must be one of ${VALID_MODES.join(", ")}` }, { status: 400 });
-  }
-  if (typeof topic !== "string" || topic.length === 0) {
-    return NextResponse.json({ error: "'topic' is required." }, { status: 400 });
-  }
+  const parsed = bodySchema.safeParse(await req.json().catch(() => null));
+  if (!parsed.success) return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Invalid request." }, { status: 400 });
 
-  const reply = getRuleBasedTutorReply({
-    mode: mode as TutorMode,
-    topic,
-    question: typeof question === "string" ? question : undefined,
-    studentAnswer: typeof studentAnswer === "string" ? studentAnswer : undefined,
-    hint: typeof hint === "string" ? hint : undefined,
-    errorOutput: typeof errorOutput === "string" ? errorOutput : undefined,
-    attempts: typeof attempts === "number" ? attempts : undefined,
-  });
+  const ctx = parsed.data;
+  const weakTopics = ctx.mode === "review" ? (await getWeakTopics(user.id)).map((w) => w.topic) : undefined;
 
-  return NextResponse.json(reply);
+  const live = await getLiveTutorReply({ ...ctx, weakTopics });
+  const reply = live ?? getRuleBasedReply({ ...ctx, weakTopics });
+
+  return NextResponse.json({ ...reply, source: live ? "live" : "rule-based" });
 }

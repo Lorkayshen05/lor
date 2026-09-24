@@ -1,17 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0b0f1a;
-  --surface: #131828;
-  --surface-2: #1a2036;
-  --border: #262d45;
-  --foreground: #e8eaf5;
-  --muted: #8b91ac;
-  --primary: #7c5cff;
-  --primary-2: #5b3df0;
-  --accent: #22d3ee;
-  --xp: #ffb020;
-  --success: #34d399;
+  --background: #f6f7f5;
+  --surface: #ffffff;
+  --surface-2: #eef1ec;
+  --border: #dfe4dc;
+  --foreground: #1c2420;
+  --muted: #5c6a60;
+  --primary: #0f766e; /* teal */
+  --primary-2: #0d5c56;
+  --accent: #d97706; /* amber */
+  --xp: #ca8a04;
+  --success: #16a34a;
+  --danger: #dc2626;
+}
+
+:root[data-theme="dark"] {
+  --background: #0d1512;
+  --surface: #141f1a;
+  --surface-2: #1b2a23;
+  --border: #26382f;
+  --foreground: #e7ede9;
+  --muted: #93a49a;
+  --primary: #2dd4bf;
+  --primary-2: #14b8a6;
+  --accent: #fb923c;
+  --xp: #fbbf24;
+  --success: #4ade80;
   --danger: #f87171;
 }
 
@@ -52,30 +67,59 @@ body {
   border-radius: 8px;
 }
 
-@keyframes xp-fill {
-  from {
-    width: var(--xp-from, 0%);
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes xp-fill {
+    from {
+      width: 0%;
+    }
+    to {
+      width: var(--xp-to, 0%);
+    }
   }
-  to {
+  .xp-bar-fill {
+    animation: xp-fill 0.7s ease-out forwards;
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.94) translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  .pop-in {
+    animation: pop-in 0.22s ease-out;
+  }
+
+  @keyframes xp-pop {
+    0% {
+      opacity: 0;
+      transform: translateY(6px) scale(0.9);
+    }
+    30% {
+      opacity: 1;
+      transform: translateY(0) scale(1.05);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  .xp-pop {
+    animation: xp-pop 0.4s ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-bar-fill {
     width: var(--xp-to, 0%);
   }
 }
 
-.xp-bar-fill {
-  animation: xp-fill 0.8s ease-out forwards;
-}
-
-@keyframes pop-in {
-  from {
-    opacity: 0;
-    transform: scale(0.92) translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-.pop-in {
-  animation: pop-in 0.25s ease-out;
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }

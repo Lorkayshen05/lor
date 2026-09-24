@@ -1,39 +1,44 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Flame, Trophy, Swords, ArrowRight, AlertTriangle } from "lucide-react";
-import { getOrCreateDemoUser } from "@/lib/user";
-import { getCurrentQuest, getWeakTopics, getAchievementsWithStatus, getQuestStats } from "@/lib/queries";
-import { xpToNextLevel } from "@/lib/xp";
-import { Card, CardHeader } from "@/components/Card";
-import { ProgressBar } from "@/components/ProgressBar";
-import { StatTile } from "@/components/StatTile";
-import { DifficultyTag } from "@/components/DifficultyTag";
-import { AchievementBadge } from "@/components/AchievementBadge";
-
-export const dynamic = "force-dynamic";
+import { getSessionUser } from "@/lib/auth/session";
+import { db } from "@/db";
+import { streaks } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { computeLevel } from "@/lib/game/xp";
+import { getWeakTopics } from "@/lib/game/weakTopics";
+import { getCurrentQuest, getAchievementsWithStatus, getQuestStats } from "@/lib/queries";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { ProgressBar } from "@/components/ui/ProgressBar";
+import { StatTile } from "@/components/ui/StatTile";
+import { DifficultyTag } from "@/components/ui/DifficultyTag";
+import { AchievementBadge } from "@/components/game/AchievementBadge";
 
 export default async function DashboardPage() {
-  const user = await getOrCreateDemoUser();
-  const [currentQuest, weakTopics, achievements, questStats] = await Promise.all([
-    getCurrentQuest(user.id),
-    getWeakTopics(user.id),
-    getAchievementsWithStatus(user.id),
-    getQuestStats(user.id),
+  const sessionUser = await getSessionUser();
+  if (!sessionUser) redirect("/login");
+
+  const [user, streak, currentQuest, weakTopics, achievements, questStats] = await Promise.all([
+    db.query.users.findFirst({ where: (u, { eq }) => eq(u.id, sessionUser.id) }),
+    db.query.streaks.findFirst({ where: eq(streaks.userId, sessionUser.id) }),
+    getCurrentQuest(sessionUser.id),
+    getWeakTopics(sessionUser.id),
+    getAchievementsWithStatus(sessionUser.id),
+    getQuestStats(sessionUser.id),
   ]);
 
-  const xpNeeded = xpToNextLevel(user.level);
+  const level = computeLevel(user?.xp ?? 0);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">Welcome back, {user.name}</h1>
-          <p className="text-sm text-muted">Here&apos;s where your quest stands today.</p>
-        </div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-foreground">Welcome back, {sessionUser.name}</h1>
+        <p className="text-sm text-muted">Here&apos;s where your quest stands today.</p>
       </div>
 
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatTile icon={<Swords className="h-4 w-4" />} label="Level" value={user.level} />
-        <StatTile icon={<Flame className="h-4 w-4" />} label="Streak" value={`${user.streak}d`} accent="text-xp" />
+        <StatTile icon={<Swords className="h-4 w-4" />} label="Level" value={level.level} />
+        <StatTile icon={<Flame className="h-4 w-4" />} label="Streak" value={`${streak?.current ?? 0}d`} accent="text-xp" />
         <StatTile icon={<Trophy className="h-4 w-4" />} label="Quests Done" value={`${questStats.completed}/${questStats.totalQuests}`} />
         <StatTile icon={<AlertTriangle className="h-4 w-4" />} label="Weak Topics" value={weakTopics.length} accent="text-danger" />
       </div>
@@ -41,8 +46,8 @@ export default async function DashboardPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Card>
-            <CardHeader title={`Level ${user.level}`} subtitle="Experience Points" />
-            <ProgressBar value={user.xp} max={xpNeeded} color="xp" label="XP" />
+            <CardHeader title={`Level ${level.level}`} subtitle="Experience Points" />
+            <ProgressBar value={level.xpIntoLevel} max={level.xpToNextLevel} color="xp" label="XP" />
           </Card>
 
           <Card>
@@ -54,10 +59,7 @@ export default async function DashboardPage() {
                   <DifficultyTag difficulty={currentQuest.difficulty} />
                 </div>
                 <p className="mb-3 text-sm text-muted">{currentQuest.description}</p>
-                <Link
-                  href={`/quest/${currentQuest.id}`}
-                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-2"
-                >
+                <Link href={`/quest/${currentQuest.id}`} className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-2">
                   Continue Quest <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -67,15 +69,18 @@ export default async function DashboardPage() {
           </Card>
 
           <Card>
-            <CardHeader title="Weak Topics" subtitle="Mistakes worth reviewing" />
+            <CardHeader title="Weak Topics" subtitle="Mistakes and low mastery worth reviewing" />
             {weakTopics.length === 0 ? (
-              <p className="text-sm text-muted">No recurring mistakes tracked yet. Keep questing!</p>
+              <p className="text-sm text-muted">No weak topics tracked yet. Keep questing!</p>
             ) : (
               <ul className="space-y-2">
-                {weakTopics.map((m) => (
-                  <li key={m.id} className="flex items-center justify-between rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm">
-                    <span className="text-foreground">{m.topic}</span>
-                    <span className="text-xs text-muted">{m.count}x</span>
+                {weakTopics.map((w) => (
+                  <li key={w.topic} className="rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-foreground">{w.topic}</span>
+                      <span className="text-xs text-danger">{w.reason === "repeated_mistake" ? "repeated mistake" : "low mastery"}</span>
+                    </div>
+                    <p className="mt-0.5 text-xs text-muted">{w.detail}</p>
                   </li>
                 ))}
               </ul>
