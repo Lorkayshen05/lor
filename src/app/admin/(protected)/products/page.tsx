@@ -8,7 +8,7 @@ import { ProductImage } from "@/components/product/ProductImage";
 import { DeleteProductButton } from "@/components/admin/DeleteProductButton";
 import { LinkButton } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Pagination } from "@/components/admin/Pagination";
+import { Pagination } from "@/components/ui/Pagination";
 import { formatCurrency } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "商品管理", robots: { index: false } };

@@ -11,9 +11,13 @@ export interface ProductFilters {
   sort?: ProductSort;
 }
 
-export async function getProducts(filters: ProductFilters = {}): Promise<Product[]> {
+// Returns the builder wrapped in a plain object — PostgrestFilterBuilder is
+// thenable, so returning it directly from this `async` function would make
+// JS auto-await (i.e. execute) the query before the caller can chain
+// `.range()` onto it.
+async function buildProductsQuery(filters: ProductFilters, count: "exact" | undefined = undefined) {
   const supabase = await createClient();
-  let query = supabase.from("products").select("*");
+  let query = supabase.from("products").select("*", count ? { count } : undefined);
 
   if (filters.category) {
     query = query.eq("category", filters.category);
@@ -38,6 +42,11 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
       break;
   }
 
+  return { query };
+}
+
+export async function getProducts(filters: ProductFilters = {}): Promise<Product[]> {
+  const { query } = await buildProductsQuery(filters);
   const { data, error } = await query;
 
   if (error) {
@@ -45,6 +54,29 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
   }
 
   return data ?? [];
+}
+
+export interface ProductsPage {
+  products: Product[];
+  total: number;
+}
+
+export async function getProductsPage(
+  filters: ProductFilters & { page?: number; pageSize?: number } = {}
+): Promise<ProductsPage> {
+  const page = Math.max(1, filters.page ?? 1);
+  const pageSize = filters.pageSize ?? 24;
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
+  const { query } = await buildProductsQuery(filters, "exact");
+  const { data, error, count } = await query.range(from, to);
+
+  if (error) {
+    throw new Error(`无法读取商品列表：${error.message}`);
+  }
+
+  return { products: data ?? [], total: count ?? 0 };
 }
 
 export async function getFeaturedProducts(limit = 8): Promise<Product[]> {

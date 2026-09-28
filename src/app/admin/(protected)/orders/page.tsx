@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { orderStatuses, getOrderStatusLabel, orderStatusMap, type OrderStatus } from "@/config/order-status";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
-import { Pagination } from "@/components/admin/Pagination";
+import { Pagination } from "@/components/ui/Pagination";
 import { formatCurrency, formatDateTime, cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "订单管理", robots: { index: false } };
