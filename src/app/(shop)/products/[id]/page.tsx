@@ -35,7 +35,17 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
-  const product = await getProductById(id);
+
+  let product;
+  try {
+    product = await getProductById(id);
+  } catch {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-16 text-center">
+        <p className="text-sm text-ink-500">商品加载失败，请稍后重试。</p>
+      </div>
+    );
+  }
 
   if (!product) {
     notFound();

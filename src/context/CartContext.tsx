@@ -44,11 +44,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    // One-time sync from localStorage on mount: reading window storage must
+    // happen client-side only, so this can't be a lazy useState initializer.
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as CartItem[];
         if (Array.isArray(parsed)) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setItems(parsed);
         }
       }

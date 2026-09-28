@@ -77,10 +77,15 @@
   --font-display: var(--font-jakarta), var(--font-noto-sans), sans-serif;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background: var(--color-cream-100);
   color: var(--color-ink-900);
   font-family: var(--font-sans);
+  overflow-x: hidden;
 }
 
 @layer utilities {

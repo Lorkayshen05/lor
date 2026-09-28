@@ -4,6 +4,7 @@ import { getProducts, type ProductSort } from "@/lib/data/products";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ProductFilters } from "@/components/product/ProductFilters";
 import { getCategoryLabel, isCategorySlug } from "@/config/categories";
+import type { Product } from "@/lib/types/database";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   const sort: ProductSort =
     params.sort === "price-asc" || params.sort === "price-desc" ? params.sort : "newest";
 
-  let products;
+  let products: Product[];
   let loadError: string | null = null;
   try {
     products = await getProducts({ category, q, sort });

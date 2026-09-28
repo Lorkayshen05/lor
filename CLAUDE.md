@@ -97,3 +97,24 @@ See `.env.example`. Required: `NEXT_PUBLIC_SUPABASE_URL`,
 placeholders when unset so `next build` never fails on missing env — real
 network calls fail loudly at request time instead, surfaced by each route's
 error state.
+
+## Business rules
+
+- Never invent real business info (address/phone/hours/prices) — use obvious
+  placeholders (already done in `config/site.ts` and `supabase/seed.sql`).
+- No payment gateway for the MVP; ordering ends at WhatsApp handoff.
+- Never fake functionality (no mock data pretending to be live/DB-backed).
+
+## Verification checklist (before calling a feature done)
+
+- Walk the real user flow, not just render the page.
+- Loading, error, and empty states all render sensibly.
+- Mobile viewport check (this is a mobile-first storefront).
+- `npm run lint` and `tsc --noEmit` clean.
+- `npm run build` succeeds.
+
+## Working style
+
+Work autonomously through the task list; don't stop after each small step.
+Keep replies concise — note what changed and what's next, skip narrating
+unchanged code or obvious mechanics.

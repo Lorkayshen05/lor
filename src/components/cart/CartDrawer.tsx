@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { X, ShoppingBag, Trash2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { QuantityStepper } from "./QuantityStepper";
