@@ -16,6 +16,11 @@ export const checkoutSchema = z.object({
   address: z.string().trim().min(5, "请输入完整地址").max(500),
   notes: z.string().trim().max(500).optional().default(""),
   items: z.array(cartItemInputSchema).min(1, "购物车是空的"),
+  // Honeypot: a hidden field real customers never see or fill. Left as a
+  // plain string (not refined to empty) so a filled value still parses and
+  // the server action can quietly drop the submission instead of leaking
+  // "spam detected" behavior back to whatever filled it in.
+  company: z.string().optional().default(""),
 });
 
 export type CheckoutFormValues = z.infer<typeof checkoutSchema>;

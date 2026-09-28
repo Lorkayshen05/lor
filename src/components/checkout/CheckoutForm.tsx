@@ -16,7 +16,7 @@ export function CheckoutForm() {
   const [isPending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
-  const [form, setForm] = useState({ customerName: "", phone: "", address: "", notes: "" });
+  const [form, setForm] = useState({ customerName: "", phone: "", address: "", notes: "", company: "" });
 
   function update<K extends keyof typeof form>(key: K, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -48,6 +48,20 @@ export function CheckoutForm() {
     <form onSubmit={handleSubmit} className="grid gap-8 lg:grid-cols-3 lg:gap-12">
       <div className="flex flex-col gap-4 lg:col-span-2">
         <h2 className="font-display text-lg font-semibold text-ink-900">收件资料</h2>
+
+        {/* Honeypot anti-spam field — hidden from real users, left for bots to fill */}
+        <div className="absolute left-[-9999px] top-auto h-0 w-0 overflow-hidden" aria-hidden="true">
+          <label htmlFor="company">Company</label>
+          <input
+            id="company"
+            name="company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={form.company}
+            onChange={(e) => update("company", e.target.value)}
+          />
+        </div>
 
         <Input
           label="姓名"

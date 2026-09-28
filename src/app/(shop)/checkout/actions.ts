@@ -20,7 +20,14 @@ export async function createOrder(input: CheckoutFormValues): Promise<CreateOrde
     };
   }
 
-  const { customerName, phone, address, notes, items } = parsed.data;
+  const { customerName, phone, address, notes, items, company } = parsed.data;
+
+  // Honeypot: real customers never see or fill this field, so a non-empty
+  // value means a bot filled every input on the form. Fail generically
+  // without touching the database.
+  if (company.trim().length > 0) {
+    return { ok: false, error: "提交失败，请重试。" };
+  }
 
   let supabase;
   try {
