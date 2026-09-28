@@ -4,7 +4,7 @@ import { CategoryIcon } from "@/components/product/CategoryIcon";
 
 export function CategoryNav({ activeCategory }: { activeCategory?: string }) {
   return (
-    <nav aria-label="商品分类" className="border-b border-ink-100/70 bg-white">
+    <nav aria-label="商品分类" className="relative border-b border-ink-100/70 bg-white">
       <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 py-2 sm:px-6 lg:px-8">
         <Link
           href="/products"
@@ -31,6 +31,9 @@ export function CategoryNav({ activeCategory }: { activeCategory?: string }) {
           </Link>
         ))}
       </div>
+      {/* Hints that the row scrolls further right - hidden once every category
+          fits on screen (lg+), since there's nothing left to scroll to there. */}
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white to-transparent lg:hidden" />
     </nav>
   );
 }

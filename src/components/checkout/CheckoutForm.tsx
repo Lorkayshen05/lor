@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, MessageCircle } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { Input, Textarea } from "@/components/ui/Field";
 import { Button } from "@/components/ui/Button";
@@ -106,6 +106,10 @@ export function CheckoutForm() {
         <Button type="submit" size="lg" disabled={isPending || items.length === 0} className="mt-2">
           {isPending ? "提交中..." : "确认下单"}
         </Button>
+        <p className="flex items-center gap-1.5 text-xs text-ink-400">
+          <MessageCircle className="h-3.5 w-3.5 shrink-0" />
+          下单无需在线付款，提交后我们会尽快通过WhatsApp与您确认订单详情。
+        </p>
       </div>
 
       <aside className="rounded-2xl border border-ink-100 bg-white p-5 lg:sticky lg:top-24 lg:h-fit">

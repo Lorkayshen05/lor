@@ -1,7 +1,7 @@
 import "server-only";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/types/database";
-import { getSupabaseUrl } from "./env";
+import { SUPABASE_DB_OPTIONS, getSupabaseUrl } from "./env";
 
 /**
  * Service-role client that bypasses Row Level Security. Server-only: never
@@ -21,6 +21,7 @@ export function createAdminClient() {
   }
 
   return createSupabaseClient<Database>(getSupabaseUrl(), serviceRoleKey, {
+    db: SUPABASE_DB_OPTIONS,
     auth: {
       autoRefreshToken: false,
       persistSession: false,

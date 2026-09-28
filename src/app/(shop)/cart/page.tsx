@@ -34,7 +34,7 @@ export default function CartPage() {
   const belowMinimum = siteConfig.minOrderAmount > 0 && subtotal < siteConfig.minOrderAmount;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-4xl px-4 pb-28 pt-8 sm:px-6 sm:pb-8">
       <h1 className="mb-6 font-display text-2xl font-bold text-ink-900">购物车</h1>
 
       <ul className="divide-y divide-ink-100 rounded-2xl border border-ink-100 bg-white">
@@ -80,17 +80,19 @@ export default function CartPage() {
         ))}
       </ul>
 
-      <div className="mt-6 flex flex-col items-end gap-3 rounded-2xl border border-ink-100 bg-white p-5">
-        <div className="flex w-full items-center justify-between text-base">
+      {/* Sticky on mobile so the primary CTA never requires scrolling to reach; a
+          plain in-flow card on sm+ where there's room to spare. */}
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t border-ink-100 bg-white/95 p-4 backdrop-blur sm:static sm:z-auto sm:mt-6 sm:flex sm:flex-col sm:items-end sm:gap-3 sm:rounded-2xl sm:border sm:bg-white sm:p-5 sm:backdrop-blur-none">
+        <div className="mx-auto flex w-full max-w-4xl items-center justify-between text-base sm:mx-0 sm:w-full">
           <span className="text-ink-500">小计</span>
           <span className="font-display text-xl font-bold text-brand-700">{formatCurrency(subtotal)}</span>
         </div>
         {belowMinimum && (
-          <p className="text-sm text-brand-600">
+          <p className="mx-auto mt-1 w-full max-w-4xl text-sm text-brand-600 sm:mx-0 sm:mt-0">
             未达最低订购金额 {formatCurrency(siteConfig.minOrderAmount)}，请继续添加商品。
           </p>
         )}
-        <div className="flex w-full gap-3 sm:w-auto">
+        <div className="mx-auto mt-3 flex w-full max-w-4xl gap-3 sm:mx-0 sm:mt-0 sm:w-auto">
           <LinkButton href="/products" variant="outline" className="flex-1 sm:flex-none">
             继续选购
           </LinkButton>

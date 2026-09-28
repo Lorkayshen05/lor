@@ -2,8 +2,10 @@
 
 import { createBrowserClient } from "@supabase/ssr";
 import type { Database } from "@/lib/types/database";
-import { getSupabaseAnonKey, getSupabaseUrl } from "./env";
+import { SUPABASE_DB_OPTIONS, getSupabaseAnonKey, getSupabaseUrl } from "./env";
 
 export function createClient() {
-  return createBrowserClient<Database>(getSupabaseUrl(), getSupabaseAnonKey());
+  return createBrowserClient<Database>(getSupabaseUrl(), getSupabaseAnonKey(), {
+    db: SUPABASE_DB_OPTIONS,
+  });
 }

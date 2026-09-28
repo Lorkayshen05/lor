@@ -22,3 +22,16 @@ export function isSupabaseConfigured(): boolean {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 }
+
+/**
+ * postgrest-js retries idempotent (GET) requests up to 3 times with
+ * exponential backoff (1s+2s+4s = 7s) on network failure by default. Good
+ * for resilience against a real project's transient blips, but it means
+ * every page that reads from an unreachable/misconfigured project (or the
+ * placeholder URL above) hangs for ~7s before the route's existing error
+ * state can render. A hard timeout on top wouldn't help - each attempt
+ * already fails in milliseconds; it's the retry loop itself costing the
+ * time. Fail fast instead: every route already has a graceful
+ * loading/error/empty state to fall back to.
+ */
+export const SUPABASE_DB_OPTIONS = { retry: false, timeout: 5000 } as const;

@@ -2,7 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
 import type { Database } from "@/lib/types/database";
-import { getSupabaseAnonKey, getSupabaseUrl } from "./env";
+import { SUPABASE_DB_OPTIONS, getSupabaseAnonKey, getSupabaseUrl } from "./env";
 
 /**
  * Supabase client bound to the current request's cookies. Use this in
@@ -13,6 +13,7 @@ export async function createClient() {
   const cookieStore = await cookies();
 
   return createServerClient<Database>(getSupabaseUrl(), getSupabaseAnonKey(), {
+    db: SUPABASE_DB_OPTIONS,
     cookies: {
       getAll() {
         return cookieStore.getAll();
