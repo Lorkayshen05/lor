@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { escapePostgrestValue } from "@/lib/supabase/postgrest";
 import type { Product } from "@/lib/types/database";
 
 export type ProductSort = "newest" | "price-asc" | "price-desc";
@@ -20,7 +21,8 @@ export async function getProducts(filters: ProductFilters = {}): Promise<Product
 
   if (filters.q && filters.q.trim().length > 0) {
     const term = filters.q.trim().replace(/[%_]/g, "");
-    query = query.or(`name.ilike.%${term}%,description.ilike.%${term}%`);
+    const pattern = escapePostgrestValue(`%${term}%`);
+    query = query.or(`name.ilike.${pattern},description.ilike.${pattern}`);
   }
 
   switch (filters.sort) {

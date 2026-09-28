@@ -8,23 +8,34 @@ import { ProductImage } from "@/components/product/ProductImage";
 import { DeleteProductButton } from "@/components/admin/DeleteProductButton";
 import { LinkButton } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Pagination } from "@/components/admin/Pagination";
 import { formatCurrency } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "商品管理", robots: { index: false } };
 export const dynamic = "force-dynamic";
 
+const PAGE_SIZE = 20;
+
 interface AdminProductsPageProps {
-  searchParams: Promise<{ stock?: string }>;
+  searchParams: Promise<{ stock?: string; page?: string }>;
 }
 
 export default async function AdminProductsPage({ searchParams }: AdminProductsPageProps) {
-  const { stock } = await searchParams;
+  const { stock, page: pageParam } = await searchParams;
+  const page = Math.max(1, Number.parseInt(pageParam ?? "1", 10) || 1);
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
   const supabase = await createClient();
 
-  let query = supabase.from("products").select("*").order("created_at", { ascending: false });
+  let query = supabase
+    .from("products")
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, to);
   if (stock) query = query.eq("stock_status", stock);
 
-  const { data: products, error } = await query;
+  const { data: products, error, count } = await query;
 
   return (
     <div className="flex flex-col gap-6">
@@ -88,6 +99,10 @@ export default async function AdminProductsPage({ searchParams }: AdminProductsP
             </tbody>
           </table>
         </div>
+      )}
+
+      {!error && products && products.length > 0 && (
+        <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/admin/products" searchParams={{ stock }} />
       )}
     </div>
   );

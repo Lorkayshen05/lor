@@ -4,23 +4,34 @@ import { createClient } from "@/lib/supabase/server";
 import { orderStatuses, getOrderStatusLabel, orderStatusMap, type OrderStatus } from "@/config/order-status";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
+import { Pagination } from "@/components/admin/Pagination";
 import { formatCurrency, formatDateTime, cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "订单管理", robots: { index: false } };
 export const dynamic = "force-dynamic";
 
+const PAGE_SIZE = 20;
+
 interface AdminOrdersPageProps {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; page?: string }>;
 }
 
 export default async function AdminOrdersPage({ searchParams }: AdminOrdersPageProps) {
-  const { status } = await searchParams;
+  const { status, page: pageParam } = await searchParams;
+  const page = Math.max(1, Number.parseInt(pageParam ?? "1", 10) || 1);
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+
   const supabase = await createClient();
 
-  let query = supabase.from("orders").select("*").order("created_at", { ascending: false });
+  let query = supabase
+    .from("orders")
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
+    .range(from, to);
   if (status) query = query.eq("status", status);
 
-  const { data: orders, error } = await query;
+  const { data: orders, error, count } = await query;
 
   return (
     <div className="flex flex-col gap-6">
@@ -88,6 +99,10 @@ export default async function AdminOrdersPage({ searchParams }: AdminOrdersPageP
             </tbody>
           </table>
         </div>
+      )}
+
+      {!error && orders && orders.length > 0 && (
+        <Pagination page={page} pageSize={PAGE_SIZE} total={count ?? 0} basePath="/admin/orders" searchParams={{ status }} />
       )}
     </div>
   );
