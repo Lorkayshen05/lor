@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
+import { useId, type InputHTMLAttributes, type ReactNode, type SelectHTMLAttributes, type TextareaHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 const controlClasses =
@@ -45,10 +45,12 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 };
 
 export function Input({ label, error, hint, className, id, required, ...props }: InputProps) {
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
   return (
-    <FieldWrapper label={label} htmlFor={id} error={error} hint={hint} required={required}>
+    <FieldWrapper label={label} htmlFor={inputId} error={error} hint={hint} required={required}>
       <input
-        id={id}
+        id={inputId}
         className={cn(controlClasses, error && "border-brand-400 focus:ring-brand-100", className)}
         aria-invalid={Boolean(error)}
         {...props}
@@ -64,10 +66,12 @@ type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
 };
 
 export function Textarea({ label, error, hint, className, id, required, ...props }: TextareaProps) {
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
   return (
-    <FieldWrapper label={label} htmlFor={id} error={error} hint={hint} required={required}>
+    <FieldWrapper label={label} htmlFor={inputId} error={error} hint={hint} required={required}>
       <textarea
-        id={id}
+        id={inputId}
         className={cn(controlClasses, "min-h-24 resize-y", error && "border-brand-400", className)}
         aria-invalid={Boolean(error)}
         {...props}
@@ -83,10 +87,12 @@ type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
 };
 
 export function Select({ label, error, hint, className, id, required, children, ...props }: SelectProps) {
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
   return (
-    <FieldWrapper label={label} htmlFor={id} error={error} hint={hint} required={required}>
+    <FieldWrapper label={label} htmlFor={inputId} error={error} hint={hint} required={required}>
       <select
-        id={id}
+        id={inputId}
         className={cn(controlClasses, "appearance-none bg-white", error && "border-brand-400", className)}
         aria-invalid={Boolean(error)}
         {...props}
