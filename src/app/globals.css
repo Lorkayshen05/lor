@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fbf8f3;
+  --foreground: #241f1c;
+
+  --color-brand-50: #fdf3f1;
+  --color-brand-100: #fbe3de;
+  --color-brand-200: #f4c3b8;
+  --color-brand-300: #e79a87;
+  --color-brand-400: #d06d54;
+  --color-brand-500: #b23a2e;
+  --color-brand-600: #952c22;
+  --color-brand-700: #78241d;
+  --color-brand-800: #5f1e19;
+  --color-brand-900: #4e1b17;
+
+  --color-gold-50: #fdf8ec;
+  --color-gold-100: #faedc9;
+  --color-gold-200: #f3d787;
+  --color-gold-300: #eabf4f;
+  --color-gold-400: #d8a12f;
+  --color-gold-500: #c98a2c;
+  --color-gold-600: #a56b22;
+  --color-gold-700: #7f501c;
+
+  --color-cream-50: #fffdf9;
+  --color-cream-100: #fbf8f3;
+  --color-cream-200: #f4ede1;
+  --color-cream-300: #ebe0cd;
+
+  --color-ink-50: #f5f3f1;
+  --color-ink-100: #e6e1db;
+  --color-ink-400: #6b625a;
+  --color-ink-600: #453d37;
+  --color-ink-800: #2c2521;
+  --color-ink-900: #241f1c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand-50: var(--color-brand-50);
+  --color-brand-100: var(--color-brand-100);
+  --color-brand-200: var(--color-brand-200);
+  --color-brand-300: var(--color-brand-300);
+  --color-brand-400: var(--color-brand-400);
+  --color-brand-500: var(--color-brand-500);
+  --color-brand-600: var(--color-brand-600);
+  --color-brand-700: var(--color-brand-700);
+  --color-brand-800: var(--color-brand-800);
+  --color-brand-900: var(--color-brand-900);
+
+  --color-gold-50: var(--color-gold-50);
+  --color-gold-100: var(--color-gold-100);
+  --color-gold-200: var(--color-gold-200);
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-700: var(--color-gold-700);
+
+  --color-cream-50: var(--color-cream-50);
+  --color-cream-100: var(--color-cream-100);
+  --color-cream-200: var(--color-cream-200);
+  --color-cream-300: var(--color-cream-300);
+
+  --color-ink-50: var(--color-ink-50);
+  --color-ink-100: var(--color-ink-100);
+  --color-ink-400: var(--color-ink-400);
+  --color-ink-600: var(--color-ink-600);
+  --color-ink-800: var(--color-ink-800);
+  --color-ink-900: var(--color-ink-900);
+
+  --font-sans: var(--font-noto-sans), "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-display: var(--font-jakarta), var(--font-noto-sans), sans-serif;
+}
+
+body {
+  background: var(--color-cream-100);
+  color: var(--color-ink-900);
+  font-family: var(--font-sans);
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
