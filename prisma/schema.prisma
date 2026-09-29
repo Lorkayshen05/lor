@@ -1,0 +1,505 @@
+// BekuSegar schema. See docs/technical-architecture.md for the modelling rationale.
+// Money is stored in sen (RM 1.00 = 100) as Int. Anything we cannot verify is nullable.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ───────────────────────── Enums ─────────────────────────
+
+enum Role {
+  USER
+  BUSINESS_OWNER
+  ADMIN
+}
+
+enum ClaimStatus {
+  UNCLAIMED
+  CLAIMED
+}
+
+enum DataSource {
+  SEED_DIRECTORY // name/address compiled from public information, not owner-verified
+  OWNER_SUBMITTED
+  ADMIN_ENTERED
+}
+
+enum CategoryKind {
+  STORE_TYPE // tags a branch: frozen-food, fresh-meat
+  PRODUCT // groups products: chicken-breast, hotpot, ...
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ArticleStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum PlanTier {
+  FREE
+  FEATURED
+  PREMIUM
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELED
+  EXPIRED
+}
+
+enum PaymentProvider {
+  MANUAL
+  STRIPE
+  BILLPLZ
+}
+
+enum Placement {
+  HOMEPAGE
+  STORE_DIRECTORY
+  CATEGORY
+  AREA
+}
+
+enum AdSlot {
+  HOME_MID
+  DIRECTORY_INLINE
+  ARTICLE_INLINE
+}
+
+enum AdType {
+  DISPLAY
+  AFFILIATE
+}
+
+enum LeadType {
+  QUOTATION
+  CONTACT
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  CLOSED
+}
+
+enum AnalyticsEventType {
+  PAGE_VIEW
+  SEARCH
+  STORE_VIEW
+  DIRECTIONS_CLICK
+  PHONE_CLICK
+  WHATSAPP_CLICK
+  WEBSITE_CLICK
+  CLAIM_SUBMITTED
+  LEAD_SUBMITTED
+  SPONSORED_CLICK
+  AD_CLICK
+}
+
+// ───────────────────────── Identity ─────────────────────────
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique // stored lower-cased
+  name           String
+  passwordHash   String
+  role           Role      @default(USER)
+  sessionVersion Int       @default(0) // bump to revoke every session of this user
+  failedLogins   Int       @default(0)
+  lockedUntil    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  businesses Business[]      @relation("BusinessOwner")
+  reviews    Review[]
+  claims     BusinessClaim[] @relation("ClaimClaimant")
+  articles   Article[]
+  leads      Lead[]
+}
+
+// ───────────────────────── Directory ─────────────────────────
+
+model Area {
+  id       String  @id @default(cuid())
+  slug     String  @unique
+  name     String
+  city     String
+  state    String
+  lat      Float // approximate centre, used for distance only
+  lng      Float
+  radiusKm Float   @default(6) // "near this area" radius for SEO pages
+  blurb    String? // short, factual, hand-written
+  isActive Boolean @default(true)
+
+  branches          Branch[]
+  sponsoredListings SponsoredListing[]
+}
+
+model Business {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String // primary display name (may be Chinese)
+  nameAlt     String? // alternative / English name
+  description String?
+  website     String?
+  logoUrl     String?
+  claimStatus ClaimStatus @default(UNCLAIMED)
+  dataSource  DataSource  @default(SEED_DIRECTORY)
+  isPublished Boolean     @default(true)
+  ownerId     String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  owner             User?              @relation("BusinessOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  branches          Branch[]
+  products          BusinessProduct[]
+  deals             Deal[]
+  leads             Lead[]
+  claims            BusinessClaim[]
+  photos            Photo[]
+  sponsoredListings SponsoredListing[]
+  subscription      Subscription?
+
+  @@index([ownerId])
+}
+
+model Branch {
+  id               String    @id @default(cuid())
+  businessId       String
+  areaId           String
+  slug             String    @unique
+  branchName       String // e.g. "Sri Petaling"
+  addressLine      String
+  postcode         String
+  city             String
+  state            String
+  lat              Float? // approximate unless coordsApprox = false
+  lng              Float?
+  coordsApprox     Boolean   @default(true)
+  phone            String? // E.164-ish digits, only when verified/owner-supplied
+  whatsapp         String? // digits with country code, e.g. 60123456789
+  email            String?
+  website          String?
+  openingHours     Json? // { mon: [{ open: "09:00", close: "18:00" }], ... }
+  hoursVerifiedAt  DateTime? // hours are shown ONLY when set
+  priceLevel       Int? // 1 = $, 2 = $$, 3 = $$$; null = unknown
+  promoDescription String? // featured-plan promotional blurb
+  isActive         Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  business          Business           @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  area              Area               @relation(fields: [areaId], references: [id])
+  categories        Category[]
+  deals             Deal[]
+  reviews           Review[]
+  leads             Lead[]
+  photos            Photo[]
+  products          BusinessProduct[]
+  sponsoredListings SponsoredListing[]
+
+  @@index([businessId])
+  @@index([areaId])
+  @@index([isActive, city])
+}
+
+model Category {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  name        String
+  nameZh      String?
+  kind        CategoryKind
+  description String
+  emoji       String       @default("🛒")
+  sortOrder   Int          @default(0)
+
+  branches          Branch[] // only meaningful for STORE_TYPE
+  products          Product[]
+  // PRODUCT category → store types where it is typically sold (availability NOT verified)
+  storeTypes        Category[]         @relation("TypicallySoldAt")
+  productCategories Category[]         @relation("TypicallySoldAt")
+  deals             Deal[]
+  sponsoredListings SponsoredListing[]
+
+  @@index([kind, sortOrder])
+}
+
+model Product {
+  id            String  @id @default(cuid())
+  slug          String  @unique
+  name          String
+  nameZh        String?
+  categoryId    String
+  description   String
+  buyingTips    String? // markdown, general advice only
+  nutritionNote String? // general, sourced statement or null
+  isPublished   Boolean @default(true)
+  sortOrder     Int     @default(0)
+
+  category  Category          @relation(fields: [categoryId], references: [id])
+  offerings BusinessProduct[]
+  deals     Deal[]
+
+  @@index([categoryId])
+}
+
+// The ONLY table that lets us say a business/branch stocks a specific product.
+model BusinessProduct {
+  id             String    @id @default(cuid())
+  businessId     String
+  branchId       String? // null = all branches
+  productId      String
+  priceSen       Int?
+  priceUnit      String? // "per kg", "per pack"
+  priceUpdatedAt DateTime?
+  verifiedAt     DateTime? // owner- or admin-confirmed; only verified rows are displayed
+  createdAt      DateTime  @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  branch   Branch?  @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, branchId, productId])
+  @@index([productId])
+}
+
+// ───────────────────────── Engagement ─────────────────────────
+
+model Deal {
+  id               String           @id @default(cuid())
+  businessId       String
+  branchId         String? // null = all branches
+  productId        String?
+  categoryId       String?
+  title            String
+  description      String?
+  priceSen         Int?
+  originalPriceSen Int?
+  priceUnit        String?
+  startsAt         DateTime
+  endsAt           DateTime
+  status           ModerationStatus @default(PENDING)
+  isSponsored      Boolean          @default(false)
+  submittedById    String?
+  reviewedById     String?
+  reviewedAt       DateTime?
+  rejectionReason  String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  business Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  branch   Branch?   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  product  Product?  @relation(fields: [productId], references: [id], onDelete: SetNull)
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@index([status, endsAt])
+  @@index([businessId])
+}
+
+model Review {
+  id            String           @id @default(cuid())
+  userId        String
+  branchId      String
+  rating        Int // 1..5, enforced in validation
+  body          String
+  status        ModerationStatus @default(PENDING)
+  moderatedById String?
+  moderatedAt   DateTime?
+  createdAt     DateTime         @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, branchId])
+  @@index([branchId, status])
+}
+
+model Lead {
+  id         String     @id @default(cuid())
+  businessId String
+  branchId   String?
+  userId     String?
+  type       LeadType
+  name       String
+  email      String?
+  phone      String?
+  message    String
+  status     LeadStatus @default(NEW)
+  sourcePath String?
+  createdAt  DateTime   @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  branch   Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  user     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([businessId, createdAt])
+}
+
+model BusinessClaim {
+  id           String           @id @default(cuid())
+  businessId   String
+  userId       String
+  claimantName String
+  claimantRole String // owner, manager, staff...
+  phone        String
+  email        String
+  note         String?
+  status       ModerationStatus @default(PENDING)
+  reviewedById String?
+  reviewedAt   DateTime?
+  createdAt    DateTime         @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  user     User     @relation("ClaimClaimant", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+  @@index([businessId])
+}
+
+model Photo {
+  id           String           @id @default(cuid())
+  businessId   String
+  branchId     String?
+  url          String // /media/<file>
+  alt          String
+  status       ModerationStatus @default(PENDING)
+  sortOrder    Int              @default(0)
+  uploadedById String?
+  createdAt    DateTime         @default(now())
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  branch   Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@index([businessId, status])
+}
+
+// ───────────────────────── Content ─────────────────────────
+
+model Article {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  title           String
+  excerpt         String
+  body            String // markdown (raw HTML is not rendered)
+  status          ArticleStatus @default(DRAFT)
+  publishedAt     DateTime?
+  reviewedAt      DateTime? // "content last reviewed"
+  metaTitle       String?
+  metaDescription String?
+  faq             Json? // [{ q, a }]
+  isSponsored     Boolean       @default(false)
+  sponsorName     String?
+  sponsorUrl      String?
+  areaSlug        String? // shows live directory listings for this area under the article
+  categorySlug    String? // ...and/or for this category
+  authorId        String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([status, publishedAt])
+}
+
+// ───────────────────────── Monetization ─────────────────────────
+
+model Plan {
+  id        String   @id @default(cuid())
+  code      String   @unique // "free", "featured-monthly", "premium-monthly"
+  name      String
+  tier      PlanTier
+  priceSen  Int // per interval; configurable from /admin
+  currency  String   @default("MYR")
+  interval  String   @default("month")
+  features  Json? // string[] shown on /business
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id               String             @id @default(cuid())
+  businessId       String             @unique
+  planId           String
+  status           SubscriptionStatus @default(ACTIVE)
+  provider         PaymentProvider    @default(MANUAL)
+  providerRef      String?
+  currentPeriodEnd DateTime?
+  notes            String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  business Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  plan     Plan     @relation(fields: [planId], references: [id])
+}
+
+model SponsoredListing {
+  id         String    @id @default(cuid())
+  businessId String
+  branchId   String?
+  placement  Placement
+  categoryId String?
+  areaId     String?
+  startsAt   DateTime
+  endsAt     DateTime
+  priority   Int       @default(0)
+  isActive   Boolean   @default(true)
+  notes      String?
+  createdAt  DateTime  @default(now())
+
+  business Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  branch   Branch?   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  area     Area?     @relation(fields: [areaId], references: [id], onDelete: SetNull)
+
+  @@index([placement, isActive, endsAt])
+}
+
+model Advertisement {
+  id         String    @id @default(cuid())
+  slot       AdSlot
+  type       AdType    @default(DISPLAY)
+  advertiser String
+  title      String
+  body       String?
+  imageUrl   String?
+  linkUrl    String
+  startsAt   DateTime?
+  endsAt     DateTime?
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+
+  @@index([slot, isActive])
+}
+
+// ───────────────────────── Analytics ─────────────────────────
+
+model AnalyticsEvent {
+  id          Int                @id @default(autoincrement())
+  type        AnalyticsEventType
+  businessId  String?
+  branchId    String?
+  path        String?
+  searchTerm  String?
+  referrer    String?
+  visitorHash String? // salted daily hash; no IP or raw UA is stored
+  meta        Json?
+  createdAt   DateTime           @default(now())
+
+  @@index([type, createdAt])
+  @@index([businessId, type, createdAt])
+  @@index([branchId, type, createdAt])
+}
