@@ -24,3 +24,11 @@ export async function createLead(raw: unknown, userId: string | null) {
   });
   return lead;
 }
+
+export async function updateLeadStatus(actor: import("@/lib/auth/errors").Actor | null, leadId: string, status: "NEW" | "CONTACTED" | "CLOSED") {
+  const { assertBusinessAccess } = await import("./access");
+  const lead = await db.lead.findUnique({ where: { id: leadId }, select: { businessId: true } });
+  if (!lead) throw new ValidationFailure("Lead not found.");
+  await assertBusinessAccess(actor, lead.businessId);
+  return db.lead.update({ where: { id: leadId }, data: { status } });
+}
