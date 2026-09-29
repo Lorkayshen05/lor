@@ -6,7 +6,7 @@ export const business = {
   name: "永隆鮮肉凍品鋪",
   nameAlt: "Yoon Loong Frozen & Fresh Meat Wholesale Mart",
   description:
-    "Frozen food and fresh meat wholesale mart with multiple branches around Kuala Lumpur and Selangor. Listing compiled from public information; not verified by the business.",
+    "Frozen food and fresh meat wholesale mart with multiple branches around Kuala Lumpur and Selangor.",
 } as const;
 
 export const branches = [
