@@ -1,7 +1,21 @@
 "use client";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useTransition, type FormEvent } from "react";
 import type { FormState } from "@/lib/form-state";
+
+/**
+ * React 19 resets uncontrolled forms after an action completes, which would wipe what the user typed
+ * whenever the server rejects it. Submitting through a transition keeps the values (native validation
+ * still runs first); forms that WANT a reset after success do it explicitly.
+ */
+export function useKeepValuesSubmit(formAction: (fd: FormData) => void) {
+  const [, start] = useTransition();
+  return (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    start(() => formAction(fd));
+  };
+}
 
 export function Field({ label, name, errors, hint, children }: { label: string; name: string; errors?: string[]; hint?: string; children: React.ReactNode }) {
   return (
@@ -33,10 +47,11 @@ type Action = (prev: FormState, fd: FormData) => Promise<FormState>;
 
 export function LeadForm({ action, businessId, branchId, businessName, sourcePath }: { action: Action; businessId: string; branchId: string; businessName: string; sourcePath: string }) {
   const [state, formAction, pending] = useActionState(action, {});
+  const onSubmit = useKeepValuesSubmit(formAction);
   const fe = state.fieldErrors ?? {};
   if (state.ok) return <FormMessage state={state} />;
   return (
-    <form action={formAction} className="space-y-3" data-testid="lead-form">
+    <form onSubmit={onSubmit} className="space-y-3" data-testid="lead-form">
       <input type="hidden" name="businessId" value={businessId} />
       <input type="hidden" name="branchId" value={branchId} />
       <input type="hidden" name="sourcePath" value={sourcePath} />
@@ -64,10 +79,11 @@ export function LeadForm({ action, businessId, branchId, businessName, sourcePat
 
 export function ReviewForm({ action, branchId, next }: { action: Action; branchId: string; next: string }) {
   const [state, formAction, pending] = useActionState(action, {});
+  const onSubmit = useKeepValuesSubmit(formAction);
   const fe = state.fieldErrors ?? {};
   if (state.ok) return <FormMessage state={state} />;
   return (
-    <form action={formAction} className="space-y-3" data-testid="review-form">
+    <form onSubmit={onSubmit} className="space-y-3" data-testid="review-form">
       <input type="hidden" name="branchId" value={branchId} />
       <Field label="Rating" name="rating" errors={fe.rating}>
         <select id="rating" name="rating" className="input" defaultValue="5">
@@ -85,10 +101,11 @@ export function ReviewForm({ action, branchId, next }: { action: Action; branchI
 
 export function ClaimForm({ action, businessId, defaultName, defaultEmail }: { action: Action; businessId: string; defaultName?: string; defaultEmail?: string }) {
   const [state, formAction, pending] = useActionState(action, {});
+  const onSubmit = useKeepValuesSubmit(formAction);
   const fe = state.fieldErrors ?? {};
   if (state.ok) return <FormMessage state={state} />;
   return (
-    <form action={formAction} className="space-y-3" data-testid="claim-form">
+    <form onSubmit={onSubmit} className="space-y-3" data-testid="claim-form">
       <input type="hidden" name="businessId" value={businessId} />
       <Field label="Your full name" name="claimantName" errors={fe.claimantName}><input id="claimantName" name="claimantName" defaultValue={defaultName} className="input" required maxLength={80} /></Field>
       <Field label="Your role" name="claimantRole" errors={fe.claimantRole}><input id="claimantRole" name="claimantRole" className="input" placeholder="Owner, manager…" required maxLength={60} /></Field>
@@ -105,9 +122,10 @@ export function ClaimForm({ action, businessId, defaultName, defaultEmail }: { a
 
 export function AuthForm({ mode, action, next }: { mode: "login" | "register"; action: Action; next?: string }) {
   const [state, formAction, pending] = useActionState(action, {});
+  const onSubmit = useKeepValuesSubmit(formAction);
   const fe = state.fieldErrors ?? {};
   return (
-    <form action={formAction} className="space-y-3" data-testid={`${mode}-form`}>
+    <form onSubmit={onSubmit} className="space-y-3" data-testid={`${mode}-form`}>
       {next && <input type="hidden" name="next" value={next} />}
       {mode === "register" && <Field label="Your name" name="name" errors={fe.name}><input id="name" name="name" className="input" autoComplete="name" required /></Field>}
       <Field label="Email" name="email" errors={fe.email}><input id="email" name="email" type="email" className="input" autoComplete="email" required /></Field>

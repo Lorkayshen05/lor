@@ -95,7 +95,7 @@ export async function saveResource(actor: Actor | null, key: string, id: string 
   const mode = id ? "update" : "create";
   const { data, errors } = parseFields(def, fd, mode);
   if (Object.keys(errors).length) throw new ValidationFailure("Please fix the highlighted problems.", errors);
-  const problem = def.beforeSave?.(data, { actor, id, mode });
+  const problem = await def.beforeSave?.(data, { actor, id, mode });
   if (problem) throw new ValidationFailure(problem);
   try {
     return id

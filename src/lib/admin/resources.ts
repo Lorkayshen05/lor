@@ -52,7 +52,7 @@ export type ResourceDef = {
   defaults?: Record<string, unknown>;
   rowActions?: RowAction[];
   /** Adjust the parsed data before saving (stamps, derived fields). */
-  beforeSave?: (data: Record<string, unknown>, ctx: { actor: Actor; id: string | null; mode: "create" | "update" }) => void | string;
+  beforeSave?: (data: Record<string, unknown>, ctx: { actor: Actor; id: string | null; mode: "create" | "update" }) => void | string | Promise<void | string>;
 };
 
 const opts = (o: Record<string, string>): Option[] => Object.values(o).map((v) => ({ value: v, label: v.replaceAll("_", " ").toLowerCase() }));
@@ -206,6 +206,14 @@ export const RESOURCES: ResourceDef[] = [
       { label: "City", path: "city" }, { label: "Phone", path: "phone" }, { label: "Active", path: "isActive", format: "bool" },
     ],
     orderBy: { branchName: "asc" }, search: ["branchName", "addressLine", "city", "slug"], defaults: { coordsApprox: true, isActive: true },
+    // Without coordinates a branch would be invisible to distance sorting and location pages,
+    // so fall back to the area centre and keep it flagged as approximate.
+    async beforeSave(d) {
+      if ((d.lat == null || d.lng == null) && typeof d.areaId === "string") {
+        const area = await db.area.findUnique({ where: { id: d.areaId }, select: { lat: true, lng: true } });
+        if (area) { d.lat = area.lat; d.lng = area.lng; d.coordsApprox = true; }
+      }
+    },
   },
   {
     key: "categories", label: "Categories", singular: "category", model: "category", group: "Directory",

@@ -1,7 +1,7 @@
 "use client";
 import { useActionState, useEffect, useRef } from "react";
 import type { FormState } from "@/lib/form-state";
-import { FormMessage } from "./forms";
+import { FormMessage, useKeepValuesSubmit } from "./forms";
 
 type Props = {
   action: (prev: FormState, fd: FormData) => Promise<FormState>;
@@ -16,12 +16,13 @@ type Props = {
 /** Generic form wrapper for server actions: pending state, field errors via <FieldErrors>, status message. */
 export function ActionForm({ action, submitLabel, children, resetOnSuccess, className, encType, testId }: Props) {
   const [state, formAction, pending] = useActionState(action, {});
+  const onSubmit = useKeepValuesSubmit(formAction);
   const ref = useRef<HTMLFormElement>(null);
   useEffect(() => {
     if (state.ok && resetOnSuccess) ref.current?.reset();
   }, [state, resetOnSuccess]);
   return (
-    <form ref={ref} action={formAction} encType={encType} className={className ?? "space-y-3"} data-testid={testId}>
+    <form ref={ref} onSubmit={onSubmit} encType={encType} className={className ?? "space-y-3"} data-testid={testId}>
       {children}
       {state.fieldErrors && (
         <ul className="rounded-lg bg-chili-50 px-3 py-2 text-sm text-chili-700" role="alert">
