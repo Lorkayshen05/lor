@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f7f5;
+  --surface: #ffffff;
+  --surface-2: #eef1ec;
+  --border: #dfe4dc;
+  --foreground: #1c2420;
+  --muted: #5c6a60;
+  --primary: #0f766e; /* teal */
+  --primary-2: #0d5c56;
+  --accent: #d97706; /* amber */
+  --xp: #ca8a04;
+  --success: #16a34a;
+  --danger: #dc2626;
+}
+
+:root[data-theme="dark"] {
+  --background: #0d1512;
+  --surface: #141f1a;
+  --surface-2: #1b2a23;
+  --border: #26382f;
+  --foreground: #e7ede9;
+  --muted: #93a49a;
+  --primary: #2dd4bf;
+  --primary-2: #14b8a6;
+  --accent: #fb923c;
+  --xp: #fbbf24;
+  --success: #4ade80;
+  --danger: #f87171;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-primary: var(--primary);
+  --color-primary-2: var(--primary-2);
+  --color-accent: var(--accent);
+  --color-xp: var(--xp);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes xp-fill {
+    from {
+      width: 0%;
+    }
+    to {
+      width: var(--xp-to, 0%);
+    }
+  }
+  .xp-bar-fill {
+    animation: xp-fill 0.7s ease-out forwards;
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.94) translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  .pop-in {
+    animation: pop-in 0.22s ease-out;
+  }
+
+  @keyframes xp-pop {
+    0% {
+      opacity: 0;
+      transform: translateY(6px) scale(0.9);
+    }
+    30% {
+      opacity: 1;
+      transform: translateY(0) scale(1.05);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+  .xp-pop {
+    animation: xp-pop 0.4s ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-bar-fill {
+    width: var(--xp-to, 0%);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

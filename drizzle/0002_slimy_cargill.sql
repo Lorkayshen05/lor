@@ -1,0 +1,1 @@
+ALTER TABLE `progress` ADD `quiz_slots_solved` text DEFAULT '[]' NOT NULL;
