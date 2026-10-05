@@ -1,0 +1,85 @@
+{
+  "app": { "skipLink": "跳至主要內容", "sampleBanner": "範例菜單——在加入真正的 Ruby 菜單之前，名稱和價格僅為佔位。", "brandTagline": "傳統中式甜品 · 始於 1927" },
+  "nav": { "label": "主導覽", "home": "首頁", "menu": "菜單", "discover": "探索", "cart": "購物車", "orders": "訂單" },
+  "orderType": { "label": "用餐方式", "dineIn": "內用", "takeAway": "外帶", "pricesFor": "顯示{{type}}價格" },
+  "common": {
+    "add": "加入", "added": "已加入", "back": "返回", "close": "關閉", "search": "搜尋", "clear": "清除", "retry": "重試", "loading": "載入中…",
+    "total": "合計", "subtotal": "小計", "remaining": "剩餘", "viewCart": "查看購物車", "increase": "增加{{name}}的數量", "decrease": "減少{{name}}的數量",
+    "quantity": "數量", "dineInPrice": "內用", "takeawayPrice": "外帶", "code": "編號", "unavailable": "暫時缺貨", "imageFailed": "圖片無法顯示", "selected": "已選擇",
+    "viewAll": "查看完整菜單", "seeAll": "查看全部"
+  },
+  "hero": { "eyebrow": "始於 1927", "orderNow": "立即點餐", "subtitle": "傳統中式甜品，內用或外帶，隨您心意。" },
+  "labels": { "signature": "招牌", "firstTimer": "初次光臨推薦", "startingPoint": "絕佳起點", "firstTimerPick": "新客之選", "tryNew": "嘗試新口味", "bestSeller": "熱銷", "recommended": "推薦" },
+  "firstTime": {
+    "title": "第一次來？", "subtitle": "不知道點什麼？從這裡開始。", "comboTitle": "首次光臨建議組合",
+    "role": { "signature": "招牌甜品", "mixed": "綜合口味甜品", "custard": "燉品", "drink": "傳統飲品" },
+    "addCombo": "全部加入購物車", "picksTitle": "新客之選"
+  },
+  "welcomeBack": {
+    "title": "歡迎回來", "subtitle": "想試試不一樣的嗎？", "orderAgain": "再點一次", "tryNew": "嘗試新口味", "lastOrder": "您上次的訂單",
+    "orderedOn": "下單於 {{date}}", "reordered": "已將上次訂單加入購物車。", "skipped": "已無法供應：{{names}}", "viewOrders": "全部訂單"
+  },
+  "signatures": { "title": "本店招牌", "subtitle": "由本店精選——不妨從這裡開始。", "bestTitle": "熱銷榜", "bestSubtitle": "根據真實訂單排名。", "rank": "第{{rank}}名" },
+  "tryNew": { "title": "嘗試新口味", "subtitleHistory": "與您以前點過的不同。", "subtitleSession": "購物車之外的新選擇。" },
+  "mix": { "title": "搭配您的甜品", "subtitle": "告訴我們人數和預算，我們為您從菜單中搭配。", "cta": "為我搭配" },
+  "story": { "title": "我們的故事", "body": "Kan Brothers Ruby Dessert House 自 1927 年起供應中式甜品，被譽為芝麻糊大王。" },
+  "location": { "title": "找到我們", "pending": "門市資訊即將公布。", "directions": "路線" },
+  "menu": {
+    "title": "菜單", "searchLabel": "搜尋菜單", "searchPlaceholder": "搜尋名稱、中文名、編號或類別", "filtersLabel": "探索篩選", "all": "全部",
+    "noResults": "沒有找到與「{{query}}」相符的甜品。", "noResultsFilter": "此篩選下暫無甜品。", "noResultsHint": "試試其他拼寫、中文名，或清除搜尋和篩選。",
+    "clearAll": "清除搜尋和篩選", "resultCount": "顯示 {{count}} 項"
+  },
+  "filters": { "signature": "招牌", "firstTime": "新客", "mixed": "綜合口味", "richNutty": "濃郁堅果", "warmSilky": "溫熱細滑", "lightRefreshing": "清爽", "drinks": "飲品", "tryNew": "嘗試新口味" },
+  "category": { "paste": "糊類", "mixed": "綜合糊", "custard": "燉品", "sweetSoup": "糖水", "cold": "冰品", "drink": "飲品" },
+  "flavour": { "sesame": "芝麻", "nutty": "堅果", "creamy": "奶香", "light": "清淡", "refreshing": "清爽", "mixed": "綜合", "traditional": "傳統" },
+  "product": { "backToMenu": "返回菜單", "notFound": "找不到這道甜品。", "notFoundHint": "它可能已從菜單中移除。", "yourPrice": "您的價格", "addToCart": "加入購物車" },
+  "cart": {
+    "title": "您的購物車", "empty": "購物車是空的。", "emptyHint": "從我們的招牌開始吧。", "browse": "瀏覽菜單", "checkout": "結帳", "clear": "清空購物車",
+    "removeItem": "移除{{name}}", "unavailableTitle": "部分商品已無法供應", "unavailableBody": "請移除後繼續：{{names}}", "suggestions": "完善您的訂單", "lineTotal": "小計"
+  },
+  "checkout": {
+    "title": "結帳", "details": "您的資料", "tableNumber": "桌號", "tableHint": "請見桌上的號碼。", "name": "姓名", "nameOptional": "姓名（選填）", "phone": "電話號碼",
+    "phoneHint": "僅在需要就此訂單聯絡您時使用。", "pickup": "取餐時間", "pickupAsap": "盡快", "pickupIn": "{{minutes}} 分鐘後", "review": "您的訂單",
+    "place": "送出訂單", "placing": "傳送中…", "fixErrors": "請修正標出的欄位。", "failedTitle": "訂單未能送出",
+    "failedBody": "您的購物車完好無損。請再試一次，或告知店員。", "privacy": "我們只在此裝置上保存訂單和桌號。您的姓名和電話僅用於本次訂單。"
+  },
+  "confirmation": {
+    "title": "已收到訂單", "subtitle": "謝謝——我們已收到您的訂單。", "orderNumber": "訂單編號", "status": "狀態", "type": "用餐方式", "table": "桌號", "pickup": "取餐",
+    "items": "項目", "backToMenu": "返回菜單", "viewOrder": "查看訂單", "notFound": "在此裝置上找不到該訂單。"
+  },
+  "status": { "received": "已收到", "preparing": "製作中", "ready": "可取餐", "completed": "已完成", "cancelled": "已取消" },
+  "orders": { "title": "您的訂單", "empty": "暫無訂單。", "emptyHint": "您在此裝置上送出的訂單會顯示在這裡。", "deviceNote": "訂單記錄僅保存在此裝置上。", "orderAgain": "再點一次", "tryNew": "嘗試新口味", "detailTitle": "訂單 {{id}}" },
+  "wizard": {
+    "title": "我該吃什麼？", "subtitle": "三個簡單問題。", "step": "第 {{current}} 步，共 {{total}} 步", "visitQuestion": "您來過 Ruby 嗎？", "cravingQuestion": "您想吃什麼口味？", "budgetQuestion": "預算？",
+    "visit": { "first": "第一次", "second": "第二次", "returning": "常客" },
+    "budgetValue": "RM{{amount}}", "budgetOpen": "RM{{amount}}+", "resultsTitle": "為您推薦", "resultsHint": "合計不超過 {{budget}}。",
+    "none": "在該預算和口味下，菜單中沒有合適的選擇。請提高預算。", "addAll": "全部加入購物車", "startOver": "重新開始", "next": "下一步", "seeResults": "查看推薦", "choose": "請選擇一項以繼續。"
+  },
+  "reasons": {
+    "signature": "本店招牌之一。", "firstTimer": "初次光臨的絕佳起點。", "preference": "因為您喜歡{{flavour}}口味而推薦。", "differentFrom": "與{{item}}不同的選擇。",
+    "somethingNew": "值得一試的新口味。", "completesOrder": "與購物車中的甜品很搭。"
+  },
+  "planner": {
+    "title": "為我搭配", "subtitle": "選擇人數和預算，我們從菜單中為您搭配。", "people": "人數", "budget": "預算", "recommended": "推薦訂單", "total": "合計", "remaining": "剩餘預算",
+    "addAll": "全部加入購物車", "tooLow": "菜單中沒有符合該預算的選擇——請提高預算。", "notEveryone": "此預算可為 {{people}} 人中的 {{count}} 人各點一份主食。請提高預算以涵蓋所有人。",
+    "peopleOption": "{{count}}", "peopleOpen": "{{count}}+"
+  },
+  "discover": { "title": "探索", "subtitle": "找到您會喜歡的甜品。" },
+  "language": {
+    "label": "語言", "choose": "選擇語言", "search": "搜尋語言", "noMatch": "沒有符合「{{query}}」的語言。", "partial": "部分翻譯", "needsReview": "待審核",
+    "notVerified": "翻譯並非全部經過專業校對。粵語和閩南語尤其需要母語人士驗證。", "loadFailed": "無法載入該語言，保持使用{{language}}。", "current": "目前"
+  },
+  "errors": {
+    "cartEmpty": "購物車是空的——請先加入商品。", "unavailableItems": "購物車中有些商品已無法供應。", "tableRequired": "請輸入桌號，以便我們送餐。",
+    "tableInvalid": "僅限字母、數字或連字號，最多 6 個字元。", "nameRequired": "請輸入訂單姓名。", "nameTooLong": "請使用 40 個字元以內。",
+    "phoneRequired": "請輸入電話號碼。", "phoneInvalid": "請輸入有效的電話號碼，例如 +60 12 345 6789。", "pageNotFound": "找不到頁面", "pageNotFoundHint": "該頁面不存在，請返回菜單。",
+    "generic": "出了點問題", "genericHint": "請重新載入頁面，您的購物車已保存。", "reload": "重新載入"
+  },
+  "dish": {
+    "black-sesame-paste": { "name": "芝麻糊" }, "peanut-paste": { "name": "花生糊" }, "almond-paste": { "name": "杏仁糊" }, "walnut-paste": { "name": "核桃糊" },
+    "sesame-peanut-mixed": { "name": "芝麻花生糊" }, "sesame-almond-mixed": { "name": "芝麻杏仁糊" }, "steamed-egg-custard": { "name": "燉蛋" },
+    "steamed-milk-custard": { "name": "燉鮮奶" }, "ginger-milk-curd": { "name": "薑汁撞奶" }, "red-bean-soup": { "name": "紅豆沙" }, "green-bean-soup": { "name": "綠豆沙" },
+    "grass-jelly": { "name": "仙草" }, "coconut-sago": { "name": "椰汁西米露" }, "chinese-tea": { "name": "中國茶" }, "chrysanthemum-tea": { "name": "菊花茶" },
+    "soy-milk": { "name": "豆漿" }, "barley-water": { "name": "薏米水" }
+  }
+}

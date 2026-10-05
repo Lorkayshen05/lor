@@ -1,0 +1,85 @@
+{
+  "app": { "skipLink": "Langkau ke kandungan", "sampleBanner": "Menu contoh — nama dan harga adalah ruang letak sehingga menu Ruby sebenar ditambah.", "brandTagline": "Pencuci mulut Cina warisan · Sejak 1927" },
+  "nav": { "label": "Navigasi utama", "home": "Utama", "menu": "Menu", "discover": "Teroka", "cart": "Troli", "orders": "Pesanan" },
+  "orderType": { "label": "Jenis pesanan", "dineIn": "Makan di sini", "takeAway": "Bungkus", "pricesFor": "Memaparkan harga {{type}}" },
+  "common": {
+    "add": "Tambah", "added": "Ditambah", "back": "Kembali", "close": "Tutup", "search": "Cari", "clear": "Kosongkan", "retry": "Cuba lagi", "loading": "Memuatkan…",
+    "total": "Jumlah", "subtotal": "Subjumlah", "remaining": "Baki", "viewCart": "Lihat troli", "increase": "Tambah kuantiti {{name}}", "decrease": "Kurangkan kuantiti {{name}}",
+    "quantity": "Kuantiti", "dineInPrice": "Makan di sini", "takeawayPrice": "Bungkus", "code": "Kod", "unavailable": "Tidak tersedia buat masa ini", "imageFailed": "Gambar tidak tersedia", "selected": "Dipilih",
+    "viewAll": "Lihat menu penuh", "seeAll": "Lihat semua"
+  },
+  "hero": { "eyebrow": "Sejak 1927", "orderNow": "Pesan sekarang", "subtitle": "Pencuci mulut Cina warisan, pilih makan di sini atau bungkus." },
+  "labels": { "signature": "Signature", "firstTimer": "Disyorkan untuk pengunjung baharu", "startingPoint": "Permulaan yang baik", "firstTimerPick": "Pilihan pengunjung baharu", "tryNew": "Cuba sesuatu yang baharu", "bestSeller": "Terlaris", "recommended": "Disyorkan" },
+  "firstTime": {
+    "title": "Kali pertama di sini?", "subtitle": "Tidak pasti nak pesan apa? Mulakan di sini.", "comboTitle": "Cadangan lawatan pertama",
+    "role": { "signature": "Pencuci mulut signature", "mixed": "Pencuci mulut perisa campur", "custard": "Custard kukus", "drink": "Minuman tradisional" },
+    "addCombo": "Tambah semua ke troli", "picksTitle": "Pilihan pengunjung baharu"
+  },
+  "welcomeBack": {
+    "title": "Selamat kembali", "subtitle": "Sedia mencuba sesuatu yang berbeza?", "orderAgain": "Pesan semula", "tryNew": "Cuba sesuatu yang baharu", "lastOrder": "Pesanan terakhir anda",
+    "orderedOn": "Dipesan pada {{date}}", "reordered": "Pesanan terakhir anda ada dalam troli.", "skipped": "Tidak lagi tersedia: {{names}}", "viewOrders": "Semua pesanan"
+  },
+  "signatures": { "title": "Signature kami", "subtitle": "Pilihan rumah kami — tempat yang baik untuk bermula.", "bestTitle": "Terlaris", "bestSubtitle": "Disusun berdasarkan pesanan sebenar.", "rank": "#{{rank}}" },
+  "tryNew": { "title": "Cuba sesuatu yang baharu", "subtitleHistory": "Berbeza daripada yang pernah anda cuba.", "subtitleSession": "Sesuatu di luar apa yang ada dalam troli anda." },
+  "mix": { "title": "Gabungkan pencuci mulut anda", "subtitle": "Beritahu kami bilangan orang dan bajet. Kami bina pesanan daripada menu.", "cta": "Bina pesanan saya" },
+  "story": { "title": "Kisah kami", "body": "Kan Brothers Ruby Dessert House menghidangkan pencuci mulut Cina sejak 1927 dan dikenali sebagai 芝麻糊大王 — raja bubur bijan." },
+  "location": { "title": "Cari kami", "pending": "Butiran cawangan akan ditambah di sini tidak lama lagi.", "directions": "Arah" },
+  "menu": {
+    "title": "Menu", "searchLabel": "Cari dalam menu", "searchPlaceholder": "Cari nama, nama Cina, kod atau kategori", "filtersLabel": "Penapis penerokaan", "all": "Semua",
+    "noResults": "Tiada hidangan sepadan dengan “{{query}}”.", "noResultsFilter": "Belum ada hidangan untuk penapis ini.", "noResultsHint": "Cuba ejaan lain, nama Cina, atau kosongkan carian dan penapis.",
+    "clearAll": "Kosongkan carian & penapis", "resultCount": "Memaparkan {{count}}"
+  },
+  "filters": { "signature": "Signature", "firstTime": "Kali pertama", "mixed": "Perisa campur", "richNutty": "Pekat & berkacang", "warmSilky": "Suam & licin", "lightRefreshing": "Ringan & menyegarkan", "drinks": "Minuman", "tryNew": "Cuba sesuatu yang baharu" },
+  "category": { "paste": "Bubur pekat", "mixed": "Bubur campur", "custard": "Custard", "sweetSoup": "Sup manis", "cold": "Pencuci mulut sejuk", "drink": "Minuman" },
+  "flavour": { "sesame": "bijan", "nutty": "berkacang", "creamy": "berkrim", "light": "ringan", "refreshing": "menyegarkan", "mixed": "campur", "traditional": "tradisional" },
+  "product": { "backToMenu": "Kembali ke menu", "notFound": "Kami tidak menjumpai hidangan itu.", "notFoundHint": "Ia mungkin telah dikeluarkan daripada menu.", "yourPrice": "Harga anda", "addToCart": "Tambah ke troli" },
+  "cart": {
+    "title": "Troli anda", "empty": "Troli anda kosong.", "emptyHint": "Mulakan dengan salah satu signature kami.", "browse": "Lihat menu", "checkout": "Daftar keluar", "clear": "Kosongkan troli",
+    "removeItem": "Buang {{name}}", "unavailableTitle": "Sesetengah item tidak lagi tersedia", "unavailableBody": "Buang untuk teruskan: {{names}}", "suggestions": "Lengkapkan pesanan anda", "lineTotal": "Jumlah baris"
+  },
+  "checkout": {
+    "title": "Daftar keluar", "details": "Butiran anda", "tableNumber": "Nombor meja", "tableHint": "Lihat pada meja anda.", "name": "Nama", "nameOptional": "Nama (pilihan)", "phone": "Nombor telefon",
+    "phoneHint": "Hanya digunakan jika kami perlu menghubungi anda tentang pesanan ini.", "pickup": "Masa ambil", "pickupAsap": "Secepat mungkin", "pickupIn": "Dalam {{minutes}} minit", "review": "Pesanan anda",
+    "place": "Hantar pesanan", "placing": "Menghantar…", "fixErrors": "Sila betulkan ruangan yang ditandakan.", "failedTitle": "Pesanan anda tidak dapat dihantar",
+    "failedBody": "Troli anda selamat dan tiada apa yang hilang. Sila cuba lagi atau maklumkan kakitangan.", "privacy": "Kami hanya menyimpan pesanan dan nombor meja anda pada peranti ini. Nama dan telefon anda hanya digunakan untuk pesanan ini."
+  },
+  "confirmation": {
+    "title": "Pesanan diterima", "subtitle": "Terima kasih — kami telah menerima pesanan anda.", "orderNumber": "Nombor pesanan", "status": "Status", "type": "Jenis pesanan", "table": "Meja", "pickup": "Ambil",
+    "items": "Item", "backToMenu": "Kembali ke menu", "viewOrder": "Lihat pesanan", "notFound": "Kami tidak menjumpai pesanan itu pada peranti ini."
+  },
+  "status": { "received": "Diterima", "preparing": "Sedang disediakan", "ready": "Sedia", "completed": "Selesai", "cancelled": "Dibatalkan" },
+  "orders": { "title": "Pesanan anda", "empty": "Belum ada pesanan.", "emptyHint": "Pesanan yang anda buat pada peranti ini akan dipaparkan di sini.", "deviceNote": "Sejarah pesanan disimpan pada peranti ini sahaja.", "orderAgain": "Pesan semula", "tryNew": "Cuba sesuatu yang baharu", "detailTitle": "Pesanan {{id}}" },
+  "wizard": {
+    "title": "Apa patut saya makan?", "subtitle": "Tiga soalan ringkas.", "step": "Langkah {{current}} daripada {{total}}", "visitQuestion": "Pernahkah anda ke Ruby?", "cravingQuestion": "Apa yang anda idamkan?", "budgetQuestion": "Bajet?",
+    "visit": { "first": "Kali pertama", "second": "Kali kedua", "returning": "Pelanggan tetap" },
+    "budgetValue": "RM{{amount}}", "budgetOpen": "RM{{amount}}+", "resultsTitle": "Pilihan untuk anda", "resultsHint": "Dalam lingkungan {{budget}} secara keseluruhan.",
+    "none": "Tiada apa pada menu yang sesuai dengan bajet dan citarasa itu. Cuba bajet lebih tinggi.", "addAll": "Tambah semua ke troli", "startOver": "Mula semula", "next": "Seterusnya", "seeResults": "Lihat pilihan saya", "choose": "Pilih satu untuk teruskan."
+  },
+  "reasons": {
+    "signature": "Salah satu signature rumah.", "firstTimer": "Permulaan yang baik untuk lawatan pertama.", "preference": "Disyorkan kerana anda suka perisa {{flavour}}.", "differentFrom": "Sesuatu yang berbeza daripada {{item}}.",
+    "somethingNew": "Sesuatu yang baharu untuk dicuba.", "completesOrder": "Sesuai dengan apa yang ada dalam troli anda."
+  },
+  "planner": {
+    "title": "Bina pesanan saya", "subtitle": "Pilih bilangan orang dan bajet. Kami bina pesanan daripada menu.", "people": "Bilangan orang", "budget": "Bajet", "recommended": "Pesanan disyorkan", "total": "Jumlah", "remaining": "Baki bajet",
+    "addAll": "Tambah semua ke troli", "tooLow": "Tiada apa pada menu yang muat dalam bajet itu — cuba yang lebih tinggi.", "notEveryone": "Bajet ini meliputi hidangan utama untuk {{count}} daripada {{people}} orang. Naikkan untuk meliputi semua.",
+    "peopleOption": "{{count}}", "peopleOpen": "{{count}}+"
+  },
+  "discover": { "title": "Teroka", "subtitle": "Temui sesuatu yang anda suka." },
+  "language": {
+    "label": "Bahasa", "choose": "Pilih bahasa", "search": "Cari bahasa", "noMatch": "Tiada bahasa sepadan dengan “{{query}}”.", "partial": "Terjemahan separa", "needsReview": "Perlu semakan",
+    "notVerified": "Tidak semua terjemahan telah disahkan secara profesional. Bahasa Kantonis dan Hokkien khususnya memerlukan pengesahan penutur asli.", "loadFailed": "Tidak dapat memuatkan bahasa itu. Kekal dalam {{language}}.", "current": "Semasa"
+  },
+  "errors": {
+    "cartEmpty": "Troli anda kosong — tambah sesuatu dahulu.", "unavailableItems": "Sesetengah item dalam troli anda tidak lagi tersedia.", "tableRequired": "Masukkan nombor meja supaya kami tahu ke mana menghantar pesanan anda.",
+    "tableInvalid": "Gunakan huruf, nombor atau sengkang sahaja, sehingga 6 aksara.", "nameRequired": "Sila masukkan nama untuk pesanan.", "nameTooLong": "Sila gunakan 40 aksara atau kurang.",
+    "phoneRequired": "Sila masukkan nombor telefon.", "phoneInvalid": "Masukkan nombor telefon yang sah, contohnya +60 12 345 6789.", "pageNotFound": "Halaman tidak dijumpai", "pageNotFoundHint": "Halaman itu tidak wujud. Kembali ke menu.",
+    "generic": "Sesuatu telah berlaku", "genericHint": "Sila muat semula halaman. Troli anda telah disimpan.", "reload": "Muat semula"
+  },
+  "dish": {
+    "black-sesame-paste": { "name": "Bubur Bijan Hitam" }, "peanut-paste": { "name": "Bubur Kacang Tanah" }, "almond-paste": { "name": "Bubur Badam" }, "walnut-paste": { "name": "Bubur Walnut" },
+    "sesame-peanut-mixed": { "name": "Bubur Campur Bijan & Kacang Tanah" }, "sesame-almond-mixed": { "name": "Bubur Campur Bijan & Badam" }, "steamed-egg-custard": { "name": "Custard Telur Kukus" },
+    "steamed-milk-custard": { "name": "Custard Susu Kukus" }, "ginger-milk-curd": { "name": "Dadih Susu Halia" }, "red-bean-soup": { "name": "Sup Kacang Merah" }, "green-bean-soup": { "name": "Sup Kacang Hijau" },
+    "grass-jelly": { "name": "Cincau" }, "coconut-sago": { "name": "Sagu Santan" }, "chinese-tea": { "name": "Teh Cina" }, "chrysanthemum-tea": { "name": "Teh Kekwa" },
+    "soy-milk": { "name": "Susu Soya" }, "barley-water": { "name": "Air Barli" }
+  }
+}

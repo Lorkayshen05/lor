@@ -1,0 +1,85 @@
+{
+  "app": { "skipLink": "انتقل إلى المحتوى", "sampleBanner": "قائمة تجريبية — الأسماء والأسعار مؤقتة إلى حين إضافة قائمة روبي الفعلية.", "brandTagline": "حلويات صينية عريقة · منذ 1927" },
+  "nav": { "label": "التنقل الرئيسي", "home": "الرئيسية", "menu": "القائمة", "discover": "اكتشف", "cart": "السلة", "orders": "الطلبات" },
+  "orderType": { "label": "نوع الطلب", "dineIn": "تناول في المطعم", "takeAway": "سفري", "pricesFor": "عرض أسعار {{type}}" },
+  "common": {
+    "add": "أضف", "added": "تمت الإضافة", "back": "رجوع", "close": "إغلاق", "search": "بحث", "clear": "مسح", "retry": "حاول مجددًا", "loading": "جارٍ التحميل…",
+    "total": "الإجمالي", "subtotal": "المجموع الفرعي", "remaining": "المتبقي", "viewCart": "عرض السلة", "increase": "زيادة كمية {{name}}", "decrease": "تقليل كمية {{name}}",
+    "quantity": "الكمية", "dineInPrice": "في المطعم", "takeawayPrice": "سفري", "code": "الرمز", "unavailable": "غير متوفر حاليًا", "imageFailed": "الصورة غير متاحة", "selected": "محدد",
+    "viewAll": "عرض القائمة الكاملة", "seeAll": "عرض الكل"
+  },
+  "hero": { "eyebrow": "منذ 1927", "orderNow": "اطلب الآن", "subtitle": "حلويات صينية عريقة، اطلبها في المطعم أو سفري." },
+  "labels": { "signature": "مميز", "firstTimer": "موصى به للزوار الجدد", "startingPoint": "بداية رائعة", "firstTimerPick": "اختيار للزوار الجدد", "tryNew": "جرّب شيئًا جديدًا", "bestSeller": "الأكثر مبيعًا", "recommended": "موصى به" },
+  "firstTime": {
+    "title": "أول زيارة؟", "subtitle": "لا تعرف ماذا تطلب؟ ابدأ من هنا.", "comboTitle": "اقتراح لزيارتك الأولى",
+    "role": { "signature": "حلوى مميزة", "mixed": "حلوى بنكهات مختلطة", "custard": "كاسترد مطهو بالبخار", "drink": "مشروب تقليدي" },
+    "addCombo": "أضف الكل إلى السلة", "picksTitle": "اختيارات للزوار الجدد"
+  },
+  "welcomeBack": {
+    "title": "أهلًا بعودتك", "subtitle": "هل أنت مستعد لتجربة شيء مختلف؟", "orderAgain": "اطلب مجددًا", "tryNew": "جرّب شيئًا جديدًا", "lastOrder": "طلبك الأخير",
+    "orderedOn": "طُلب في {{date}}", "reordered": "طلبك الأخير في السلة.", "skipped": "لم يعد متوفرًا: {{names}}", "viewOrders": "كل الطلبات"
+  },
+  "signatures": { "title": "أطباقنا المميزة", "subtitle": "اختيارات المطعم — بداية جيدة.", "bestTitle": "الأكثر مبيعًا", "bestSubtitle": "مرتبة حسب الطلبات الفعلية.", "rank": "#{{rank}}" },
+  "tryNew": { "title": "جرّب شيئًا جديدًا", "subtitleHistory": "مختلف عمّا جربته من قبل.", "subtitleSession": "شيء بعيد عمّا في سلتك." },
+  "mix": { "title": "ركّب حلواك", "subtitle": "أخبرنا بعدد الأشخاص والميزانية وسنُعدّ طلبًا من القائمة.", "cta": "أعدّ طلبي" },
+  "story": { "title": "قصتنا", "body": "تقدّم Kan Brothers Ruby Dessert House الحلويات الصينية منذ عام 1927، وتُعرف باسم 芝麻糊大王 — ملك عجينة السمسم." },
+  "location": { "title": "مواقعنا", "pending": "ستُضاف تفاصيل الفروع هنا قريبًا.", "directions": "الاتجاهات" },
+  "menu": {
+    "title": "القائمة", "searchLabel": "ابحث في القائمة", "searchPlaceholder": "ابحث بالاسم أو الاسم الصيني أو الرمز أو الفئة", "filtersLabel": "مرشحات الاكتشاف", "all": "الكل",
+    "noResults": "لا توجد أطباق مطابقة لـ «{{query}}».", "noResultsFilter": "لا توجد أطباق لهذا المرشح بعد.", "noResultsHint": "جرّب تهجئة أخرى أو الاسم الصيني أو امسح البحث والمرشح.",
+    "clearAll": "مسح البحث والمرشحات", "resultCount": "عرض {{count}}"
+  },
+  "filters": { "signature": "المميزة", "firstTime": "أول مرة", "mixed": "نكهات مختلطة", "richNutty": "غني ومكسّرات", "warmSilky": "دافئ وناعم", "lightRefreshing": "خفيف ومنعش", "drinks": "المشروبات", "tryNew": "جرّب شيئًا جديدًا" },
+  "category": { "paste": "عجائن", "mixed": "عجائن مختلطة", "custard": "كاسترد", "sweetSoup": "شوربات حلوة", "cold": "حلويات باردة", "drink": "مشروبات" },
+  "flavour": { "sesame": "السمسم", "nutty": "المكسّرات", "creamy": "الكريمية", "light": "الخفيفة", "refreshing": "المنعشة", "mixed": "المختلطة", "traditional": "التقليدية" },
+  "product": { "backToMenu": "العودة إلى القائمة", "notFound": "لم نجد هذا الطبق.", "notFoundHint": "ربما أُزيل من القائمة.", "yourPrice": "سعرك", "addToCart": "أضف إلى السلة" },
+  "cart": {
+    "title": "سلتك", "empty": "سلتك فارغة.", "emptyHint": "ابدأ بأحد أطباقنا المميزة.", "browse": "تصفّح القائمة", "checkout": "إتمام الطلب", "clear": "إفراغ السلة",
+    "removeItem": "إزالة {{name}}", "unavailableTitle": "بعض العناصر لم تعد متوفرة", "unavailableBody": "أزلها للمتابعة: {{names}}", "suggestions": "أكمل طلبك", "lineTotal": "إجمالي البند"
+  },
+  "checkout": {
+    "title": "إتمام الطلب", "details": "بياناتك", "tableNumber": "رقم الطاولة", "tableHint": "ستجده على طاولتك.", "name": "الاسم", "nameOptional": "الاسم (اختياري)", "phone": "رقم الهاتف",
+    "phoneHint": "يُستخدم فقط إذا احتجنا إلى التواصل معك بشأن هذا الطلب.", "pickup": "وقت الاستلام", "pickupAsap": "في أقرب وقت", "pickupIn": "بعد {{minutes}} دقيقة", "review": "طلبك",
+    "place": "إرسال الطلب", "placing": "جارٍ الإرسال…", "fixErrors": "يرجى تصحيح الحقول المحددة.", "failedTitle": "تعذّر إرسال طلبك",
+    "failedBody": "سلتك آمنة ولم يضع شيء. يرجى المحاولة مجددًا أو إبلاغ أحد الموظفين.", "privacy": "نحتفظ فقط بطلبك ورقم الطاولة على هذا الجهاز. يُستخدم اسمك وهاتفك لهذا الطلب فقط."
+  },
+  "confirmation": {
+    "title": "تم استلام الطلب", "subtitle": "شكرًا — لقد استلمنا طلبك.", "orderNumber": "رقم الطلب", "status": "الحالة", "type": "نوع الطلب", "table": "الطاولة", "pickup": "الاستلام",
+    "items": "العناصر", "backToMenu": "العودة إلى القائمة", "viewOrder": "عرض الطلب", "notFound": "لم نجد هذا الطلب على هذا الجهاز."
+  },
+  "status": { "received": "تم الاستلام", "preparing": "قيد التحضير", "ready": "جاهز", "completed": "مكتمل", "cancelled": "ملغى" },
+  "orders": { "title": "طلباتك", "empty": "لا توجد طلبات بعد.", "emptyHint": "ستظهر هنا الطلبات التي تجريها على هذا الجهاز.", "deviceNote": "سجل الطلبات محفوظ على هذا الجهاز فقط.", "orderAgain": "اطلب مجددًا", "tryNew": "جرّب شيئًا جديدًا", "detailTitle": "الطلب {{id}}" },
+  "wizard": {
+    "title": "ماذا آكل؟", "subtitle": "ثلاثة أسئلة سريعة.", "step": "الخطوة {{current}} من {{total}}", "visitQuestion": "هل زرت روبي من قبل؟", "cravingQuestion": "ماذا تشتهي؟", "budgetQuestion": "الميزانية؟",
+    "visit": { "first": "أول مرة", "second": "ثاني مرة", "returning": "زائر دائم" },
+    "budgetValue": "RM{{amount}}", "budgetOpen": "RM{{amount}}+", "resultsTitle": "اختياراتك", "resultsHint": "ضمن {{budget}} إجمالًا.",
+    "none": "لا شيء في القائمة يناسب هذه الميزانية والأذواق. جرّب ميزانية أعلى.", "addAll": "أضف الكل إلى السلة", "startOver": "ابدأ من جديد", "next": "التالي", "seeResults": "اعرض اختياراتي", "choose": "اختر واحدًا للمتابعة."
+  },
+  "reasons": {
+    "signature": "من أطباق المطعم المميزة.", "firstTimer": "بداية رائعة لزيارتك الأولى.", "preference": "موصى به لأنك تحب النكهات {{flavour}}.", "differentFrom": "شيء مختلف عن {{item}}.",
+    "somethingNew": "شيء جديد لتجربته.", "completesOrder": "ينسجم مع ما في سلتك."
+  },
+  "planner": {
+    "title": "أعدّ طلبي", "subtitle": "اختر عدد الأشخاص والميزانية وسنُعدّ طلبًا من القائمة.", "people": "عدد الأشخاص", "budget": "الميزانية", "recommended": "الطلب الموصى به", "total": "الإجمالي", "remaining": "الميزانية المتبقية",
+    "addAll": "أضف الكل إلى السلة", "tooLow": "لا شيء في القائمة يناسب هذه الميزانية — جرّب ميزانية أعلى.", "notEveryone": "تغطي هذه الميزانية طبقًا رئيسيًا لـ {{count}} من {{people}} أشخاص. ارفعها لتشمل الجميع.",
+    "peopleOption": "{{count}}", "peopleOpen": "+{{count}}"
+  },
+  "discover": { "title": "اكتشف", "subtitle": "اعثر على ما سيعجبك." },
+  "language": {
+    "label": "اللغة", "choose": "اختر اللغة", "search": "ابحث عن لغة", "noMatch": "لا توجد لغة مطابقة لـ «{{query}}».", "partial": "ترجمة جزئية", "needsReview": "تحتاج مراجعة",
+    "notVerified": "ليست كل الترجمات موثقة مهنيًا. اللغتان الكانتونية والهوكيين تحديدًا تحتاجان إلى تدقيق من ناطقين أصليين.", "loadFailed": "تعذّر تحميل تلك اللغة. سنبقى على {{language}}.", "current": "الحالية"
+  },
+  "errors": {
+    "cartEmpty": "سلتك فارغة — أضف شيئًا أولًا.", "unavailableItems": "بعض العناصر في سلتك لم تعد متوفرة.", "tableRequired": "أدخل رقم الطاولة لنعرف أين نقدّم طلبك.",
+    "tableInvalid": "استخدم أحرفًا أو أرقامًا أو شرطات فقط، حتى 6 خانات.", "nameRequired": "يرجى إدخال اسم للطلب.", "nameTooLong": "يرجى استخدام 40 حرفًا أو أقل.",
+    "phoneRequired": "يرجى إدخال رقم الهاتف.", "phoneInvalid": "أدخل رقم هاتف صالحًا، مثل ‎+60 12 345 6789.", "pageNotFound": "الصفحة غير موجودة", "pageNotFoundHint": "هذه الصفحة غير موجودة. عد إلى القائمة.",
+    "generic": "حدث خطأ ما", "genericHint": "يرجى إعادة تحميل الصفحة. سلتك محفوظة.", "reload": "إعادة التحميل"
+  },
+  "dish": {
+    "black-sesame-paste": { "name": "عجينة السمسم الأسود" }, "peanut-paste": { "name": "عجينة الفول السوداني" }, "almond-paste": { "name": "عجينة اللوز" }, "walnut-paste": { "name": "عجينة الجوز" },
+    "sesame-peanut-mixed": { "name": "عجينة السمسم والفول السوداني" }, "sesame-almond-mixed": { "name": "عجينة السمسم واللوز" }, "steamed-egg-custard": { "name": "كاسترد البيض بالبخار" },
+    "steamed-milk-custard": { "name": "كاسترد الحليب بالبخار" }, "ginger-milk-curd": { "name": "حليب متخثر بالزنجبيل" }, "red-bean-soup": { "name": "شوربة الفاصوليا الحمراء" }, "green-bean-soup": { "name": "شوربة الفاصوليا الخضراء" },
+    "grass-jelly": { "name": "جيلي الأعشاب" }, "coconut-sago": { "name": "ساغو بجوز الهند" }, "chinese-tea": { "name": "شاي صيني" }, "chrysanthemum-tea": { "name": "شاي الأقحوان" },
+    "soy-milk": { "name": "حليب الصويا" }, "barley-water": { "name": "ماء الشعير" }
+  }
+}

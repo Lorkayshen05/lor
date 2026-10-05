@@ -1,0 +1,293 @@
+{
+  "app": {
+    "skipLink": "Skip to content",
+    "sampleBanner": "Sample menu — names and prices are placeholders until the real Ruby menu is added.",
+    "brandTagline": "Heritage Chinese desserts · Since 1927"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home",
+    "menu": "Menu",
+    "discover": "Discover",
+    "cart": "Cart",
+    "orders": "Orders"
+  },
+  "orderType": {
+    "label": "Order type",
+    "dineIn": "Dine in",
+    "takeAway": "Take away",
+    "pricesFor": "Showing {{type}} prices"
+  },
+  "common": {
+    "add": "Add",
+    "added": "Added",
+    "back": "Back",
+    "close": "Close",
+    "search": "Search",
+    "clear": "Clear",
+    "retry": "Try again",
+    "loading": "Loading…",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "remaining": "Remaining",
+    "viewCart": "View cart",
+    "increase": "Increase quantity of {{name}}",
+    "decrease": "Decrease quantity of {{name}}",
+    "quantity": "Quantity",
+    "dineInPrice": "Dine in",
+    "takeawayPrice": "Take away",
+    "code": "Code",
+    "unavailable": "Currently unavailable",
+    "imageFailed": "Photo unavailable",
+    "selected": "Selected",
+    "viewAll": "View full menu",
+    "seeAll": "See all"
+  },
+  "hero": {
+    "eyebrow": "Since 1927",
+    "orderNow": "Order now",
+    "subtitle": "Heritage Chinese desserts, ordered your way — dine in or take away."
+  },
+  "labels": {
+    "signature": "Signature",
+    "firstTimer": "Recommended for first timers",
+    "startingPoint": "Great starting point",
+    "firstTimerPick": "First-timer pick",
+    "tryNew": "Try something new",
+    "bestSeller": "Best seller",
+    "recommended": "Recommended"
+  },
+  "firstTime": {
+    "title": "First time here?",
+    "subtitle": "Not sure what to order? Start here.",
+    "comboTitle": "A suggested first visit",
+    "role": {
+      "signature": "Signature dessert",
+      "mixed": "Mixed-flavour dessert",
+      "custard": "Steamed custard",
+      "drink": "Traditional drink"
+    },
+    "addCombo": "Add all to cart",
+    "picksTitle": "First-timer picks"
+  },
+  "welcomeBack": {
+    "title": "Welcome back",
+    "subtitle": "Ready to try something different?",
+    "orderAgain": "Order again",
+    "tryNew": "Try something new",
+    "lastOrder": "Your last order",
+    "orderedOn": "Ordered {{date}}",
+    "reordered": "Your last order is in the cart.",
+    "skipped": "No longer available: {{names}}",
+    "viewOrders": "All orders"
+  },
+  "signatures": {
+    "title": "Our signatures",
+    "subtitle": "Chosen by the house — a good place to begin.",
+    "bestTitle": "Best sellers",
+    "bestSubtitle": "Ranked from real orders.",
+    "rank": "#{{rank}}"
+  },
+  "tryNew": {
+    "title": "Try something new",
+    "subtitleHistory": "Different from what you've had before.",
+    "subtitleSession": "Something beyond what's in your cart."
+  },
+  "mix": {
+    "title": "Mix your dessert",
+    "subtitle": "Tell us your group size and budget. We'll build an order from the menu.",
+    "cta": "Build my order"
+  },
+  "story": {
+    "title": "Our story",
+    "body": "Kan Brothers Ruby Dessert House has been serving Chinese desserts since 1927, and is known as 芝麻糊大王 — the king of sesame paste."
+  },
+  "location": {
+    "title": "Find us",
+    "pending": "Outlet details will be added here soon.",
+    "directions": "Directions"
+  },
+  "menu": {
+    "title": "Menu",
+    "searchLabel": "Search the menu",
+    "searchPlaceholder": "Search name, code or category",
+    "filtersLabel": "Discovery filters",
+    "all": "All",
+    "noResults": "No dishes match “{{query}}”.",
+    "noResultsFilter": "No dishes match this filter yet.",
+    "noResultsHint": "Try another spelling, the Chinese name, or clear the search and filter.",
+    "clearAll": "Clear search & filters",
+    "resultCount": "Showing {{count}}"
+  },
+  "filters": {
+    "signature": "Signatures",
+    "firstTime": "First time",
+    "mixed": "Mixed flavours",
+    "richNutty": "Rich & nutty",
+    "warmSilky": "Warm & silky",
+    "lightRefreshing": "Light & refreshing",
+    "drinks": "Drinks",
+    "tryNew": "Try something new"
+  },
+  "category": {
+    "paste": "Pastes",
+    "mixed": "Mixed pastes",
+    "custard": "Custards",
+    "sweetSoup": "Sweet soups",
+    "cold": "Chilled desserts",
+    "drink": "Drinks"
+  },
+  "flavour": {
+    "sesame": "sesame",
+    "nutty": "nutty",
+    "creamy": "creamy",
+    "light": "light",
+    "refreshing": "refreshing",
+    "mixed": "mixed",
+    "traditional": "traditional"
+  },
+  "product": {
+    "backToMenu": "Back to menu",
+    "notFound": "We couldn't find that dish.",
+    "notFoundHint": "It may have been removed from the menu.",
+    "yourPrice": "Your price",
+    "addToCart": "Add to cart"
+  },
+  "cart": {
+    "title": "Your cart",
+    "empty": "Your cart is empty.",
+    "emptyHint": "Start with one of our signatures.",
+    "browse": "Browse menu",
+    "checkout": "Checkout",
+    "clear": "Clear cart",
+    "removeItem": "Remove {{name}}",
+    "unavailableTitle": "Some items are no longer available",
+    "unavailableBody": "Remove them to continue: {{names}}",
+    "suggestions": "Complete your order",
+    "lineTotal": "Line total"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "details": "Your details",
+    "tableNumber": "Table number",
+    "tableHint": "Find it on your table.",
+    "name": "Name",
+    "nameOptional": "Name (optional)",
+    "phone": "Phone number",
+    "phoneHint": "Only used if we need to reach you about this order.",
+    "pickup": "Pickup time",
+    "pickupAsap": "As soon as ready",
+    "pickupIn": "In {{minutes}} minutes",
+    "review": "Your order",
+    "place": "Place order",
+    "placing": "Sending…",
+    "fixErrors": "Please fix the highlighted fields.",
+    "failedTitle": "We couldn't send your order",
+    "failedBody": "Your cart is safe and nothing has been lost. Please try again, or tell a member of staff.",
+    "privacy": "We keep only your order and table number on this device. Your name and phone are used for this order only."
+  },
+  "confirmation": {
+    "title": "Order received",
+    "subtitle": "Thank you — we have your order.",
+    "orderNumber": "Order number",
+    "status": "Status",
+    "type": "Order type",
+    "table": "Table",
+    "pickup": "Pickup",
+    "items": "Items",
+    "backToMenu": "Back to menu",
+    "viewOrder": "View order",
+    "notFound": "We couldn't find that order on this device."
+  },
+  "status": {
+    "received": "Received",
+    "preparing": "Preparing",
+    "ready": "Ready",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "orders": {
+    "title": "Your orders",
+    "empty": "No orders yet.",
+    "emptyHint": "Orders you place on this device will appear here.",
+    "deviceNote": "Order history is saved on this device only.",
+    "orderAgain": "Order again",
+    "tryNew": "Try something new",
+    "detailTitle": "Order {{id}}"
+  },
+  "wizard": {
+    "title": "What should I eat?",
+    "subtitle": "Three quick questions.",
+    "step": "Step {{current}} of {{total}}",
+    "visitQuestion": "Have you visited Ruby before?",
+    "cravingQuestion": "What are you craving?",
+    "budgetQuestion": "Budget?",
+    "visit": {
+      "first": "First time",
+      "second": "Second time",
+      "returning": "Returning"
+    },
+    "budgetValue": "RM{{amount}}",
+    "budgetOpen": "RM{{amount}}+",
+    "resultsTitle": "Your picks",
+    "resultsHint": "Within {{budget}} in total.",
+    "none": "Nothing on the menu fits that budget with those tastes. Try a higher budget.",
+    "addAll": "Add all to cart",
+    "startOver": "Start over",
+    "next": "Next",
+    "seeResults": "See my picks",
+    "choose": "Choose one to continue."
+  },
+  "reasons": {
+    "signature": "One of the house signatures.",
+    "firstTimer": "A great starting point for a first visit.",
+    "preference": "Recommended because you like {{flavour}} flavours.",
+    "differentFrom": "Something different from {{item}}.",
+    "somethingNew": "Something new to try.",
+    "completesOrder": "Goes well with what's in your cart."
+  },
+  "planner": {
+    "title": "Build my order",
+    "subtitle": "Choose your group size and budget. We'll build an order from the menu.",
+    "people": "Number of people",
+    "budget": "Budget",
+    "recommended": "Recommended order",
+    "total": "Total",
+    "remaining": "Remaining budget",
+    "addAll": "Add all to cart",
+    "tooLow": "Nothing on the menu fits that budget — try a higher one.",
+    "notEveryone": "This budget covers a main for {{count}} of {{people}} people. Raise it to cover everyone.",
+    "peopleOption": "{{count}}",
+    "peopleOpen": "{{count}}+"
+  },
+  "discover": {
+    "title": "Discover",
+    "subtitle": "Find something you'll love."
+  },
+  "language": {
+    "label": "Language",
+    "choose": "Choose language",
+    "search": "Search languages",
+    "noMatch": "No language matches “{{query}}”.",
+    "partial": "Partial translation",
+    "needsReview": "Needs review",
+    "notVerified": "Translations are not all professionally verified. Cantonese and Hokkien in particular need native-speaker validation.",
+    "loadFailed": "Couldn't load that language. Staying on {{language}}.",
+    "current": "Current"
+  },
+  "errors": {
+    "cartEmpty": "Your cart is empty — add something first.",
+    "unavailableItems": "Some items in your cart are no longer available.",
+    "tableRequired": "Enter your table number so we know where to bring your order.",
+    "tableInvalid": "Use letters, numbers or dashes only, up to 6 characters.",
+    "nameRequired": "Please enter a name for the order.",
+    "nameTooLong": "Please use 40 characters or fewer.",
+    "phoneRequired": "Please enter a phone number.",
+    "phoneInvalid": "Enter a valid phone number, for example +60 12 345 6789.",
+    "pageNotFound": "Page not found",
+    "pageNotFoundHint": "That page doesn't exist. Head back to the menu.",
+    "generic": "Something went wrong",
+    "genericHint": "Please reload the page. Your cart is saved.",
+    "reload": "Reload"
+  }
+}

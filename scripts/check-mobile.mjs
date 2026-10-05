@@ -1,0 +1,102 @@
+/**
+ * Layout smoke test in a real (headless Chromium) browser.
+ * For every route × viewport it checks:
+ *   - the page never scrolls horizontally
+ *   - no visible element pokes outside the viewport (except explicit scrollers)
+ *   - interactive controls are at least 44×44 CSS px
+ * Usage: npm run build && npm run check:mobile   (starts `vite preview` itself)
+ * Set SHOTS=dir to save screenshots.
+ */
+import { chromium } from 'playwright';
+import { spawn } from 'node:child_process';
+import { mkdirSync } from 'node:fs';
+
+const PORT = 4173;
+const BASE = `http://127.0.0.1:${PORT}/#`;
+const VIEWPORTS = [375, 390, 393, 412, 768, 1024, 1440].map((w) => ({ width: w, height: w < 700 ? 800 : 900 }));
+const ROUTES = ['/', '/menu', '/menu/black-sesame-paste', '/discover', '/discover?mode=plan', '/cart', '/checkout', '/orders'];
+const LANGS = ['en', 'ar', 'ms', 'zh-CN'];
+const SHOTS = process.env.SHOTS;
+
+const server = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort', '--host', '127.0.0.1'], { stdio: 'ignore' });
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+for (let i = 0; i < 40; i++) {
+  try { const r = await fetch(`http://127.0.0.1:${PORT}/`); if (r.ok) break; } catch { /* retry */ }
+  await wait(250);
+}
+
+const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+let failures = 0;
+if (SHOTS) mkdirSync(SHOTS, { recursive: true });
+
+async function audit(page, label) {
+  const result = await page.evaluate(() => {
+    const vw = document.documentElement.clientWidth;
+    const scrollW = document.documentElement.scrollWidth;
+    const out = [];
+    const inScroller = (el) => !!el.closest('.chips');
+    for (const el of document.querySelectorAll('body *')) {
+      const cs = getComputedStyle(el);
+      if (cs.display === 'none' || cs.visibility === 'hidden' || cs.position === 'fixed' && el.closest('.sheet-backdrop')) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) continue;
+      if (el.closest('.sr-only') || el.classList.contains('sr-only') || el.closest('.skip-link') || el.classList.contains('skip-link')) continue;
+      if ((r.right > vw + 1 || r.left < -1) && !inScroller(el)) {
+        out.push(`overflow ${el.tagName.toLowerCase()}.${String(el.className).slice(0, 40)} [${Math.round(r.left)},${Math.round(r.right)}] vw=${vw}`);
+      }
+      if (['A', 'BUTTON', 'INPUT', 'SELECT'].includes(el.tagName) && !el.closest('.sr-only')) {
+        const small = (r.height < 43.5 || r.width < 43.5) && !(el.tagName === 'A' && getComputedStyle(el).display === 'inline' );
+        const isTitleLink = el.closest('.card__title, .rec__title, .combo__name, .cart-line__name, .wordmark, .panel, .facts, .outlets');
+        if (small && !isTitleLink) out.push(`small-target ${el.tagName.toLowerCase()}.${String(el.className).slice(0, 30)} ${Math.round(r.width)}x${Math.round(r.height)} "${(el.textContent || el.getAttribute('aria-label') || '').trim().slice(0, 20)}"`);
+      }
+    }
+    return { vw, scrollW, issues: [...new Set(out)].slice(0, 12) };
+  });
+  const problems = [...result.issues];
+  if (result.scrollW > result.vw + 1) problems.unshift(`HORIZONTAL SCROLL scrollWidth=${result.scrollW} > ${result.vw}`);
+  if (problems.length) {
+    failures += 1;
+    console.log(`✗ ${label}\n   ${problems.join('\n   ')}`);
+  }
+  return problems.length === 0;
+}
+
+for (const lang of LANGS) {
+  for (const vp of VIEWPORTS) {
+    const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: 2, isMobile: vp.width < 700, hasTouch: vp.width < 700 });
+    const page = await ctx.newPage();
+    const errors = [];
+    page.on('pageerror', (e) => errors.push(String(e)));
+    page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+    await page.addInitScript(([l]) => {
+      localStorage.setItem('rdh.lang.v1', JSON.stringify(l));
+      // Seed one order + a cart so every state (cart lines, checkout, orders, welcome back) is exercised.
+      localStorage.setItem('rdh.session.v1', JSON.stringify({ orderType: 'takeaway', tableNumber: '', cart: [{ itemId: 'black-sesame-paste', quantity: 2 }, { itemId: 'steamed-egg-custard', quantity: 1 }, { itemId: 'chinese-tea', quantity: 3 }], wizard: { step: 0 }, planner: {} }));
+      localStorage.setItem('rdh.customerId.v1', JSON.stringify('test-customer'));
+      localStorage.setItem('rdh.orders.v1', JSON.stringify([{ orderId: 'RDH-250101-ABCD', customerId: 'test-customer', items: [{ itemId: 'black-sesame-paste', name: 'Black Sesame Paste', chineseName: '芝麻糊', quantity: 1, unitPrice: 750 }], total: 750, orderType: 'dine-in', tableNumber: 'A12', timestamp: '2025-01-01T10:00:00.000Z', status: 'received' }]));
+    }, [lang]);
+    for (const route of ROUTES) {
+      await page.goto(`${BASE}${route}`);
+      await page.waitForSelector('main');
+      await wait(120);
+      if (process.env.BREAK) await page.evaluate(() => { const d = document.createElement('div'); d.style.cssText = 'width:600px;height:50px'; d.textContent = 'x'; document.querySelector('main').appendChild(d); });
+      const ok = await audit(page, `[${lang}] ${vp.width}px ${route}`);
+      if (SHOTS && lang === (process.env.SHOT_LANG || 'en')) {
+        await page.screenshot({ path: `${SHOTS}/${vp.width}-${route.replace(/[^a-z0-9]+/gi, '_')}.png`, fullPage: true });
+      }
+    }
+    // Language sheet open
+    await page.goto(`${BASE}/`);
+    await page.click('.lang-btn');
+    await page.waitForSelector('.sheet');
+    await audit(page, `[${lang}] ${vp.width}px language sheet`);
+    if (SHOTS && lang === (process.env.SHOT_LANG || 'en')) await page.screenshot({ path: `${SHOTS}/${vp.width}-language-sheet.png` });
+    if (errors.length) { failures += 1; console.log(`✗ [${lang}] ${vp.width}px console errors:\n   ${errors.join('\n   ')}`); }
+    await ctx.close();
+  }
+}
+
+await browser.close();
+server.kill();
+console.log(failures === 0 ? '\n✓ mobile layout checks passed' : `\n${failures} check(s) failed`);
+process.exit(failures === 0 ? 0 : 1);
