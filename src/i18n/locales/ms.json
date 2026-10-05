@@ -35,7 +35,7 @@
   "product": { "backToMenu": "Kembali ke menu", "notFound": "Kami tidak menjumpai hidangan itu.", "notFoundHint": "Ia mungkin telah dikeluarkan daripada menu.", "yourPrice": "Harga anda", "addToCart": "Tambah ke troli" },
   "cart": {
     "title": "Troli anda", "empty": "Troli anda kosong.", "emptyHint": "Mulakan dengan salah satu signature kami.", "browse": "Lihat menu", "checkout": "Daftar keluar", "clear": "Kosongkan troli",
-    "removeItem": "Buang {{name}}", "unavailableTitle": "Sesetengah item tidak lagi tersedia", "unavailableBody": "Buang untuk teruskan: {{names}}", "suggestions": "Lengkapkan pesanan anda", "lineTotal": "Jumlah baris"
+    "removeItem": "Buang {{name}}", "unavailableTitle": "Sesetengah item tidak lagi tersedia", "unavailableBody": "Buang untuk teruskan: {{names}}", "removeUnavailable": "Buang item tidak tersedia", "suggestions": "Lengkapkan pesanan anda", "lineTotal": "Jumlah baris"
   },
   "checkout": {
     "title": "Daftar keluar", "details": "Butiran anda", "tableNumber": "Nombor meja", "tableHint": "Lihat pada meja anda.", "name": "Nama", "nameOptional": "Nama (pilihan)", "phone": "Nombor telefon",

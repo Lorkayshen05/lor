@@ -5,6 +5,8 @@
  *   - no visible element pokes outside the viewport (except explicit scrollers)
  *   - interactive controls are at least 44×44 CSS px
  * Usage: npm run build && npm run check:mobile   (starts `vite preview` itself)
+ * It also drives interactive flows (checkout errors → confirmation, wizard, planner, empty search,
+ * Back-button scroll restoration) and audits each resulting state.
  * Set SHOTS=dir to save screenshots.
  */
 import { chromium } from 'playwright';
@@ -13,7 +15,7 @@ import { mkdirSync } from 'node:fs';
 
 const PORT = 4173;
 const BASE = `http://127.0.0.1:${PORT}/#`;
-const VIEWPORTS = [375, 390, 393, 412, 768, 1024, 1440].map((w) => ({ width: w, height: w < 700 ? 800 : 900 }));
+const VIEWPORTS = [320, 375, 390, 393, 412, 768, 1024, 1440].map((w) => ({ width: w, height: w < 700 ? 800 : 900 }));
 const ROUTES = ['/', '/menu', '/menu/black-sesame-paste', '/discover', '/discover?mode=plan', '/cart', '/checkout', '/orders'];
 const LANGS = ['en', 'ar', 'ms', 'zh-CN'];
 const SHOTS = process.env.SHOTS;
@@ -43,6 +45,9 @@ async function audit(page, label) {
       if (el.closest('.sr-only') || el.classList.contains('sr-only') || el.closest('.skip-link') || el.classList.contains('skip-link')) continue;
       if ((r.right > vw + 1 || r.left < -1) && !inScroller(el)) {
         out.push(`overflow ${el.tagName.toLowerCase()}.${String(el.className).slice(0, 40)} [${Math.round(r.left)},${Math.round(r.right)}] vw=${vw}`);
+      }
+      if (el.matches('button, .option, .chip, .tag, .badge, .btn, .segmented__btn, .tabs__btn') && cs.textOverflow !== 'ellipsis' && el.scrollWidth > el.clientWidth + 1) {
+        out.push(`text-overflow ${el.tagName.toLowerCase()}.${String(el.className).slice(0, 30)} scrollW=${el.scrollWidth} clientW=${el.clientWidth} "${(el.textContent || '').trim().slice(0, 24)}"`);
       }
       if (['A', 'BUTTON', 'INPUT', 'SELECT'].includes(el.tagName) && !el.closest('.sr-only')) {
         const small = (r.height < 43.5 || r.width < 43.5) && !(el.tagName === 'A' && getComputedStyle(el).display === 'inline' );
@@ -91,6 +96,75 @@ for (const lang of LANGS) {
     await page.waitForSelector('.sheet');
     await audit(page, `[${lang}] ${vp.width}px language sheet`);
     if (SHOTS && lang === (process.env.SHOT_LANG || 'en')) await page.screenshot({ path: `${SHOTS}/${vp.width}-language-sheet.png` });
+
+    // ---- Interactive flows (states a static page load never reaches) ----
+    const flowLabel = `[${lang}] ${vp.width}px`;
+    const expect = (cond, msg) => { if (!cond) { failures += 1; console.log(`✗ ${flowLabel} flow: ${msg}`); } };
+
+    // Escape closes the language sheet and focus returns to its trigger.
+    await page.keyboard.press('Escape');
+    await wait(80);
+    expect((await page.locator('.sheet').count()) === 0, 'Escape closes the language sheet');
+    expect(await page.evaluate(() => document.activeElement?.classList.contains('lang-btn')), 'focus returns to the language button');
+
+    // Every dish image must actually load once scrolled into view (lazy loading must not leave blanks).
+    await page.goto(`${BASE}/menu`);
+    await page.waitForSelector('.card');
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 400) { window.scrollTo({ top: y, behavior: 'instant' }); await new Promise((r) => setTimeout(r, 40)); }
+    });
+    await wait(300);
+    const broken = await page.evaluate(() => [...document.querySelectorAll('img.dish-image')].filter((i) => !(i.complete && i.naturalWidth > 0)).length);
+    const total = await page.evaluate(() => document.querySelectorAll('img.dish-image').length);
+    expect(broken === 0 && total > 0, `${broken}/${total} dish images failed to load`);
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+
+
+    // Checkout: validation errors, then a successful takeaway order → confirmation.
+    await page.goto(`${BASE}/checkout`);
+    await page.waitForSelector('.checkout__form');
+    await page.click('.checkout__form button[type=submit]');
+    await page.waitForSelector('.field.has-error');
+    await audit(page, `${flowLabel} checkout errors`);
+    await page.fill('#f-name', 'Mei');
+    await page.fill('#f-phone', '012 345 6789');
+    await page.click('.checkout__form button[type=submit]');
+    await page.waitForSelector('.confirmation');
+    await audit(page, `${flowLabel} confirmation`);
+    expect(await page.locator('.facts__big').innerText().then((t) => /^RDH-\d{6}-/.test(t)), 'order number shown');
+
+    // Wizard → results, then planner → results.
+    await page.goto(`${BASE}/discover`);
+    await page.waitForSelector('.option');
+    for (let i = 0; i < 3; i++) { await page.locator('.option').first().click(); await wait(60); }
+    await page.waitForSelector('.rec');
+    await audit(page, `${flowLabel} wizard results`);
+    await page.goto(`${BASE}/discover?mode=plan`);
+    await page.waitForSelector('.option');
+    await page.locator('.option-grid--4 .option').nth(2).click();
+    await page.locator('.option-grid--5 .option').nth(2).click();
+    await page.waitForSelector('.plan .totals');
+    await audit(page, `${flowLabel} planner results`);
+
+    // Empty search state.
+    await page.goto(`${BASE}/menu`);
+    await page.fill('.searchbox input', 'zzzz');
+    await page.waitForSelector('.empty');
+    await audit(page, `${flowLabel} empty search`);
+
+    // Back restores the menu scroll position.
+    await page.fill('.searchbox input', '');
+    await page.waitForSelector('.card');
+    await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }));
+    await wait(150);
+    const before = await page.evaluate(() => window.scrollY);
+    await page.locator('.card__title a').nth(4).click();
+    await page.waitForSelector('.product');
+    await page.goBack();
+    await page.waitForSelector('.card');
+    await wait(200);
+    const after = await page.evaluate(() => window.scrollY);
+    expect(Math.abs(after - before) < 40, `scroll restored on Back (before=${Math.round(before)}, after=${Math.round(after)})`);
     if (errors.length) { failures += 1; console.log(`✗ [${lang}] ${vp.width}px console errors:\n   ${errors.join('\n   ')}`); }
     await ctx.close();
   }

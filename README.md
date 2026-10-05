@@ -6,7 +6,7 @@ React 19 + TypeScript + Vite, i18next (50 languages, RTL), no backend required t
 ```bash
 npm install
 npm run dev            # http://localhost:5173
-npm test               # 82 unit + UI tests (vitest, jsdom)
+npm test               # 93 unit + UI tests (vitest, jsdom)
 npm run build          # typecheck + production build
 npm run check:mobile   # real-browser layout audit (see below)
 ```
@@ -56,7 +56,7 @@ and isolated LTR price/number runs.
 
 ## Mobile verification
 
-`npm run check:mobile` drives headless Chromium over 8 routes × 7 widths (375/390/393/412/768/1024/1440) × 4
+`npm run check:mobile` drives headless Chromium over 8 routes × 8 widths (320/375/390/393/412/768/1024/1440) × 4
 languages (en, ar, ms, zh-CN), plus the language sheet, and fails on: horizontal scroll, any element outside the
-viewport, controls under 44×44px, or console errors. Set `CHROMIUM_PATH` if Playwright's browser isn't installed
+viewport, controls under 44×44px, text overflowing its control, console errors, or dish images that fail to load. It also drives interactive flows (checkout errors → confirmation, wizard, planner, empty search, language-sheet Escape/focus, Back-button scroll restoration). Set `CHROMIUM_PATH` if Playwright's browser isn't installed
 and `SHOTS=dir` to save screenshots. This is a layout check, **not a substitute for testing on real phones**.

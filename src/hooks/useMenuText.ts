@@ -24,8 +24,9 @@ export function useMenuText() {
   );
 
   /** Second line under the name: Chinese for most readers; English for Chinese-language readers. */
-  const secondaryNameOf = useCallback(
-    (item: MenuItem) => (CHINESE_LANGS.test(lang) ? item.name : item.chineseName),
+  const secondaryOf = useCallback(
+    (item: MenuItem) =>
+      CHINESE_LANGS.test(lang) ? { text: item.name, lang: 'en' } : { text: item.chineseName, lang: 'zh-Hans' },
     [lang],
   );
 
@@ -49,5 +50,5 @@ export function useMenuText() {
     [t, nameOf, categoryOf],
   );
 
-  return { nameOf, secondaryNameOf, descriptionOf, categoryOf, searchFields };
+  return { nameOf, secondaryOf, descriptionOf, categoryOf, searchFields };
 }

@@ -35,7 +35,7 @@
   "product": { "backToMenu": "返回菜單", "notFound": "找不到這道甜品。", "notFoundHint": "它可能已從菜單中移除。", "yourPrice": "您的價格", "addToCart": "加入購物車" },
   "cart": {
     "title": "您的購物車", "empty": "購物車是空的。", "emptyHint": "從我們的招牌開始吧。", "browse": "瀏覽菜單", "checkout": "結帳", "clear": "清空購物車",
-    "removeItem": "移除{{name}}", "unavailableTitle": "部分商品已無法供應", "unavailableBody": "請移除後繼續：{{names}}", "suggestions": "完善您的訂單", "lineTotal": "小計"
+    "removeItem": "移除{{name}}", "unavailableTitle": "部分商品已無法供應", "unavailableBody": "請移除後繼續：{{names}}", "removeUnavailable": "移除無法供應的商品", "suggestions": "完善您的訂單", "lineTotal": "小計"
   },
   "checkout": {
     "title": "結帳", "details": "您的資料", "tableNumber": "桌號", "tableHint": "請見桌上的號碼。", "name": "姓名", "nameOptional": "姓名（選填）", "phone": "電話號碼",

@@ -5,15 +5,17 @@ import { useApp } from '../../state/AppContext';
 import { useMenuText } from '../../hooks/useMenuText';
 import { getFirstVisitCombo } from '../../services/recommendations';
 import { getUnitPrice } from '../../services/pricing';
+import { AddAllButton } from '../AddAllButton';
 import { DishImage } from '../DishImage';
+import { SecondaryName } from '../SecondaryName';
 import { Price } from '../Price';
 import { SectionHeading } from '../SectionHeading';
 
 /** "FIRST TIME HERE?" — a starter order built from real menu items, priced for the current order type. */
 export function FirstTimeSection() {
   const { t } = useTranslation();
-  const { menu, orderType, cartActions, announce } = useApp();
-  const { nameOf, secondaryNameOf } = useMenuText();
+  const { menu, orderType } = useApp();
+  const { nameOf } = useMenuText();
   const combo = useMemo(() => getFirstVisitCombo(menu, orderType), [menu, orderType]);
   if (combo.lines.length === 0) return null;
 
@@ -34,7 +36,7 @@ export function FirstTimeSection() {
                 <Link to={`/menu/${item.id}`} className="combo__name">
                   {nameOf(item)}
                 </Link>
-                <span className="combo__zh">{secondaryNameOf(item)}</span>
+                <SecondaryName item={item} as="span" className="combo__zh" />
               </span>
               <Price value={getUnitPrice(item, orderType)} />
             </li>
@@ -44,16 +46,7 @@ export function FirstTimeSection() {
           <span>{t('common.total')}</span>
           <Price value={combo.total} className="combo__total-price" />
         </div>
-        <button
-          type="button"
-          className="btn btn--primary btn--block"
-          onClick={() => {
-            cartActions.addMany(combo.items.map((m) => ({ itemId: m.id, quantity: 1 })));
-            announce(t('common.added'));
-          }}
-        >
-          {t('firstTime.addCombo')}
-        </button>
+        <AddAllButton items={combo.items.map((m) => ({ itemId: m.id, quantity: 1 }))} label={t('firstTime.addCombo')} />
         <Link to="/menu?filter=first-time" className="link-arrow">
           {t('firstTime.picksTitle')}
         </Link>

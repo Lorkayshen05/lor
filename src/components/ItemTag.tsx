@@ -8,7 +8,7 @@ import { useApp } from '../state/AppContext';
  */
 export function ItemTag({ item }: { item: MenuItem }) {
   const { t } = useTranslation();
-  const { bestSellers, orders, seenIds } = useApp();
+  const { bestSellers, tryNewIds } = useApp();
 
   const rank = bestSellers?.find((b) => b.itemId === item.id)?.rank;
   let label: string | null = null;
@@ -20,7 +20,7 @@ export function ItemTag({ item }: { item: MenuItem }) {
   } else if (item.curation.firstTimerPick) {
     label = t('labels.firstTimerPick');
     tone = 'jade';
-  } else if (orders.length > 0 && !seenIds.has(item.id)) {
+  } else if (tryNewIds.has(item.id)) {
     label = t('labels.tryNew');
     tone = 'ruby';
   }

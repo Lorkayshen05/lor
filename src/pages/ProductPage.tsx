@@ -8,6 +8,8 @@ import { DishImage } from '../components/DishImage';
 import { ItemTag } from '../components/ItemTag';
 import { OrderTypeToggle } from '../components/OrderTypeToggle';
 import { Price } from '../components/Price';
+import { PriceRows } from '../components/PriceRows';
+import { SecondaryName } from '../components/SecondaryName';
 import { QuantityStepper } from '../components/QuantityStepper';
 import { Icon } from '../components/Icon';
 
@@ -15,7 +17,7 @@ export function ProductPage() {
   const { id = '' } = useParams();
   const { t } = useTranslation();
   const { menuById, orderType, cart, cartActions, announce } = useApp();
-  const { nameOf, secondaryNameOf, descriptionOf, categoryOf } = useMenuText();
+  const { nameOf, descriptionOf, categoryOf } = useMenuText();
   const item = menuById.get(id);
 
   if (!item) {
@@ -49,23 +51,12 @@ export function ProductPage() {
             <ItemTag item={item} />
           </div>
           <h1 className="product__title">{name}</h1>
-          <p className="product__zh" lang={secondaryNameOf(item) === item.chineseName ? 'zh' : undefined}>
-            {secondaryNameOf(item)}
-          </p>
+          <SecondaryName item={item} className="product__zh" />
           <p className="muted">{categoryOf(item.category)}</p>
           <p className="product__desc" dir="auto">{descriptionOf(item)}</p>
 
           <OrderTypeToggle />
-          <dl className="price-table">
-            {(['dine-in', 'takeaway'] as const).map((type) => (
-              <div key={type} className={type === orderType ? 'is-active' : ''} aria-current={type === orderType || undefined}>
-                <dt>{t(type === 'dine-in' ? 'common.dineInPrice' : 'common.takeawayPrice')}</dt>
-                <dd>
-                  <Price value={type === 'dine-in' ? item.dineInPrice : item.takeawayPrice} />
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <PriceRows item={item} className="price-table" />
 
           {!item.available ? (
             <p className="notice">{t('common.unavailable')}</p>

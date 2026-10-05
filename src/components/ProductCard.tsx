@@ -8,13 +8,14 @@ import { getUnitPrice } from '../services/pricing';
 import { DishImage } from './DishImage';
 import { ItemTag } from './ItemTag';
 import { formatMoney } from '../utils/money';
-import { Price } from './Price';
+import { PriceRows } from './PriceRows';
+import { SecondaryName } from './SecondaryName';
 import { QuantityStepper } from './QuantityStepper';
 
 export function ProductCard({ item }: { item: MenuItem }) {
   const { t } = useTranslation();
   const { orderType, cart, cartActions, announce } = useApp();
-  const { nameOf, secondaryNameOf, descriptionOf } = useMenuText();
+  const { nameOf, descriptionOf } = useMenuText();
   const quantity = getQuantity(cart, item.id);
   const name = nameOf(item);
 
@@ -31,20 +32,9 @@ export function ProductCard({ item }: { item: MenuItem }) {
         <h3 className="card__title">
           <Link to={`/menu/${item.id}`}>{name}</Link>
         </h3>
-        <p className="card__zh" lang={secondaryNameOf(item) === item.chineseName ? 'zh' : undefined}>
-          {secondaryNameOf(item)}
-        </p>
+        <SecondaryName item={item} className="card__zh" />
         <p className="card__desc" dir="auto">{descriptionOf(item)}</p>
-        <dl className="card__prices">
-          {(['dine-in', 'takeaway'] as const).map((type) => (
-            <div key={type} className={type === orderType ? 'is-active' : ''} aria-current={type === orderType || undefined}>
-              <dt>{t(type === 'dine-in' ? 'common.dineInPrice' : 'common.takeawayPrice')}</dt>
-              <dd>
-                <Price value={type === 'dine-in' ? item.dineInPrice : item.takeawayPrice} />
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <PriceRows item={item} className="card__prices" />
         <div className="card__action">
           {!item.available ? (
             <span className="card__soldout">{t('common.unavailable')}</span>

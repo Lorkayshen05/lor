@@ -35,7 +35,7 @@
   "product": { "backToMenu": "العودة إلى القائمة", "notFound": "لم نجد هذا الطبق.", "notFoundHint": "ربما أُزيل من القائمة.", "yourPrice": "سعرك", "addToCart": "أضف إلى السلة" },
   "cart": {
     "title": "سلتك", "empty": "سلتك فارغة.", "emptyHint": "ابدأ بأحد أطباقنا المميزة.", "browse": "تصفّح القائمة", "checkout": "إتمام الطلب", "clear": "إفراغ السلة",
-    "removeItem": "إزالة {{name}}", "unavailableTitle": "بعض العناصر لم تعد متوفرة", "unavailableBody": "أزلها للمتابعة: {{names}}", "suggestions": "أكمل طلبك", "lineTotal": "إجمالي البند"
+    "removeItem": "إزالة {{name}}", "unavailableTitle": "بعض العناصر لم تعد متوفرة", "unavailableBody": "أزلها للمتابعة: {{names}}", "removeUnavailable": "إزالة العناصر غير المتوفرة", "suggestions": "أكمل طلبك", "lineTotal": "إجمالي البند"
   },
   "checkout": {
     "title": "إتمام الطلب", "details": "بياناتك", "tableNumber": "رقم الطاولة", "tableHint": "ستجده على طاولتك.", "name": "الاسم", "nameOptional": "الاسم (اختياري)", "phone": "رقم الهاتف",

@@ -5,6 +5,7 @@ import { useApp, type WizardState } from '../state/AppContext';
 import { useRecommendations } from '../hooks/useRecommendations';
 import { rm } from '../utils/money';
 import { formatMoney } from '../utils/money';
+import { AddAllButton } from './AddAllButton';
 import { Icon } from './Icon';
 import { Price } from './Price';
 import { RecommendationCard } from './RecommendationCard';
@@ -26,7 +27,7 @@ function Option({ selected, onClick, children }: { selected: boolean; onClick: (
 /** "WHAT SHOULD I EAT?" — three questions → rule-based picks from the real menu. Progress survives language changes. */
 export function Wizard() {
   const { t } = useTranslation();
-  const { wizard, setWizard, visitType, orders, cartActions, announce, orderType } = useApp();
+  const { wizard, setWizard, visitType, orders, orderType } = useApp();
   const { step } = wizard;
 
   // Defend against stale/corrupt saved progress.
@@ -122,16 +123,7 @@ export function Wizard() {
                 <span>{t('common.total')}</span>
                 <Price value={resultTotal} />
               </div>
-              <button
-                type="button"
-                className="btn btn--primary btn--block"
-                onClick={() => {
-                  cartActions.addMany(recs.map((r) => ({ itemId: r.item.id, quantity: 1 })));
-                  announce(t('common.added'));
-                }}
-              >
-                {t('wizard.addAll')}
-              </button>
+              <AddAllButton items={recs.map((r) => ({ itemId: r.item.id, quantity: 1 }))} label={t('wizard.addAll')} />
             </>
           )}
         </section>

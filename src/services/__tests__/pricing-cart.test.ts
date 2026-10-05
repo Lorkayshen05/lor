@@ -1,6 +1,6 @@
 import { MENU, MENU_BY_ID } from '../../data/menu';
 import { getUnitPrice, priceCart } from '../pricing';
-import { cartReducer, clampQuantity, orderToCart, sanitizeCart } from '../cart';
+import { cartCovers, cartReducer, clampQuantity, orderToCart, sanitizeCart } from '../cart';
 import { formatMoney, rm } from '../../utils/money';
 import { byId, makeOrder } from '../../test/fixtures';
 
@@ -103,5 +103,26 @@ describe('reorder', () => {
     const { items, skippedNames } = orderToCart(order, menu);
     expect(items).toEqual([{ itemId: 'black-sesame-paste', quantity: 1 }]);
     expect(skippedNames).toEqual(['Peanut Paste']);
+  });
+});
+
+describe('cartCovers', () => {
+  it('is true only when every wanted quantity is already in the cart', () => {
+    const cart = [{ itemId: 'a', quantity: 2 }, { itemId: 'b', quantity: 1 }];
+    expect(cartCovers(cart, [{ itemId: 'a', quantity: 2 }, { itemId: 'b', quantity: 1 }])).toBe(true);
+    expect(cartCovers(cart, [{ itemId: 'a', quantity: 3 }])).toBe(false);
+    expect(cartCovers(cart, [{ itemId: 'c', quantity: 1 }])).toBe(false);
+    expect(cartCovers(cart, [])).toBe(false);
+  });
+});
+
+describe('formatMoney', () => {
+  it('is stable and exact for every sen value that can occur', () => {
+    expect(formatMoney(0)).toBe('RM 0.00');
+    expect(formatMoney(5)).toBe('RM 0.05');
+    expect(formatMoney(100000)).toBe('RM 1,000.00');
+    for (const m of MENU) {
+      expect(formatMoney(m.dineInPrice)).toMatch(/^RM \d+\.\d{2}$/);
+    }
   });
 });

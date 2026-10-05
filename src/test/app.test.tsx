@@ -200,7 +200,7 @@ describe('budget planner UI', () => {
     const n = (s: string) => Number(s.replace(/[^\d.]/g, ''));
     expect(n(total)).toBeLessThanOrEqual(30);
     expect(n(total) + n(remaining)).toBeCloseTo(30);
-    const planner = screen.getByRole('tabpanel');
+    const planner = screen.getByRole('region', { name: 'Build my order' });
     await user.click(within(planner).getByRole('button', { name: 'Add all to cart' }));
     expect(screen.getByRole('link', { name: /Cart: \d+/ })).toBeInTheDocument();
   });
@@ -215,5 +215,85 @@ describe('unknown routes and products', () => {
     go('#/nope');
     render(<App />);
     expect(await screen.findByText('Page not found')).toBeInTheDocument();
+  });
+});
+
+describe('production-readiness regressions', () => {
+  it('clears the table number after an order so the next order cannot go to the wrong table', async () => {
+    const user = userEvent.setup();
+    go('#/menu/soy-milk');
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: /Add to cart/ }));
+    go('#/checkout');
+    await user.type(await screen.findByLabelText('Table number'), '9');
+    await user.click(screen.getByRole('button', { name: /Place order/ }));
+    await screen.findByRole('heading', { name: 'Order received' });
+    expect(JSON.parse(window.localStorage.getItem('rdh.session.v1')!).tableNumber).toBe('');
+  });
+
+  it('ORDER AGAIN merges into the cart instead of discarding what is already there', async () => {
+    const user = userEvent.setup();
+    window.localStorage.setItem('rdh.orders.v1', JSON.stringify([makeOrder(['peanut-paste'])]));
+    window.localStorage.setItem('rdh.session.v1', JSON.stringify({ orderType: 'dine-in', tableNumber: '', cart: [{ itemId: 'soy-milk', quantity: 1 }], wizard: { step: 0 }, planner: {} }));
+    render(<App />);
+    await user.click(await screen.findByRole('button', { name: 'Order again' }));
+    expect(await screen.findByRole('link', { name: 'Peanut Paste' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Soy Milk' })).toBeInTheDocument();
+  });
+
+  it('"Add all" cannot silently double-add: it becomes a link to the cart once added', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Add all to cart' }));
+    expect(screen.queryByRole('button', { name: 'Add all to cart' })).not.toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /Added · View cart/ }).length).toBeGreaterThan(0);
+    const cart = JSON.parse(window.localStorage.getItem('rdh.session.v1')!).cart as { quantity: number }[];
+    expect(cart.every((c) => c.quantity === 1)).toBe(true);
+  });
+
+  it('cart badge counts only items that are actually in the total', () => {
+    window.localStorage.setItem('rdh.session.v1', JSON.stringify({ orderType: 'dine-in', tableNumber: '', cart: [{ itemId: 'soy-milk', quantity: 2 }, { itemId: 'ghost-item', quantity: 5 }], wizard: { step: 0 }, planner: {} }));
+    render(<App />);
+    expect(screen.getByRole('link', { name: 'Cart: 2' })).toBeInTheDocument();
+  });
+
+  it('blocks checkout from the cart while unavailable items remain, and lets you remove them', async () => {
+    const user = userEvent.setup();
+    window.localStorage.setItem('rdh.session.v1', JSON.stringify({ orderType: 'dine-in', tableNumber: '', cart: [{ itemId: 'soy-milk', quantity: 1 }, { itemId: 'ghost-item', quantity: 1 }], wizard: { step: 0 }, planner: {} }));
+    go('#/cart');
+    render(<App />);
+    expect(await screen.findByRole('alert')).toHaveTextContent('no longer available');
+    expect(screen.getByRole('button', { name: /^Checkout/ })).toBeDisabled();
+    await user.click(screen.getByRole('button', { name: 'Remove unavailable items' }));
+    expect(screen.getByRole('link', { name: /^Checkout/ })).toBeInTheDocument();
+  });
+
+  it('drops stale validation errors when the order type changes on checkout', async () => {
+    const user = userEvent.setup();
+    go('#/menu/soy-milk');
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: /Add to cart/ }));
+    go('#/checkout');
+    await user.click(await screen.findByRole('button', { name: /Place order/ }));
+    expect(await screen.findByText(/Enter your table number/)).toBeInTheDocument();
+    await user.click(screen.getByRole('radio', { name: /take away/i }));
+    expect(screen.queryByText('Please fix the highlighted fields.')).not.toBeInTheDocument();
+    expect(screen.queryByText(/Enter your table number/)).not.toBeInTheDocument();
+  });
+
+  it('tags only a few "Try something new" picks for returning customers, not most of the menu', () => {
+    window.localStorage.setItem('rdh.orders.v1', JSON.stringify([makeOrder(['black-sesame-paste'])]));
+    go('#/menu');
+    render(<App />);
+    const tags = screen.getAllByText('Try something new', { selector: '.tag' });
+    expect(tags.length).toBeGreaterThan(0);
+    expect(tags.length).toBeLessThanOrEqual(3);
+  });
+
+  it('marks the applicable price in text and labels Chinese text with its language', () => {
+    go('#/menu/peanut-paste');
+    render(<App />);
+    expect(screen.getByText('(Selected)')).toBeInTheDocument();
+    expect(document.querySelector('.product__zh')).toHaveAttribute('lang', 'zh-Hans');
   });
 });

@@ -11,7 +11,8 @@ import {
 } from 'react';
 import type { CartItem, FlavourTag, MenuItem, Money, Order, OrderType, VisitType } from '../types';
 import { MENU } from '../data/menu';
-import { cartCount, cartReducer, orderToCart, sanitizeCart, type CartAction } from '../services/cart';
+import { cartReducer, orderToCart, sanitizeCart, type CartAction } from '../services/cart';
+import { getRecommendations } from '../services/recommendations';
 import { priceCart, type CartTotals } from '../services/pricing';
 import {
   buildOrder,
@@ -120,6 +121,8 @@ export interface AppContextValue {
   visitType: VisitType;
   /** Products this customer has already ordered (from real history). */
   seenIds: ReadonlySet<string>;
+  /** Products worth tagging "Try something new" (top rule-based picks the customer hasn't ordered). */
+  tryNewIds: ReadonlySet<string>;
   /** Real ranking, or null until enough real orders exist (UI then shows "Our signatures"). */
   bestSellers: BestSeller[] | null;
   placeOrder: (contact: OrderContact, options?: { pickupInMinutes?: number }) => Promise<Order>;
@@ -161,6 +164,23 @@ export function AppProvider({
   const menuById = useMemo(() => new Map(menu.map((m) => [m.id, m])), [menu]);
   const [bestSellers, setBestSellers] = useState<BestSeller[] | null>(null);
   const seenIds = useMemo(() => orderedItemIds(orders), [orders]);
+
+  const tryNewIds = useMemo(
+    () =>
+      orders.length === 0
+        ? new Set<string>()
+        : new Set(
+            getRecommendations({
+              menu,
+              customerHistory: orders,
+              visitType: 'returning',
+              orderType: session.orderType,
+              excludeOrdered: true,
+              limit: 3,
+            }).map((r) => r.item.id),
+          ),
+    [menu, orders, session.orderType],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -219,6 +239,8 @@ export function AppProvider({
       repository.add(accepted);
       setOrders(repository.list());
       dispatch({ type: 'cart', action: { type: 'clear' } });
+      // A table number belongs to one visit; keeping it could send the next order to the wrong table.
+      dispatch({ type: 'table', value: '' });
       return accepted;
     },
     [session.cart, session.orderType, session.tableNumber, menuById, repository],
@@ -227,7 +249,8 @@ export function AppProvider({
   const reorder = useCallback(
     (order: Order) => {
       const { items, skippedNames } = orderToCart(order, menuById);
-      dispatch({ type: 'cart', action: { type: 'replace', items } });
+      // Merge rather than replace: never silently discard what the customer already chose.
+      dispatch({ type: 'cart', action: { type: 'addMany', items } });
       return { skippedNames };
     },
     [menuById],
@@ -243,7 +266,7 @@ export function AppProvider({
       setTableNumber: (v) => dispatch({ type: 'table', value: v }),
       cart: session.cart,
       totals,
-      itemCount: cartCount(session.cart),
+      itemCount: totals.count,
       cartActions,
       wizard: session.wizard,
       setWizard: (w) => dispatch({ type: 'wizard', value: w }),
@@ -252,13 +275,14 @@ export function AppProvider({
       orders,
       visitType: getVisitType(orders),
       seenIds,
+      tryNewIds,
       bestSellers,
       placeOrder,
       reorder,
       announce,
       announcement,
     }),
-    [menu, menuById, session, totals, cartActions, orders, seenIds, bestSellers, placeOrder, reorder, announce, announcement],
+    [menu, menuById, session, totals, cartActions, orders, seenIds, tryNewIds, bestSellers, placeOrder, reorder, announce, announcement],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

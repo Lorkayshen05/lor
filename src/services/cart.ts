@@ -90,3 +90,8 @@ export function orderToCart(
   }
   return { items, skippedNames };
 }
+
+/** True when the cart already holds at least every quantity in `wanted` (used to avoid silent double-adds). */
+export function cartCovers(cart: CartItem[], wanted: CartItem[]): boolean {
+  return wanted.length > 0 && wanted.every((w) => getQuantity(cart, w.itemId) >= w.quantity);
+}

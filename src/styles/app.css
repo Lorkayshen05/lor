@@ -275,8 +275,8 @@ main:focus {
   padding: 6px 2px;
   text-decoration: none;
   color: var(--ink-2);
-  font-size: 11.5px;
-  letter-spacing: 0.05em;
+  font-size: 12px;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 .mainnav__text {
@@ -726,11 +726,7 @@ main:focus {
 .menu-tools {
   display: grid;
   gap: 12px;
-  position: sticky;
-  top: 56px;
-  z-index: 20;
-  background: var(--cream);
-  padding-block: 8px 10px;
+  padding-block: 4px 10px;
   margin-bottom: 6px;
 }
 .searchbox {
@@ -1094,6 +1090,10 @@ main:focus {
   margin-top: 18px;
 }
 .tabs__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
   min-height: 52px;
   padding: 6px 8px;
   background: none;
@@ -1184,6 +1184,8 @@ main:focus {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-align: center;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 .option.is-selected {
   background: var(--ruby);
@@ -1582,6 +1584,35 @@ main:focus {
   border-top: 1px solid var(--line);
   font-size: 12px;
   color: var(--ink-2);
+}
+
+/* ---------- Very small phones (320–360px) ---------- */
+
+@media (max-width: 360px) {
+  :root {
+    --gutter: 14px;
+  }
+  .wordmark__en {
+    font-size: 15px;
+  }
+  .wordmark__zh {
+    font-size: 12px;
+  }
+  .lang-btn {
+    padding-inline: 8px;
+  }
+  .lang-btn__label {
+    max-width: 6ch;
+  }
+  .option,
+  .tabs__btn {
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    padding-inline: 4px;
+  }
+  .hero__title {
+    letter-spacing: 0.02em;
+  }
 }
 
 /* ---------- Larger screens ---------- */

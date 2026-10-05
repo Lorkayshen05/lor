@@ -162,7 +162,7 @@
     "clear": "Clear cart",
     "removeItem": "Remove {{name}}",
     "unavailableTitle": "Some items are no longer available",
-    "unavailableBody": "Remove them to continue: {{names}}",
+    "unavailableBody": "Remove them to continue: {{names}}", "removeUnavailable": "Remove unavailable items",
     "suggestions": "Complete your order",
     "lineTotal": "Line total"
   },

@@ -5,6 +5,7 @@ import { useMenuText } from '../hooks/useMenuText';
 import { planOrder } from '../services/budgetPlanner';
 import { getUnitPrice } from '../services/pricing';
 import { rm } from '../utils/money';
+import { AddAllButton } from './AddAllButton';
 import { DishImage } from './DishImage';
 import { Icon } from './Icon';
 import { Price } from './Price';
@@ -24,7 +25,7 @@ function Option({ selected, onClick, children }: { selected: boolean; onClick: (
 /** "BUILD MY ORDER" — the plan can never exceed the chosen budget (enforced in planOrder). */
 export function BudgetPlanner() {
   const { t } = useTranslation();
-  const { menu, orderType, planner, setPlanner, cartActions, announce } = useApp();
+  const { menu, orderType, planner, setPlanner } = useApp();
   const { nameOf } = useMenuText();
   const { people, budget } = planner;
 
@@ -102,16 +103,7 @@ export function BudgetPlanner() {
                   </dd>
                 </div>
               </dl>
-              <button
-                type="button"
-                className="btn btn--primary btn--block"
-                onClick={() => {
-                  cartActions.addMany(plan.lines.map((l) => ({ itemId: l.item.id, quantity: l.quantity })));
-                  announce(t('common.added'));
-                }}
-              >
-                {t('planner.addAll')}
-              </button>
+              <AddAllButton items={plan.lines.map((l) => ({ itemId: l.item.id, quantity: l.quantity }))} label={t('planner.addAll')} />
             </>
           )}
         </section>

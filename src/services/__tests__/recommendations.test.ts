@@ -86,6 +86,21 @@ describe('getRecommendations', () => {
   });
 });
 
+describe('cart suggestions', () => {
+  it('prioritise completing the order (custard, then drink) over novelty for a returning customer', () => {
+    const recs = getRecommendations({
+      menu: MENU,
+      customerHistory: [makeOrder(['black-sesame-paste'])],
+      currentCart: [{ itemId: 'black-sesame-paste', quantity: 1 }],
+      visitType: 'returning',
+      orderType: 'dine-in',
+      limit: 2,
+    });
+    expect(recs.map((r) => r.reason.key)).toEqual(['reasons.completesOrder', 'reasons.completesOrder']);
+    expect(recs[0]!.item.category).toBe('custard');
+  });
+});
+
 describe('getFirstVisitCombo', () => {
   it.each<OrderType>(['dine-in', 'takeaway'])('builds signature + mixed + custard + traditional drink priced from the menu (%s)', (orderType) => {
     const combo = getFirstVisitCombo(MENU, orderType);

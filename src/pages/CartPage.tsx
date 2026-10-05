@@ -9,11 +9,12 @@ import { OrderTypeToggle } from '../components/OrderTypeToggle';
 import { Price } from '../components/Price';
 import { QuantityStepper } from '../components/QuantityStepper';
 import { RecommendationCard } from '../components/RecommendationCard';
+import { SecondaryName } from '../components/SecondaryName';
 
 export function CartPage() {
   const { t } = useTranslation();
   const { cart, totals, cartActions, menuById } = useApp();
-  const { nameOf, secondaryNameOf } = useMenuText();
+  const { nameOf } = useMenuText();
   const suggestions = useRecommendations({ limit: 2 });
 
   if (cart.length === 0) {
@@ -51,7 +52,7 @@ export function CartPage() {
             className="btn btn--ghost btn--sm"
             onClick={() => totals.unavailable.forEach((u) => cartActions.remove(u.itemId))}
           >
-            {t('common.clear')}
+            {t('cart.removeUnavailable')}
           </button>
         </div>
       )}
@@ -66,7 +67,7 @@ export function CartPage() {
                 <Link to={`/menu/${item.id}`} className="cart-line__name">
                   {name}
                 </Link>
-                <span className="cart-line__zh">{secondaryNameOf(item)}</span>
+                <SecondaryName item={item} as="span" className="cart-line__zh" />
                 <Price value={unitPrice} className="muted" />
               </div>
               <div className="cart-line__side">
@@ -115,7 +116,7 @@ export function CartPage() {
       )}
 
       <div className="cart__actions">
-        {totals.lines.length === 0 ? (
+        {totals.lines.length === 0 || totals.unavailable.length > 0 ? (
           <button type="button" className="btn btn--primary btn--lg btn--block" disabled>
             {t('cart.checkout')}
           </button>

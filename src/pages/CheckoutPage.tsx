@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CHECKOUT_CONFIG } from '../data/restaurant';
@@ -51,6 +51,12 @@ export function CheckoutPage() {
   const [failed, setFailed] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const isDineIn = orderType === 'dine-in';
+
+  // Field errors belong to the other order type's form; don't leave a banner pointing at fields that are gone.
+  useEffect(() => {
+    setErrors({});
+    setFailed(false);
+  }, [orderType]);
 
   if (totals.lines.length === 0 && !submitting) {
     return (

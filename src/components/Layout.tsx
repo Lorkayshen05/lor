@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useRef } from 'react';
+import { Link, NavLink, Outlet, useLocation, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { BRAND } from '../data/restaurant';
 import { MENU_IS_SAMPLE } from '../data/menu';
@@ -15,11 +15,32 @@ const NAV: { to: string; key: string; icon: IconName; end?: boolean }[] = [
   { to: '/cart', key: 'nav.cart', icon: 'cart' },
 ];
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
+/**
+ * New page → top. Back/forward → the scroll position you left (so returning from a dish to the
+ * menu doesn't throw you back to the top of a long list). Focus moves to <main> for screen readers.
+ */
+function ScrollManager() {
+  const { pathname, key } = useLocation();
+  const navType = useNavigationType();
+  const positions = useRef(new Map<string, number>());
+  const currentKey = useRef(key);
+
+  useLayoutEffect(() => {
+    currentKey.current = key;
+  }, [key]);
+
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const onScroll = () => positions.current.set(currentKey.current, window.scrollY);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useLayoutEffect(() => {
+    const y = navType === 'POP' ? (positions.current.get(key) ?? 0) : 0;
+    window.scrollTo({ top: y, behavior: 'instant' });
     document.getElementById('main')?.focus({ preventScroll: true });
+    // Only a path change is a "page change"; query-param updates (filters) must not move the page.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
   return null;
 }
@@ -93,7 +114,7 @@ export function Layout() {
       )}
 
       <main id="main" tabIndex={-1} className="main">
-        <ScrollToTop />
+        <ScrollManager />
         <Outlet />
       </main>
 

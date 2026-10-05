@@ -34,6 +34,10 @@ export interface RecommendationInput {
 /** A stated preference must outrank any curation boost (max boost for a first visit is 6). */
 const PREFERENCE_WEIGHT = 8;
 
+/** Finishing a cart (custard / drink) outranks novelty (max 3) but not a stated preference. */
+const COMPLETE_ORDER_CUSTARD = 5;
+const COMPLETE_ORDER_DRINK = 4;
+
 const CATEGORY_ORDER = ['paste', 'mixed', 'custard', 'sweet-soup', 'cold', 'drink'];
 
 function flavourSet(items: readonly MenuItem[]): Set<FlavourTag> {
@@ -96,11 +100,11 @@ export function getRecommendations(input: RecommendationInput): Recommendation[]
       }
     }
     if (cartHasMain && !cartCategories.has('custard') && item.category === 'custard') {
-      score += 2;
+      score += COMPLETE_ORDER_CUSTARD;
       if (matched.length === 0) reason = { key: 'reasons.completesOrder' };
     }
     if (cartHasMain && !cartCategories.has('drink') && item.curation.traditionalDrink) {
-      score += 1.5;
+      score += COMPLETE_ORDER_DRINK;
       if (matched.length === 0) reason = { key: 'reasons.completesOrder' };
     }
     return { item, score, reason };
