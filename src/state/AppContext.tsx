@@ -14,14 +14,11 @@ import { MENU } from '../data/menu';
 import { cartReducer, orderToCart, sanitizeCart, type CartAction } from '../services/cart';
 import { getRecommendations } from '../services/recommendations';
 import { priceCart, type CartTotals } from '../services/pricing';
-import {
-  buildOrder,
-  createLocalGateway,
-  localOrderRepository,
-  type OrderContact,
-  type OrderGateway,
-  type OrderRepository,
-} from '../services/orderHistory';
+import { localOrderRepository, type OrderRepository } from '../services/orderHistory';
+import { createHttpGateway, createLocalGateway, PriceChangedError, type OrderContact, type OrderGateway } from '../services/orderGateway';
+import { defaultApi, type ApiClient } from '../services/api';
+import { clearKey, fingerprintOf, keyFor } from '../services/idempotency';
+import i18n from '../i18n';
 import { getVisitType, orderedItemIds } from '../services/visit';
 import {
   computeBestSellers,
@@ -118,6 +115,12 @@ export interface AppContextValue {
   planner: PlannerState;
   setPlanner: (p: PlannerState) => void;
   orders: Order[];
+  /** Server connection, or null in local prototype mode. */
+  api: ApiClient | null;
+  /** Re-read prices and availability from the server (no-op in local mode). */
+  refreshMenu: () => Promise<void>;
+  /** Apply a status change reported by the server to this device's order history. */
+  updateOrderStatus: (orderId: string, status: Order['status']) => void;
   visitType: VisitType;
   /** Products this customer has already ordered (from real history). */
   seenIds: ReadonlySet<string>;
@@ -139,19 +142,21 @@ export interface AppProviderProps {
   menu?: readonly MenuItem[];
   repository?: OrderRepository;
   gateway?: OrderGateway;
+  /** Server API; defaults to the one configured at build time (VITE_ORDER_API). Pass null to force local mode. */
+  api?: ApiClient | null;
   salesSource?: SalesDataSource;
   initialSession?: Partial<SessionState>;
 }
 
 export function AppProvider({
   children,
-  menu = MENU,
+  menu: initialMenu = MENU,
   repository = localOrderRepository,
   gateway,
+  api = defaultApi,
   salesSource = localSalesDataSource,
   initialSession,
 }: AppProviderProps) {
-  const gatewayRef = useRef<OrderGateway>(gateway ?? createLocalGateway());
   const [session, dispatch] = useReducer(
     sessionReducer,
     undefined,
@@ -161,7 +166,26 @@ export function AppProvider({
   const [announcement, setAnnouncement] = useState('');
   const announceTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
+  // With a server, prices and availability come from it (it is the authority); the bundled menu is only the first paint
+  // and the fallback if the server can't be reached.
+  const [menu, setMenu] = useState<readonly MenuItem[]>(initialMenu);
   const menuById = useMemo(() => new Map(menu.map((m) => [m.id, m])), [menu]);
+  const gatewayRef = useRef<OrderGateway>(gateway ?? (api ? createHttpGateway(api) : createLocalGateway(menuById)));
+  if (!gateway && !api) gatewayRef.current = createLocalGateway(menuById); // local mode prices from the current menu
+
+  const refreshMenu = useCallback(async () => {
+    if (!api) return;
+    try {
+      setMenu((await api.menu()).menu);
+    } catch {
+      /* keep the last known menu; checkout is still validated by the server */
+    }
+  }, [api]);
+
+  useEffect(() => {
+    void refreshMenu();
+  }, [refreshMenu]);
+
   const [bestSellers, setBestSellers] = useState<BestSeller[] | null>(null);
   const seenIds = useMemo(() => orderedItemIds(orders), [orders]);
 
@@ -225,17 +249,29 @@ export function AppProvider({
 
   const placeOrder = useCallback(
     async (contact: OrderContact, options?: { pickupInMinutes?: number }): Promise<Order> => {
-      const order = buildOrder(
-        {
-          cart: session.cart,
-          orderType: session.orderType,
-          tableNumber: session.tableNumber,
-          pickupInMinutes: options?.pickupInMinutes,
-        },
-        menuById,
-        repository.getCustomerId(),
-      );
-      const accepted = await gatewayRef.current.submit(order, contact);
+      const submissionCore = {
+        items: session.cart,
+        orderType: session.orderType,
+        tableNumber: session.tableNumber,
+        pickupInMinutes: options?.pickupInMinutes,
+      };
+      // Same order + same key on every retry: a lost response can never turn into a second order.
+      const idempotencyKey = keyFor(fingerprintOf({ ...submissionCore, name: contact.name, phone: contact.phone }));
+      let accepted: Order;
+      try {
+        accepted = await gatewayRef.current.submit({
+          ...submissionCore,
+          contact,
+          expectedTotal: totals.total,
+          customerId: repository.getCustomerId(),
+          language: i18n.language,
+          idempotencyKey,
+        });
+      } catch (e) {
+        if (e instanceof PriceChangedError) await refreshMenu(); // show the customer the new prices before they re-confirm
+        throw e;
+      }
+      clearKey();
       repository.add(accepted);
       setOrders(repository.list());
       dispatch({ type: 'cart', action: { type: 'clear' } });
@@ -243,7 +279,17 @@ export function AppProvider({
       dispatch({ type: 'table', value: '' });
       return accepted;
     },
-    [session.cart, session.orderType, session.tableNumber, menuById, repository],
+    [session.cart, session.orderType, session.tableNumber, totals.total, repository, refreshMenu],
+  );
+
+  const updateOrderStatus = useCallback(
+    (orderId: string, status: Order['status']) => {
+      const current = repository.get(orderId);
+      if (!current || current.status === status) return;
+      repository.add({ ...current, status });
+      setOrders(repository.list());
+    },
+    [repository],
   );
 
   const reorder = useCallback(
@@ -273,6 +319,9 @@ export function AppProvider({
       planner: session.planner,
       setPlanner: (p) => dispatch({ type: 'planner', value: p }),
       orders,
+      api,
+      refreshMenu,
+      updateOrderStatus,
       visitType: getVisitType(orders),
       seenIds,
       tryNewIds,
@@ -282,7 +331,7 @@ export function AppProvider({
       announce,
       announcement,
     }),
-    [menu, menuById, session, totals, cartActions, orders, seenIds, tryNewIds, bestSellers, placeOrder, reorder, announce, announcement],
+    [menu, menuById, session, totals, cartActions, orders, api, refreshMenu, updateOrderStatus, seenIds, tryNewIds, bestSellers, placeOrder, reorder, announce, announcement],
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

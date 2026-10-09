@@ -20,7 +20,7 @@ export function makeOrder(itemIds: string[], overrides: Partial<Order> = {}): Or
     orderType: 'dine-in',
     tableNumber: 'A1',
     timestamp: '2025-01-01T10:00:00.000Z',
-    status: 'received',
+    status: 'new',
     ...overrides,
   };
 }

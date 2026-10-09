@@ -1,85 +1,425 @@
 {
-  "app": { "skipLink": "跳到主要内容", "sampleBanner": "示例菜单——在加入真实 Ruby 菜单之前，名称和价格仅为占位。", "brandTagline": "传统中式甜品 · 始于 1927" },
-  "nav": { "label": "主导航", "home": "首页", "menu": "菜单", "discover": "发现", "cart": "购物车", "orders": "订单" },
-  "orderType": { "label": "用餐方式", "dineIn": "堂食", "takeAway": "外带", "pricesFor": "显示{{type}}价格" },
-  "common": {
-    "add": "加入", "added": "已加入", "back": "返回", "close": "关闭", "search": "搜索", "clear": "清除", "retry": "重试", "loading": "加载中…",
-    "total": "合计", "subtotal": "小计", "remaining": "剩余", "viewCart": "查看购物车", "increase": "增加{{name}}的数量", "decrease": "减少{{name}}的数量",
-    "quantity": "数量", "dineInPrice": "堂食", "takeawayPrice": "外带", "code": "编号", "unavailable": "暂时缺货", "imageFailed": "图片无法显示", "selected": "已选择",
-    "viewAll": "查看完整菜单", "seeAll": "查看全部"
+  "app": {
+    "skipLink": "跳到主要内容",
+    "sampleBanner": "示例菜单——在加入真实 Ruby 菜单之前，名称和价格仅为占位。",
+    "brandTagline": "传统中式甜品 · 始于 1927"
   },
-  "hero": { "eyebrow": "始于 1927", "orderNow": "立即点餐", "subtitle": "传统中式甜品，堂食或外带，随您心意。" },
-  "labels": { "signature": "招牌", "firstTimer": "初次光临推荐", "startingPoint": "绝佳起点", "firstTimerPick": "新客之选", "tryNew": "尝试新口味", "bestSeller": "畅销", "recommended": "推荐" },
+  "nav": {
+    "label": "主导航",
+    "home": "首页",
+    "menu": "菜单",
+    "discover": "发现",
+    "cart": "购物车",
+    "orders": "订单"
+  },
+  "orderType": {
+    "label": "用餐方式",
+    "dineIn": "堂食",
+    "takeAway": "外带",
+    "pricesFor": "显示{{type}}价格"
+  },
+  "common": {
+    "add": "加入",
+    "added": "已加入",
+    "back": "返回",
+    "close": "关闭",
+    "search": "搜索",
+    "clear": "清除",
+    "retry": "重试",
+    "loading": "加载中…",
+    "total": "合计",
+    "subtotal": "小计",
+    "remaining": "剩余",
+    "viewCart": "查看购物车",
+    "increase": "增加{{name}}的数量",
+    "decrease": "减少{{name}}的数量",
+    "quantity": "数量",
+    "dineInPrice": "堂食",
+    "takeawayPrice": "外带",
+    "code": "编号",
+    "unavailable": "暂时缺货",
+    "imageFailed": "图片无法显示",
+    "selected": "已选择",
+    "viewAll": "查看完整菜单",
+    "seeAll": "查看全部"
+  },
+  "hero": {
+    "eyebrow": "始于 1927",
+    "orderNow": "立即点餐",
+    "subtitle": "传统中式甜品，堂食或外带，随您心意。"
+  },
+  "labels": {
+    "signature": "招牌",
+    "firstTimer": "初次光临推荐",
+    "startingPoint": "绝佳起点",
+    "firstTimerPick": "新客之选",
+    "tryNew": "尝试新口味",
+    "bestSeller": "畅销",
+    "recommended": "推荐"
+  },
   "firstTime": {
-    "title": "第一次来？", "subtitle": "不知道点什么？从这里开始。", "comboTitle": "首次光临建议组合",
-    "role": { "signature": "招牌甜品", "mixed": "综合口味甜品", "custard": "炖品", "drink": "传统饮品" },
-    "addCombo": "全部加入购物车", "picksTitle": "新客之选"
+    "title": "第一次来？",
+    "subtitle": "不知道点什么？从这里开始。",
+    "comboTitle": "首次光临建议组合",
+    "role": {
+      "signature": "招牌甜品",
+      "mixed": "综合口味甜品",
+      "custard": "炖品",
+      "drink": "传统饮品"
+    },
+    "addCombo": "全部加入购物车",
+    "picksTitle": "新客之选"
   },
   "welcomeBack": {
-    "title": "欢迎回来", "subtitle": "想试试不一样的吗？", "orderAgain": "再点一次", "tryNew": "尝试新口味", "lastOrder": "您上次的订单",
-    "orderedOn": "下单于 {{date}}", "reordered": "已将上次订单加入购物车。", "skipped": "已无法供应：{{names}}", "viewOrders": "全部订单"
+    "title": "欢迎回来",
+    "subtitle": "想试试不一样的吗？",
+    "orderAgain": "再点一次",
+    "tryNew": "尝试新口味",
+    "lastOrder": "您上次的订单",
+    "orderedOn": "下单于 {{date}}",
+    "reordered": "已将上次订单加入购物车。",
+    "skipped": "已无法供应：{{names}}",
+    "viewOrders": "全部订单"
   },
-  "signatures": { "title": "本店招牌", "subtitle": "由本店精选——不妨从这里开始。", "bestTitle": "畅销榜", "bestSubtitle": "根据真实订单排名。", "rank": "第{{rank}}名" },
-  "tryNew": { "title": "尝试新口味", "subtitleHistory": "与您以前点过的不同。", "subtitleSession": "购物车之外的新选择。" },
-  "mix": { "title": "搭配您的甜品", "subtitle": "告诉我们人数和预算，我们为您从菜单中搭配。", "cta": "为我搭配" },
-  "story": { "title": "我们的故事", "body": "Kan Brothers Ruby Dessert House 自 1927 年起供应中式甜品，被誉为芝麻糊大王。" },
-  "location": { "title": "找到我们", "pending": "门店信息即将公布。", "directions": "路线" },
+  "signatures": {
+    "title": "本店招牌",
+    "subtitle": "由本店精选——不妨从这里开始。",
+    "bestTitle": "畅销榜",
+    "bestSubtitle": "根据真实订单排名。",
+    "rank": "第{{rank}}名"
+  },
+  "tryNew": {
+    "title": "尝试新口味",
+    "subtitleHistory": "与您以前点过的不同。",
+    "subtitleSession": "购物车之外的新选择。"
+  },
+  "mix": {
+    "title": "搭配您的甜品",
+    "subtitle": "告诉我们人数和预算，我们为您从菜单中搭配。",
+    "cta": "为我搭配"
+  },
+  "story": {
+    "title": "我们的故事",
+    "body": "Kan Brothers Ruby Dessert House 自 1927 年起供应中式甜品，被誉为芝麻糊大王。"
+  },
+  "location": {
+    "title": "找到我们",
+    "pending": "门店信息即将公布。",
+    "directions": "路线"
+  },
   "menu": {
-    "title": "菜单", "searchLabel": "搜索菜单", "searchPlaceholder": "搜索名称、中文名、编号或类别", "filtersLabel": "发现筛选", "all": "全部",
-    "noResults": "没有找到与“{{query}}”相符的甜品。", "noResultsFilter": "此筛选下暂无甜品。", "noResultsHint": "试试其他拼写、中文名，或清除搜索和筛选。",
-    "clearAll": "清除搜索和筛选", "resultCount": "显示 {{count}} 项"
+    "title": "菜单",
+    "searchLabel": "搜索菜单",
+    "searchPlaceholder": "搜索名称、中文名、编号或类别",
+    "filtersLabel": "发现筛选",
+    "all": "全部",
+    "noResults": "没有找到与“{{query}}”相符的甜品。",
+    "noResultsFilter": "此筛选下暂无甜品。",
+    "noResultsHint": "试试其他拼写、中文名，或清除搜索和筛选。",
+    "clearAll": "清除搜索和筛选",
+    "resultCount": "显示 {{count}} 项"
   },
-  "filters": { "signature": "招牌", "firstTime": "新客", "mixed": "综合口味", "richNutty": "浓郁坚果", "warmSilky": "温热细滑", "lightRefreshing": "清爽", "drinks": "饮品", "tryNew": "尝试新口味" },
-  "category": { "paste": "糊类", "mixed": "综合糊", "custard": "炖品", "sweetSoup": "糖水", "cold": "冰品", "drink": "饮品" },
-  "flavour": { "sesame": "芝麻", "nutty": "坚果", "creamy": "奶香", "light": "清淡", "refreshing": "清爽", "mixed": "综合", "traditional": "传统" },
-  "product": { "backToMenu": "返回菜单", "notFound": "找不到这道甜品。", "notFoundHint": "它可能已从菜单中移除。", "yourPrice": "您的价格", "addToCart": "加入购物车" },
+  "filters": {
+    "signature": "招牌",
+    "firstTime": "新客",
+    "mixed": "综合口味",
+    "richNutty": "浓郁坚果",
+    "warmSilky": "温热细滑",
+    "lightRefreshing": "清爽",
+    "drinks": "饮品",
+    "tryNew": "尝试新口味"
+  },
+  "category": {
+    "paste": "糊类",
+    "mixed": "综合糊",
+    "custard": "炖品",
+    "sweetSoup": "糖水",
+    "cold": "冰品",
+    "drink": "饮品"
+  },
+  "flavour": {
+    "sesame": "芝麻",
+    "nutty": "坚果",
+    "creamy": "奶香",
+    "light": "清淡",
+    "refreshing": "清爽",
+    "mixed": "综合",
+    "traditional": "传统"
+  },
+  "product": {
+    "backToMenu": "返回菜单",
+    "notFound": "找不到这道甜品。",
+    "notFoundHint": "它可能已从菜单中移除。",
+    "yourPrice": "您的价格",
+    "addToCart": "加入购物车"
+  },
   "cart": {
-    "title": "您的购物车", "empty": "购物车是空的。", "emptyHint": "从我们的招牌开始吧。", "browse": "浏览菜单", "checkout": "结账", "clear": "清空购物车",
-    "removeItem": "移除{{name}}", "unavailableTitle": "部分商品已无法供应", "unavailableBody": "请移除后继续：{{names}}", "removeUnavailable": "移除无法供应的商品", "suggestions": "完善您的订单", "lineTotal": "小计"
+    "title": "您的购物车",
+    "empty": "购物车是空的。",
+    "emptyHint": "从我们的招牌开始吧。",
+    "browse": "浏览菜单",
+    "checkout": "结账",
+    "clear": "清空购物车",
+    "removeItem": "移除{{name}}",
+    "unavailableTitle": "部分商品已无法供应",
+    "unavailableBody": "请移除后继续：{{names}}",
+    "removeUnavailable": "移除无法供应的商品",
+    "suggestions": "完善您的订单",
+    "lineTotal": "小计"
   },
   "checkout": {
-    "title": "结账", "details": "您的资料", "tableNumber": "桌号", "tableHint": "请见桌上的号码。", "name": "姓名", "nameOptional": "姓名（选填）", "phone": "电话号码",
-    "phoneHint": "仅在需要就此订单联系您时使用。", "pickup": "取餐时间", "pickupAsap": "尽快", "pickupIn": "{{minutes}} 分钟后", "review": "您的订单",
-    "place": "提交订单", "placing": "发送中…", "fixErrors": "请修正标出的栏位。", "failedTitle": "订单未能发送",
-    "failedBody": "您的购物车完好无损。请再试一次，或告知店员。", "privacy": "我们只在此设备上保存订单和桌号。您的姓名和电话仅用于本次订单。"
+    "title": "结账",
+    "details": "您的资料",
+    "tableNumber": "桌号",
+    "tableHint": "请见桌上的号码。",
+    "name": "姓名",
+    "nameOptional": "姓名（选填）",
+    "phone": "电话号码",
+    "phoneHint": "仅在需要就此订单联系您时使用。",
+    "pickup": "取餐时间",
+    "pickupAsap": "尽快",
+    "pickupIn": "{{minutes}} 分钟后",
+    "review": "您的订单",
+    "place": "提交订单",
+    "placing": "发送中…",
+    "fixErrors": "请修正标出的栏位。",
+    "failedTitle": "订单未能发送",
+    "failedBody": "您的购物车完好无损。请再试一次，或告知店员。",
+    "privacy": "我们只在此设备上保存订单和桌号。您的姓名和电话仅用于本次订单。",
+    "priceChanged": "自您加入这些商品后价格已更新。新的合计为 {{total}}。请确认后重新提交订单。",
+    "itemsUnavailable": "部分商品刚刚缺货。请查看您的购物车。",
+    "closed": "在线点餐尚未开放。请向店员点餐。"
   },
   "confirmation": {
-    "title": "已收到订单", "subtitle": "谢谢——我们已收到您的订单。", "orderNumber": "订单编号", "status": "状态", "type": "用餐方式", "table": "桌号", "pickup": "取餐",
-    "items": "项目", "backToMenu": "返回菜单", "viewOrder": "查看订单", "notFound": "在此设备上找不到该订单。"
+    "title": "已收到订单",
+    "subtitle": "谢谢——我们已收到您的订单。",
+    "orderNumber": "订单编号",
+    "status": "状态",
+    "type": "用餐方式",
+    "table": "桌号",
+    "pickup": "取餐",
+    "items": "项目",
+    "backToMenu": "返回菜单",
+    "viewOrder": "查看订单",
+    "notFound": "在此设备上找不到该订单。"
   },
-  "status": { "received": "已收到", "preparing": "制作中", "ready": "可取餐", "completed": "已完成", "cancelled": "已取消" },
-  "orders": { "title": "您的订单", "empty": "暂无订单。", "emptyHint": "您在此设备上提交的订单会显示在这里。", "deviceNote": "订单记录仅保存在此设备上。", "orderAgain": "再点一次", "tryNew": "尝试新口味", "detailTitle": "订单 {{id}}" },
+  "status": {
+    "new": "已收到",
+    "confirmed": "已确认",
+    "preparing": "制作中",
+    "ready": "可取餐",
+    "completed": "已完成",
+    "cancelled": "已取消"
+  },
+  "orders": {
+    "title": "您的订单",
+    "empty": "暂无订单。",
+    "emptyHint": "您在此设备上提交的订单会显示在这里。",
+    "deviceNote": "订单记录仅保存在此设备上。",
+    "orderAgain": "再点一次",
+    "tryNew": "尝试新口味",
+    "detailTitle": "订单 {{id}}"
+  },
   "wizard": {
-    "title": "我该吃什么？", "subtitle": "三个简单问题。", "step": "第 {{current}} 步，共 {{total}} 步", "visitQuestion": "您来过 Ruby 吗？", "cravingQuestion": "您想吃什么口味？", "budgetQuestion": "预算？",
-    "visit": { "first": "第一次", "second": "第二次", "returning": "常客" },
-    "budgetValue": "RM{{amount}}", "budgetOpen": "RM{{amount}}+", "resultsTitle": "为您推荐", "resultsHint": "合计不超过 {{budget}}。",
-    "none": "在该预算和口味下，菜单中没有合适的选择。请提高预算。", "addAll": "全部加入购物车", "startOver": "重新开始", "next": "下一步", "seeResults": "查看推荐", "choose": "请选择一项以继续。"
+    "title": "我该吃什么？",
+    "subtitle": "三个简单问题。",
+    "step": "第 {{current}} 步，共 {{total}} 步",
+    "visitQuestion": "您来过 Ruby 吗？",
+    "cravingQuestion": "您想吃什么口味？",
+    "budgetQuestion": "预算？",
+    "visit": {
+      "first": "第一次",
+      "second": "第二次",
+      "returning": "常客"
+    },
+    "budgetValue": "RM{{amount}}",
+    "budgetOpen": "RM{{amount}}+",
+    "resultsTitle": "为您推荐",
+    "resultsHint": "合计不超过 {{budget}}。",
+    "none": "在该预算和口味下，菜单中没有合适的选择。请提高预算。",
+    "addAll": "全部加入购物车",
+    "startOver": "重新开始",
+    "next": "下一步",
+    "seeResults": "查看推荐",
+    "choose": "请选择一项以继续。"
   },
   "reasons": {
-    "signature": "本店招牌之一。", "firstTimer": "初次光临的绝佳起点。", "preference": "因为您喜欢{{flavour}}口味而推荐。", "differentFrom": "与{{item}}不同的选择。",
-    "somethingNew": "值得一试的新口味。", "completesOrder": "与购物车中的甜品很搭。"
+    "signature": "本店招牌之一。",
+    "firstTimer": "初次光临的绝佳起点。",
+    "preference": "因为您喜欢{{flavour}}口味而推荐。",
+    "differentFrom": "与{{item}}不同的选择。",
+    "somethingNew": "值得一试的新口味。",
+    "completesOrder": "与购物车中的甜品很搭。"
   },
   "planner": {
-    "title": "为我搭配", "subtitle": "选择人数和预算，我们从菜单中为您搭配。", "people": "人数", "budget": "预算", "recommended": "推荐订单", "total": "合计", "remaining": "剩余预算",
-    "addAll": "全部加入购物车", "tooLow": "菜单中没有符合该预算的选择——请提高预算。", "notEveryone": "此预算可为 {{people}} 人中的 {{count}} 人各点一份主食。请提高预算以涵盖所有人。",
-    "peopleOption": "{{count}}", "peopleOpen": "{{count}}+"
+    "title": "为我搭配",
+    "subtitle": "选择人数和预算，我们从菜单中为您搭配。",
+    "people": "人数",
+    "budget": "预算",
+    "recommended": "推荐订单",
+    "total": "合计",
+    "remaining": "剩余预算",
+    "addAll": "全部加入购物车",
+    "tooLow": "菜单中没有符合该预算的选择——请提高预算。",
+    "notEveryone": "此预算可为 {{people}} 人中的 {{count}} 人各点一份主食。请提高预算以涵盖所有人。",
+    "peopleOption": "{{count}}",
+    "peopleOpen": "{{count}}+"
   },
-  "discover": { "title": "发现", "subtitle": "找到您会喜欢的甜品。" },
+  "discover": {
+    "title": "发现",
+    "subtitle": "找到您会喜欢的甜品。"
+  },
   "language": {
-    "label": "语言", "choose": "选择语言", "search": "搜索语言", "noMatch": "没有符合“{{query}}”的语言。", "partial": "部分翻译", "needsReview": "待审核",
-    "notVerified": "翻译并非全部经过专业校对。粤语和闽南语尤其需要母语人士验证。", "loadFailed": "无法加载该语言，保持使用{{language}}。", "current": "当前"
+    "label": "语言",
+    "choose": "选择语言",
+    "search": "搜索语言",
+    "noMatch": "没有符合“{{query}}”的语言。",
+    "partial": "部分翻译",
+    "needsReview": "待审核",
+    "notVerified": "翻译并非全部经过专业校对。粤语和闽南语尤其需要母语人士验证。",
+    "loadFailed": "无法加载该语言，保持使用{{language}}。",
+    "current": "当前"
   },
   "errors": {
-    "cartEmpty": "购物车是空的——请先加入商品。", "unavailableItems": "购物车中有些商品已无法供应。", "tableRequired": "请输入桌号，以便我们送餐。",
-    "tableInvalid": "仅限字母、数字或连字符，最多 6 个字符。", "nameRequired": "请输入订单姓名。", "nameTooLong": "请使用 40 个字符以内。",
-    "phoneRequired": "请输入电话号码。", "phoneInvalid": "请输入有效的电话号码，例如 +60 12 345 6789。", "pageNotFound": "找不到页面", "pageNotFoundHint": "该页面不存在，请返回菜单。",
-    "generic": "出了点问题", "genericHint": "请重新加载页面，您的购物车已保存。", "reload": "重新加载"
+    "cartEmpty": "购物车是空的——请先加入商品。",
+    "unavailableItems": "购物车中有些商品已无法供应。",
+    "tableRequired": "请输入桌号，以便我们送餐。",
+    "tableInvalid": "仅限字母、数字或连字符，最多 6 个字符。",
+    "nameRequired": "请输入订单姓名。",
+    "nameTooLong": "请使用 40 个字符以内。",
+    "phoneRequired": "请输入电话号码。",
+    "phoneInvalid": "请输入有效的电话号码，例如 +60 12 345 6789。",
+    "pageNotFound": "找不到页面",
+    "pageNotFoundHint": "该页面不存在，请返回菜单。",
+    "generic": "出了点问题",
+    "genericHint": "请重新加载页面，您的购物车已保存。",
+    "reload": "重新加载"
   },
   "dish": {
-    "black-sesame-paste": { "name": "芝麻糊" }, "peanut-paste": { "name": "花生糊" }, "almond-paste": { "name": "杏仁糊" }, "walnut-paste": { "name": "核桃糊" },
-    "sesame-peanut-mixed": { "name": "芝麻花生糊" }, "sesame-almond-mixed": { "name": "芝麻杏仁糊" }, "steamed-egg-custard": { "name": "炖蛋" },
-    "steamed-milk-custard": { "name": "炖鲜奶" }, "ginger-milk-curd": { "name": "姜汁撞奶" }, "red-bean-soup": { "name": "红豆沙" }, "green-bean-soup": { "name": "绿豆沙" },
-    "grass-jelly": { "name": "仙草" }, "coconut-sago": { "name": "椰汁西米露" }, "chinese-tea": { "name": "中国茶" }, "chrysanthemum-tea": { "name": "菊花茶" },
-    "soy-milk": { "name": "豆浆" }, "barley-water": { "name": "薏米水" }
+    "black-sesame-paste": {
+      "name": "芝麻糊"
+    },
+    "peanut-paste": {
+      "name": "花生糊"
+    },
+    "almond-paste": {
+      "name": "杏仁糊"
+    },
+    "walnut-paste": {
+      "name": "核桃糊"
+    },
+    "sesame-peanut-mixed": {
+      "name": "芝麻花生糊"
+    },
+    "sesame-almond-mixed": {
+      "name": "芝麻杏仁糊"
+    },
+    "steamed-egg-custard": {
+      "name": "炖蛋"
+    },
+    "steamed-milk-custard": {
+      "name": "炖鲜奶"
+    },
+    "ginger-milk-curd": {
+      "name": "姜汁撞奶"
+    },
+    "red-bean-soup": {
+      "name": "红豆沙"
+    },
+    "green-bean-soup": {
+      "name": "绿豆沙"
+    },
+    "grass-jelly": {
+      "name": "仙草"
+    },
+    "coconut-sago": {
+      "name": "椰汁西米露"
+    },
+    "chinese-tea": {
+      "name": "中国茶"
+    },
+    "chrysanthemum-tea": {
+      "name": "菊花茶"
+    },
+    "soy-milk": {
+      "name": "豆浆"
+    },
+    "barley-water": {
+      "name": "薏米水"
+    }
+  },
+  "guide": {
+    "title": "Ruby 甜品向导",
+    "subtitle": "询问菜单、预算，以及下次尝试什么。",
+    "placeholder": "输入您的问题…",
+    "ask": "提问",
+    "thinking": "思考中…",
+    "suggested": "推荐问题",
+    "you": "您的提问",
+    "disclaimer": "回答依据我们当前的菜单。如有过敏、清真或饮食需求，请务必询问店员。",
+    "ai": "AI 撰写的回答。下方的菜品和价格来自菜单。",
+    "error": "抱歉，暂时无法回答。请重试或询问店员。",
+    "chip": {
+      "first": "第一次来应该尝试什么？",
+      "second": "第二次来应该点什么？",
+      "next": "下一次可以试哪种搭配？",
+      "rm10": "RM10 以内可以点什么？",
+      "rm20": "RM20 以内可以点什么？",
+      "rm30": "RM30 以内可以点什么？",
+      "sesame": "哪些甜品含芝麻？",
+      "peanut": "哪些甜品含花生？",
+      "almond": "哪些甜品含杏仁？",
+      "walnut": "哪些甜品含核桃？",
+      "drinks": "有哪些饮品？",
+      "compare": "菜单上的各项有什么区别？",
+      "allergy": "我有食物过敏"
+    },
+    "msg": {
+      "first": "这是简单的入门选择，均来自我们当前的菜单。",
+      "second": "既然您以前点过，这里有些不同的选择可以尝试。",
+      "secondNoHistory": "我在此设备上看不到以前的订单，所以先推荐几个适合入门的选择。",
+      "next": "这里有与您以前吃过的不同的选择。",
+      "nextNoHistory": "我没有以前的订单可供比较，所以先推荐几个适合入门的选择。",
+      "budget": "{{amount}} 以内的建议（{{people}} 人）。",
+      "budgetPartial": "{{amount}} 可为 {{people}} 人中的 {{count}} 人各点一份主食。这是最合适的搭配。",
+      "budgetTooLow": "菜单上没有 {{amount}} 以内可点的项目。请提高预算。",
+      "ingredient": "以下甜品的主要成分包含{{ingredient}}：",
+      "ingredientNone": "菜单上没有甜品将{{ingredient}}列为主要成分。",
+      "allergy": "我无法确认过敏原、清真或饮食方面的信息，因此不会猜测。点餐前请询问店员。",
+      "drinks": "以下是菜单上的饮品。",
+      "compare": "这些菜品的区别如下。",
+      "compareOverview": "告诉我要比较的两个菜品，或先看看我们的招牌。",
+      "unknown": "这个我不太确定。请试试推荐问题，或询问店员。",
+      "ai": "我找到的信息如下："
+    },
+    "faq": {
+      "hours": "营业时间：{{value}}",
+      "location": "地址：{{value}}",
+      "contact": "您可以通过以下方式联系餐厅：",
+      "ordering": "选择堂食或外带，将菜品加入购物车并核对价格，然后提交订单。堂食请填写桌号；外带请填写姓名、电话和取餐时间。",
+      "languages": "本应用提供 {{count}} 种语言。并非每种翻译都经过专业校对。",
+      "dineinTakeaway": "您可随时选择堂食或外带。两者价格可能不同，显示的价格始终与您的选择一致。",
+      "unknown": "我没有经过核实的相关信息，因此不会猜测。请联系餐厅。"
+    },
+    "note": {
+      "askStaff": "如有过敏、清真或饮食需求，或此处未显示的任何问题，请询问店员。",
+      "headline": "依据每款甜品列出的主要成分，这不是过敏原声明。"
+    },
+    "allergen": {
+      "unknown": "过敏原信息未经核实——请询问店员",
+      "verified": "已核实含有：{{list}}（{{by}} 于 {{date}} 核对）"
+    },
+    "ingredient": {
+      "sesame": "芝麻",
+      "peanut": "花生",
+      "almond": "杏仁",
+      "walnut": "核桃"
+    },
+    "contact": {
+      "heading": "联系餐厅",
+      "phone": "致电",
+      "whatsapp": "WhatsApp",
+      "email": "电邮"
+    }
   }
 }

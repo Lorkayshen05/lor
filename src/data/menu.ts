@@ -18,6 +18,7 @@ const item = (i: Omit<MenuItem, 'placeholder'>): MenuItem => ({ ...i, placeholde
 export const MENU: readonly MenuItem[] = [
   item({
     id: 'black-sesame-paste',
+    ingredients: ['sesame'],
     productCode: 'A01',
     category: 'paste',
     name: 'Black Sesame Paste',
@@ -33,6 +34,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'peanut-paste',
+    ingredients: ['peanut'],
     productCode: 'A02',
     category: 'paste',
     name: 'Peanut Paste',
@@ -48,6 +50,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'almond-paste',
+    ingredients: ['almond'],
     productCode: 'A03',
     category: 'paste',
     name: 'Almond Paste',
@@ -63,6 +66,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'walnut-paste',
+    ingredients: ['walnut'],
     productCode: 'A04',
     category: 'paste',
     name: 'Walnut Paste',
@@ -78,6 +82,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'sesame-peanut-mixed',
+    ingredients: ['sesame', 'peanut'],
     productCode: 'B01',
     category: 'mixed',
     name: 'Sesame & Peanut Mixed Paste',
@@ -93,6 +98,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'sesame-almond-mixed',
+    ingredients: ['sesame', 'almond'],
     productCode: 'B02',
     category: 'mixed',
     name: 'Sesame & Almond Mixed Paste',
@@ -108,6 +114,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'steamed-egg-custard',
+    ingredients: ['egg'],
     productCode: 'C01',
     category: 'custard',
     name: 'Steamed Egg Custard',
@@ -123,6 +130,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'steamed-milk-custard',
+    ingredients: ['milk', 'egg'],
     productCode: 'C02',
     category: 'custard',
     name: 'Steamed Milk Custard',
@@ -138,6 +146,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'ginger-milk-curd',
+    ingredients: ['milk', 'ginger'],
     productCode: 'C03',
     category: 'custard',
     name: 'Ginger Milk Curd',
@@ -153,6 +162,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'red-bean-soup',
+    ingredients: ['red bean'],
     productCode: 'D01',
     category: 'sweet-soup',
     name: 'Red Bean Soup',
@@ -168,6 +178,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'green-bean-soup',
+    ingredients: ['green bean'],
     productCode: 'D02',
     category: 'sweet-soup',
     name: 'Green Bean Soup',
@@ -183,6 +194,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'grass-jelly',
+    ingredients: ['grass jelly'],
     productCode: 'E01',
     category: 'cold',
     name: 'Grass Jelly',
@@ -198,6 +210,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'coconut-sago',
+    ingredients: ['coconut', 'sago'],
     productCode: 'E02',
     category: 'cold',
     name: 'Coconut Sago',
@@ -213,6 +226,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'chinese-tea',
+    ingredients: ['tea'],
     productCode: 'F01',
     category: 'drink',
     name: 'Chinese Tea',
@@ -228,6 +242,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'chrysanthemum-tea',
+    ingredients: ['chrysanthemum'],
     productCode: 'F02',
     category: 'drink',
     name: 'Chrysanthemum Tea',
@@ -243,6 +258,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'soy-milk',
+    ingredients: ['soy'],
     productCode: 'F03',
     category: 'drink',
     name: 'Soy Milk',
@@ -258,6 +274,7 @@ export const MENU: readonly MenuItem[] = [
   }),
   item({
     id: 'barley-water',
+    ingredients: ['barley'],
     productCode: 'F04',
     category: 'drink',
     name: 'Barley Water',

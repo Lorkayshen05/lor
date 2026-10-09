@@ -4,7 +4,7 @@
  *   - the page never scrolls horizontally
  *   - no visible element pokes outside the viewport (except explicit scrollers)
  *   - interactive controls are at least 44×44 CSS px
- * Usage: npm run build && npm run check:mobile   (starts `vite preview` itself)
+ * Usage: npm run build && npm run check:mobile   (the LOCAL build — not build:app, which expects an API)   (starts `vite preview` itself)
  * It also drives interactive flows (checkout errors → confirmation, wizard, planner, empty search,
  * Back-button scroll restoration) and audits each resulting state.
  * Set SHOTS=dir to save screenshots.
@@ -16,7 +16,7 @@ import { mkdirSync } from 'node:fs';
 const PORT = 4173;
 const BASE = `http://127.0.0.1:${PORT}/#`;
 const VIEWPORTS = [320, 375, 390, 393, 412, 768, 1024, 1440].map((w) => ({ width: w, height: w < 700 ? 800 : 900 }));
-const ROUTES = ['/', '/menu', '/menu/black-sesame-paste', '/discover', '/discover?mode=plan', '/cart', '/checkout', '/orders'];
+const ROUTES = ['/', '/menu', '/menu/black-sesame-paste', '/discover', '/discover?mode=wizard', '/discover?mode=plan', '/admin', '/cart', '/checkout', '/orders'];
 const LANGS = ['en', 'ar', 'ms', 'zh-CN'];
 const SHOTS = process.env.SHOTS;
 
@@ -133,8 +133,23 @@ for (const lang of LANGS) {
     await audit(page, `${flowLabel} confirmation`);
     expect(await page.locator('.facts__big').innerText().then((t) => /^RDH-\d{6}-/.test(t)), 'order number shown');
 
-    // Wizard → results, then planner → results.
+    // Ruby Dessert Guide: budget answer, expanded chips, ingredient answer with allergen caveats.
     await page.goto(`${BASE}/discover`);
+    await page.waitForSelector('.guide__chip');
+    await page.locator('.guide__chip').nth(3).click();
+    await page.waitForSelector('.guide__answer');
+    await audit(page, `${flowLabel} guide budget answer`);
+    await page.getByRole('button', { name: /^(See all|查看全部|Lihat semua|عرض الكل)/ }).click();
+    await page.locator('.guide__chip').nth(6).click();
+    await page.locator('.guide__answer').nth(1).waitFor();
+    await audit(page, `${flowLabel} guide ingredient answer`);
+    await page.fill('#guide-input', 'what are your opening hours');
+    await page.locator('.guide__form button').click();
+    await page.locator('.guide__answer').nth(2).waitFor();
+    await audit(page, `${flowLabel} guide faq answer`);
+
+    // Wizard → results, then planner → results.
+    await page.goto(`${BASE}/discover?mode=wizard`);
     await page.waitForSelector('.option');
     for (let i = 0; i < 3; i++) { await page.locator('.option').first().click(); await wait(60); }
     await page.waitForSelector('.rec');

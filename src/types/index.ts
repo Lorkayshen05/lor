@@ -3,7 +3,7 @@ export type Money = number;
 
 export type OrderType = 'dine-in' | 'takeaway';
 
-export type OrderStatus = 'received' | 'preparing' | 'ready' | 'completed' | 'cancelled';
+export type OrderStatus = 'new' | 'confirmed' | 'preparing' | 'ready' | 'completed' | 'cancelled';
 
 export type VisitType = 'first' | 'second' | 'returning';
 
@@ -48,6 +48,21 @@ export interface MenuItem {
     firstTimerPick?: boolean;
     traditionalDrink?: boolean;
   };
+  /**
+   * Headline ingredients as declared by the restaurant (lower-case keys, e.g. 'sesame', 'peanut').
+   * This is NOT an allergen declaration — see `allergenInfo`.
+   */
+  ingredients?: string[];
+  /**
+   * Verified allergen information. Absent = unknown: the UI and the assistant must send
+   * customers to staff and must never guess. Only set with a named verifier and date.
+   */
+  allergenInfo?: {
+    contains: string[];
+    mayContain?: string[];
+    verifiedBy: string;
+    verifiedAt: string;
+  };
   /** Served hot ("warm & silky") vs cold. */
   temperature: 'hot' | 'cold';
   available: boolean;
@@ -81,6 +96,8 @@ export interface Order {
   pickupInMinutes?: number;
   timestamp: string;
   status: OrderStatus;
+  /** Server-issued secret that lets this device look up its order's live status. Not personal data. */
+  trackingToken?: string;
 }
 
 export interface Customer {

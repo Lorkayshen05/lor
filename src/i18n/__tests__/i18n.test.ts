@@ -78,7 +78,7 @@ describe('locale files', () => {
       }
     };
     walk(join(__dirname, '../..'));
-    const re = /'((?:app|nav|orderType|common|hero|labels|firstTime|welcomeBack|signatures|tryNew|mix|story|location|menu|filters|category|flavour|product|cart|checkout|confirmation|status|orders|wizard|reasons|planner|discover|language|errors)\.[A-Za-z.]+)'/g;
+    const re = /'((?:app|nav|orderType|common|guide|hero|labels|firstTime|welcomeBack|signatures|tryNew|mix|story|location|menu|filters|category|flavour|product|cart|checkout|confirmation|status|orders|wizard|reasons|planner|discover|language|errors)\.[A-Za-z.]+)'/g;
     const missing: string[] = [];
     for (const file of files) {
       for (const m of readFileSync(file, 'utf8').matchAll(re)) {

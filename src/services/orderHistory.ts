@@ -53,9 +53,9 @@ export const localOrderRepository: OrderRepository = {
   },
   list() {
     const raw = safeStorage.get<unknown>(ORDERS_KEY, []);
-    return (Array.isArray(raw) ? raw.filter(isOrder) : []).sort((a, b) =>
-      b.timestamp.localeCompare(a.timestamp),
-    );
+    return (Array.isArray(raw) ? raw.filter(isOrder) : [])
+      .map((o) => ((o.status as string) === 'received' ? { ...o, status: 'new' as const } : o)) // legacy value
+      .sort((a, b) => b.timestamp.localeCompare(a.timestamp));
   },
   add(order) {
     safeStorage.set(ORDERS_KEY, [order, ...this.list()].slice(0, MAX_STORED));
@@ -107,7 +107,7 @@ export function buildOrder(
     tableNumber: draft.orderType === 'dine-in' ? draft.tableNumber?.trim().toUpperCase() : undefined,
     pickupInMinutes: draft.orderType === 'takeaway' ? draft.pickupInMinutes : undefined,
     timestamp: now.toISOString(),
-    status: 'received',
+    status: 'new',
   };
 }
 
@@ -116,21 +116,3 @@ export function buildOrder(
  * Production: POST to the ordering backend and reject with a readable Error on failure;
  * the checkout page already renders that failure state with a retry.
  */
-export interface OrderContact {
-  name: string;
-  phone: string;
-}
-
-export interface OrderGateway {
-  /** `contact` goes to the restaurant for this order only; it is never written to order history. */
-  submit(order: Order, contact: OrderContact): Promise<Order>;
-}
-
-/** Prototype gateway: accepts every order. History is stored by the app via OrderRepository. */
-export function createLocalGateway(): OrderGateway {
-  return {
-    async submit(order, _contact) {
-      return order;
-    },
-  };
-}

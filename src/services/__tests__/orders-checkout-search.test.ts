@@ -1,5 +1,6 @@
 import { MENU, MENU_BY_ID } from '../../data/menu';
-import { buildOrder, localOrderRepository, makeOrderId, createLocalGateway } from '../orderHistory';
+import { buildOrder, localOrderRepository, makeOrderId } from '../orderHistory';
+import { createLocalGateway } from '../orderGateway';
 import { validateCheckout, normalizePhone } from '../checkout';
 import { normalizeText, searchMenu } from '../search';
 import { makeOrder } from '../../test/fixtures';
@@ -16,7 +17,7 @@ describe('order history', () => {
     expect(order.total).toBe(order.items[0]!.unitPrice * 2);
     expect(order.tableNumber).toBeUndefined(); // takeaway has no table
     expect(order.pickupInMinutes).toBe(15);
-    expect(order.status).toBe('received');
+    expect(order.status).toBe('new');
     expect(order.orderId).toMatch(/^RDH-\d{6}-[0-9A-Z]{4}$/);
     expect(Object.keys(order)).not.toContain('name');
     expect(Object.keys(order)).not.toContain('phone');
@@ -42,9 +43,9 @@ describe('order history', () => {
     expect(a).toBeTruthy();
     expect(localOrderRepository.getCustomerId()).toBe(a);
   });
-  it('local gateway accepts orders; ids are well formed', async () => {
-    const o = makeOrder(['soy-milk']);
-    await expect(createLocalGateway().submit(o, { name: 'x', phone: '' })).resolves.toBe(o);
+  it('local gateway builds the order on-device; ids are well formed', async () => {
+    const order = await createLocalGateway(MENU_BY_ID).submit({ items: [{ itemId: 'soy-milk', quantity: 2 }], orderType: 'takeaway', pickupInMinutes: 15, contact: { name: 'x', phone: '' }, expectedTotal: 800, customerId: 'c1', language: 'en', idempotencyKey: 'ik_test' });
+    expect(order).toMatchObject({ total: 800, status: 'new', orderType: 'takeaway', customerId: 'c1' });
     expect(makeOrderId(new Date('2025-12-31T00:00:00'))).toMatch(/^RDH-251231-/);
   });
 });

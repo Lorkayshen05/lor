@@ -20,6 +20,8 @@ import { orderedItemIds } from './visit';
 export interface RecommendationInput {
   menu: readonly MenuItem[];
   customerHistory?: readonly Order[];
+  /** Product ids the customer has ordered, when only ids are known (e.g. sent by the client, no full orders). */
+  orderedItemIds?: readonly string[];
   currentCart?: readonly CartItem[];
   visitType: VisitType;
   orderType: OrderType;
@@ -57,16 +59,18 @@ export function getRecommendations(input: RecommendationInput): Recommendation[]
   } = input;
   const excludeOrdered = input.excludeOrdered ?? visitType !== 'first';
 
-  const orderedIds = orderedItemIds(customerHistory);
+  const orderedIds = new Set([...orderedItemIds(customerHistory), ...(input.orderedItemIds ?? [])]);
   const cartIds = new Set(currentCart.map((c) => c.itemId));
   const orderedItems = menu.filter((m) => orderedIds.has(m.id));
   const orderedFlavours = flavourSet(orderedItems);
   const cartItems = menu.filter((m) => cartIds.has(m.id));
   const cartCategories = new Set(cartItems.map((c) => c.category));
   const cartHasMain = cartCategories.has('paste') || cartCategories.has('mixed');
-  const lastOrdered = [...customerHistory]
+  const lastFromHistory = [...customerHistory]
     .filter((o) => o.status !== 'cancelled')
     .sort((a, b) => b.timestamp.localeCompare(a.timestamp))[0]?.items[0];
+  const lastId = input.orderedItemIds?.at(-1);
+  const lastOrdered = lastFromHistory ?? (lastId ? { itemId: lastId } : undefined);
 
   const candidates = menu.filter((m) => m.available && !cartIds.has(m.id));
 

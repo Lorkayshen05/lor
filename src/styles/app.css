@@ -1085,7 +1085,7 @@ main:focus {
 
 .tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-bottom: 2px solid var(--line);
   margin-top: 18px;
 }
@@ -1113,6 +1113,8 @@ main:focus {
 .tool {
   padding-block: 20px 8px;
   display: grid;
+  /* minmax(0, …): without it an input's intrinsic width props the column open wider than a 320px screen. */
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
 }
 .tool__title {
@@ -1790,4 +1792,128 @@ main:focus {
     transition: none !important;
     animation: none !important;
   }
+}
+
+/* ---------- Ruby Dessert Guide ---------- */
+
+.guide__turns {
+  display: grid;
+  gap: 14px;
+}
+.guide__turn {
+  display: grid;
+  gap: 8px;
+}
+.guide__q {
+  justify-self: end;
+  max-width: 88%;
+  padding: 8px 14px;
+  background: var(--ruby);
+  color: var(--cream);
+  border-radius: 14px 14px 4px 14px;
+  font-size: 15px;
+}
+[dir='rtl'] .guide__q {
+  border-radius: 14px 14px 14px 4px;
+}
+.guide__answer {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.guide__ai {
+  font-size: 12.5px;
+  color: var(--ink-2);
+  border-inline-start: 3px solid var(--gold);
+  padding-inline-start: 8px;
+}
+.guide__items {
+  display: grid;
+  gap: 8px;
+}
+.guide-item {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding-block: 8px;
+  border-top: 1px dashed var(--line);
+}
+.guide-item__name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.25;
+}
+.guide-item__zh {
+  font-size: 13px;
+  color: var(--gold-text);
+}
+.guide-item__reason,
+.guide-item__allergen {
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.guide-item__allergen.is-unknown {
+  color: var(--ruby);
+  font-weight: 600;
+}
+.guide-item__side {
+  display: grid;
+  gap: 6px;
+  justify-items: end;
+}
+.guide__add {
+  display: grid;
+  gap: 8px;
+}
+.guide__notes {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.guide__notes li::before {
+  content: 'ⓘ ';
+}
+.guide__contact-title {
+  font-weight: 700;
+  font-size: 14px;
+}
+.guide__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.guide__chip {
+  min-height: 44px;
+  padding: 8px 14px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 14px;
+  text-align: start;
+}
+.guide__chip:hover:not(:disabled) {
+  border-color: var(--ruby);
+}
+.guide__chip:disabled {
+  opacity: 0.55;
+}
+.guide__form {
+  display: flex;
+  gap: 8px;
+  min-width: 0;
+}
+.guide__form input {
+  flex: 1;
+  min-width: 0;
+  min-height: 50px;
+  padding: 0 12px;
+  background: var(--paper);
+  border: 1px solid #b9a98a;
+  border-radius: 4px;
+  font-size: 16px;
 }

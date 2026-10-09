@@ -2,21 +2,24 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useApp } from '../state/AppContext';
 import { BudgetPlanner } from '../components/BudgetPlanner';
+import { RubyGuide } from '../components/RubyGuide';
 import { Wizard } from '../components/Wizard';
 import { FirstTimeSection } from '../components/home/FirstTimeSection';
 import { WelcomeBackSection } from '../components/home/WelcomeBackSection';
 import { Icon } from '../components/Icon';
 import { OrderTypeToggle } from '../components/OrderTypeToggle';
 
-type Mode = 'wizard' | 'plan';
+type Mode = 'guide' | 'wizard' | 'plan';
+const TITLE_KEY: Record<Mode, string> = { guide: 'guide.title', wizard: 'wizard.title', plan: 'planner.title' };
 
 export function DiscoverPage() {
   const { t } = useTranslation();
   const { orders } = useApp();
   const [params, setParams] = useSearchParams();
-  const mode: Mode = params.get('mode') === 'plan' ? 'plan' : 'wizard';
+  const raw = params.get('mode');
+  const mode: Mode = raw === 'plan' || raw === 'wizard' ? raw : 'guide';
 
-  const setMode = (m: Mode) => setParams(m === 'plan' ? { mode: 'plan' } : {}, { replace: true });
+  const setMode = (m: Mode) => setParams(m === 'guide' ? {} : { mode: m }, { replace: true });
 
   return (
     <>
@@ -30,7 +33,7 @@ export function DiscoverPage() {
 
       <div className="container page page--tight">
         <div className="tabs" role="group" aria-label={t('discover.title')}>
-          {(['wizard', 'plan'] as const).map((m) => (
+          {(['guide', 'wizard', 'plan'] as const).map((m) => (
             <button
               key={m}
               type="button"
@@ -39,12 +42,12 @@ export function DiscoverPage() {
               onClick={() => setMode(m)}
             >
               {mode === m && <Icon name="check" size={14} />}
-              {t(m === 'wizard' ? 'wizard.title' : 'planner.title')}
+              {t(TITLE_KEY[m])}
             </button>
           ))}
         </div>
-        <section aria-label={t(mode === 'wizard' ? 'wizard.title' : 'planner.title')}>
-          {mode === 'wizard' ? <Wizard /> : <BudgetPlanner />}
+        <section aria-label={t(TITLE_KEY[mode])}>
+          {mode === 'guide' ? <RubyGuide /> : mode === 'wizard' ? <Wizard /> : <BudgetPlanner />}
         </section>
       </div>
     </>

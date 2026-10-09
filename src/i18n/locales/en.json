@@ -162,7 +162,8 @@
     "clear": "Clear cart",
     "removeItem": "Remove {{name}}",
     "unavailableTitle": "Some items are no longer available",
-    "unavailableBody": "Remove them to continue: {{names}}", "removeUnavailable": "Remove unavailable items",
+    "unavailableBody": "Remove them to continue: {{names}}",
+    "removeUnavailable": "Remove unavailable items",
     "suggestions": "Complete your order",
     "lineTotal": "Line total"
   },
@@ -184,7 +185,10 @@
     "fixErrors": "Please fix the highlighted fields.",
     "failedTitle": "We couldn't send your order",
     "failedBody": "Your cart is safe and nothing has been lost. Please try again, or tell a member of staff.",
-    "privacy": "We keep only your order and table number on this device. Your name and phone are used for this order only."
+    "privacy": "We keep only your order and table number on this device. Your name and phone are used for this order only.",
+    "priceChanged": "Prices have been updated since you added these items. Your new total is {{total}}. Please review it, then place your order again.",
+    "itemsUnavailable": "Some items just became unavailable. Please review your cart.",
+    "closed": "Online ordering isn't open yet. Please order with our staff."
   },
   "confirmation": {
     "title": "Order received",
@@ -200,7 +204,8 @@
     "notFound": "We couldn't find that order on this device."
   },
   "status": {
-    "received": "Received",
+    "new": "Received",
+    "confirmed": "Confirmed",
     "preparing": "Preparing",
     "ready": "Ready",
     "completed": "Completed",
@@ -289,5 +294,79 @@
     "generic": "Something went wrong",
     "genericHint": "Please reload the page. Your cart is saved.",
     "reload": "Reload"
+  },
+  "guide": {
+    "title": "Ruby Dessert Guide",
+    "subtitle": "Ask about the menu, budgets and what to try next.",
+    "placeholder": "Ask a question…",
+    "ask": "Ask",
+    "thinking": "Thinking…",
+    "suggested": "Suggested questions",
+    "you": "You asked",
+    "disclaimer": "Answers use our current menu. For allergies, halal or dietary needs, always ask our staff.",
+    "ai": "AI-written answer. Items and prices below come from the menu.",
+    "error": "Sorry, I couldn't answer that right now. Please try again or ask our staff.",
+    "chip": {
+      "first": "What should I try on my first visit?",
+      "second": "What should I order on my second visit?",
+      "next": "Which combination should I try next?",
+      "rm10": "What can I order within RM10?",
+      "rm20": "What can I order within RM20?",
+      "rm30": "What can I order within RM30?",
+      "sesame": "Which desserts contain sesame?",
+      "peanut": "Which desserts contain peanut?",
+      "almond": "Which desserts contain almond?",
+      "walnut": "Which desserts contain walnut?",
+      "drinks": "What drinks are available?",
+      "compare": "What's the difference between the menu items?",
+      "allergy": "I have a food allergy"
+    },
+    "msg": {
+      "first": "Here's a simple way to start, using items from our current menu.",
+      "second": "Since you've ordered before, here are different things to try.",
+      "secondNoHistory": "I can't see any earlier orders on this device, so here are good places to start.",
+      "next": "Here's something different from what you've had.",
+      "nextNoHistory": "I don't have any earlier orders to compare with, so here are good places to start.",
+      "budget": "A suggestion within {{amount}} (group of {{people}}).",
+      "budgetPartial": "{{amount}} covers a main for {{count}} of {{people}} people. Here's the best fit.",
+      "budgetTooLow": "Nothing on the menu fits within {{amount}}. Try a higher budget.",
+      "ingredient": "These desserts list {{ingredient}} as a main ingredient:",
+      "ingredientNone": "No dessert on the menu lists {{ingredient}} as a main ingredient.",
+      "allergy": "I can't confirm allergen, halal or dietary information, so I won't guess. Please ask our staff before ordering.",
+      "drinks": "Here are the drinks on the menu.",
+      "compare": "Here's how these items differ.",
+      "compareOverview": "Tell me two items to compare, or start with our signatures.",
+      "unknown": "I'm not sure about that. Try one of the suggested questions, or ask our staff.",
+      "ai": "Here's what I found:"
+    },
+    "faq": {
+      "hours": "Opening hours: {{value}}",
+      "location": "Address: {{value}}",
+      "contact": "You can reach the restaurant here:",
+      "ordering": "Choose Dine in or Take away, add dishes to your cart and check the price, then place your order. For dine-in, enter your table number; for takeaway, enter your name, phone and pickup time.",
+      "languages": "The app is available in {{count}} languages. Not every translation has been professionally verified.",
+      "dineinTakeaway": "You can choose Dine in or Take away at any time. Prices can differ between the two, and the price shown always matches your choice.",
+      "unknown": "I don't have verified information about that, so I won't guess. Please contact the restaurant."
+    },
+    "note": {
+      "askStaff": "For allergies, halal or dietary needs, or anything not shown here, please ask a member of staff.",
+      "headline": "Based on the main ingredients listed for each dessert. This is not an allergen declaration."
+    },
+    "allergen": {
+      "unknown": "Allergen details not verified — ask staff",
+      "verified": "Verified to contain: {{list}} (checked {{date}} by {{by}})"
+    },
+    "ingredient": {
+      "sesame": "sesame",
+      "peanut": "peanut",
+      "almond": "almond",
+      "walnut": "walnut"
+    },
+    "contact": {
+      "heading": "Contact the restaurant",
+      "phone": "Call",
+      "whatsapp": "WhatsApp",
+      "email": "Email"
+    }
   }
 }

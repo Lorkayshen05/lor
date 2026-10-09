@@ -23,3 +23,9 @@ dist/
 coverage/
 *.log
 .DS_Store
+dist-server/
+data/
+.env
+*.db
+*.db-wal
+*.db-shm

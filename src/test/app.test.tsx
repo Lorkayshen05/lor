@@ -67,7 +67,7 @@ describe('language switching never resets the order', () => {
 
   it('keeps wizard progress across a language change', async () => {
     const user = userEvent.setup();
-    go('#/discover');
+    go('#/discover?mode=wizard');
     render(<App />);
     await user.click(screen.getByRole('button', { name: 'Second time' }));
     await user.click(screen.getByRole('button', { name: 'sesame' }));

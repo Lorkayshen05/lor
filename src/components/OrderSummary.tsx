@@ -43,7 +43,9 @@ export function OrderSummary({ order }: { order: Order }) {
         <div>
           <dt>{t('confirmation.status')}</dt>
           <dd>
-            <span className="status">{t(`status.${order.status}`)}</span>
+            <span className="status" role="status" aria-live="polite">
+              {t(`status.${order.status}`)}
+            </span>
           </dd>
         </div>
         <div>

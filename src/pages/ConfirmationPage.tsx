@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { useApp } from '../state/AppContext';
 import { Icon } from '../components/Icon';
 import { OrderSummary } from '../components/OrderSummary';
+import { useOrderStatusSync } from '../hooks/useOrderStatusSync';
 
 export function ConfirmationPage() {
   const { id = '' } = useParams();
   const { t } = useTranslation();
   const { orders } = useApp();
   const order = orders.find((o) => o.orderId === id);
+  useOrderStatusSync(order);
 
   if (!order) {
     return (

@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { AppProvider, type AppProviderProps } from './state/AppContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -13,9 +14,20 @@ import { OrdersPage } from './pages/OrdersPage';
 import { OrderDetailPage } from './pages/OrderDetailPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
+// Staff dashboard: its own chunk, so customers never download it.
+const AdminApp = lazy(() => import('./admin/AdminApp'));
+
 export function AppRoutes() {
   return (
     <Routes>
+      <Route
+        path="admin/*"
+        element={
+          <Suspense fallback={<p className="container page">Loading…</p>}>
+            <AdminApp />
+          </Suspense>
+        }
+      />
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
         <Route path="menu" element={<MenuPage />} />

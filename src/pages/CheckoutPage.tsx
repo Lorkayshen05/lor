@@ -5,6 +5,8 @@ import { CHECKOUT_CONFIG } from '../data/restaurant';
 import { useApp } from '../state/AppContext';
 import { useMenuText } from '../hooks/useMenuText';
 import { normalizePhone, validateCheckout, type CheckoutErrors } from '../services/checkout';
+import { OrderRejectedError, PriceChangedError } from '../services/orderGateway';
+import { formatMoney } from '../utils/money';
 import { Icon } from '../components/Icon';
 import { OrderTypeToggle } from '../components/OrderTypeToggle';
 import { Price } from '../components/Price';
@@ -41,7 +43,7 @@ function Field({ id, label, error, hint, children }: FieldProps) {
 export function CheckoutPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { orderType, tableNumber, setTableNumber, totals, placeOrder } = useApp();
+  const { orderType, tableNumber, setTableNumber, totals, placeOrder, refreshMenu } = useApp();
   const { nameOf } = useMenuText();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -49,6 +51,8 @@ export function CheckoutPage() {
   const [errors, setErrors] = useState<CheckoutErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [failed, setFailed] = useState(false);
+  /** A specific, non-generic reason the order was not placed (price changed, item gone, ordering closed). */
+  const [notice, setNotice] = useState<{ key: string; params?: Record<string, string> } | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const isDineIn = orderType === 'dine-in';
 
@@ -56,6 +60,7 @@ export function CheckoutPage() {
   useEffect(() => {
     setErrors({});
     setFailed(false);
+    setNotice(null);
   }, [orderType]);
 
   if (totals.lines.length === 0 && !submitting) {
@@ -83,6 +88,7 @@ export function CheckoutPage() {
     );
     setErrors(found);
     setFailed(false);
+    setNotice(null);
     if (Object.keys(found).length > 0) {
       const firstId = (['tableNumber', 'name', 'phone'] as const).find((k) => found[k]);
       if (firstId) formRef.current?.querySelector<HTMLElement>(`#f-${firstId}`)?.focus();
@@ -92,9 +98,22 @@ export function CheckoutPage() {
     try {
       const order = await placeOrder({ name: name.trim(), phone: normalizePhone(phone) }, { pickupInMinutes: pickup });
       navigate(`/confirmation/${encodeURIComponent(order.orderId)}`, { replace: true });
-    } catch {
-      setFailed(true);
+    } catch (e) {
       setSubmitting(false);
+      if (e instanceof PriceChangedError) {
+        // Nothing was saved. The cart now shows the new prices; the customer must confirm them again.
+        setNotice({ key: 'checkout.priceChanged', params: { total: formatMoney(e.currentTotal) } });
+      } else if (e instanceof OrderRejectedError) {
+        if (e.code === 'VALIDATION_FAILED' && e.details && typeof e.details === 'object') setErrors(e.details as CheckoutErrors);
+        else if (e.code === 'ITEM_UNAVAILABLE') {
+          void refreshMenu();
+          setNotice({ key: 'checkout.itemsUnavailable' });
+        } else if (e.code === 'MENU_NOT_CONFIGURED') setNotice({ key: 'checkout.closed' });
+        else setFailed(true);
+      } else {
+        // Network trouble or a server error: we can't tell whether it was saved. Retrying reuses the same key, so it's safe.
+        setFailed(true);
+      }
     }
   };
 
@@ -185,6 +204,17 @@ export function CheckoutPage() {
           <span>{t('common.total')}</span>
           <Price value={totals.total} />
         </div>
+
+        {notice && (
+          <div className="notice notice--warn" role="alert">
+            <p>{t(notice.key, notice.params)}</p>
+            {notice.key === 'checkout.itemsUnavailable' && (
+              <Link to="/cart" className="link-arrow">
+                {t('nav.cart')}
+              </Link>
+            )}
+          </div>
+        )}
 
         {failed && (
           <div className="notice notice--warn" role="alert">
